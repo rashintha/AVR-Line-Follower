@@ -37,7 +37,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "pwm.h"
-#include "serial.h"
 
 void controlMotor(uint8_t status);
 
@@ -47,7 +46,6 @@ uint8_t channelA_status = FORWARD, channelB_status = FORWARD, left_status = FALS
 int main(void){
 
 	setupPWM();
-	initUSART();
 
 	MOTOR_DDR = 0x0F;
 
@@ -55,22 +53,7 @@ int main(void){
 	pwm(CH_B, 0, MAX_PWM_SPEED);
 
 	while(1){
-		uint8_t input = getCh();
-
-		//putCh(input);
-
-		if(input == 'u')
-			controlMotor(FORWARD);
-		else if(input == 'd')
-			controlMotor(REVERSE);
-		else if(input == 's')
-			controlMotor(STOP);
-		else if(input == 'n')
-			controlMotor(NEUTRAL);
-		else if(input == 'l')
-			controlMotor(LEFT);
-		else if(input == 'r')
-			controlMotor(RIGHT);
+		
 	}
 	
 	return 0;
