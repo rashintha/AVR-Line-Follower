@@ -13,6 +13,11 @@
 #define MOTOR_DDR	DDRC
 #define MOTOR_PORT	PORTC
 
+#define IR_DDR DDRD
+#define IR_PIN PIND
+#define IR_RIGHT PD4
+#define IR_LEFT PD5
+
 #define MOTOR_RIGHT_FWD_PIN		PC0
 #define MOTOR_RIGHT_REV_PIN		PC1
 #define MOTOR_LEFT_FWD_PIN		PC2
@@ -26,6 +31,7 @@
 #define MAX_PWM_SPEED	20000
 #define MIN_PWM_SPEED	100
 
+#define MAX_SPEED 10000
 #define SPEED_INCREASE_RATE		10
 #define SPEED_DECREASE_RATE		5
 #define BREAK_RATE				30
@@ -49,11 +55,24 @@ int main(void){
 
 	MOTOR_DDR = 0x0F;
 
+	IR_DDR &= ~((1 << IR_LEFT) | (1 << IR_RIGHT));
+
 	pwm(CH_A, 0, MAX_PWM_SPEED);
 	pwm(CH_B, 0, MAX_PWM_SPEED);
 
+	controlMotor(NEUTRAL);
+
 	while(1){
-		
+		if(IR_PIN & (1 << IR_RIGHT) && !(IR_PIN & (1 << IR_LEFT))){
+			controlMotor(LEFT);
+			_delay_ms(100);
+		}else if(IR_PIN & (1 << IR_LEFT) && !(IR_PIN & (1 << IR_RIGHT))){
+			controlMotor(RIGHT);
+			_delay_ms(100);
+		}else{
+			controlMotor(NEUTRAL);
+			controlMotor(FORWARD);
+		}
 	}
 	
 	return 0;
@@ -63,7 +82,7 @@ void controlMotor(uint8_t status){
 	switch(status){
 		case FORWARD:
 			if(channelA_status == FORWARD && channelB_status == FORWARD){
-				(channelA == MAX_PWM_SPEED) ? (channelA = MAX_PWM_SPEED) : (channelA += SPEED_INCREASE_RATE);
+				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
 				channelB = channelA;
 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
 				if(channelA > MIN_PWM_SPEED){
@@ -79,7 +98,7 @@ void controlMotor(uint8_t status){
 		
 		case REVERSE:
 			if(channelA_status == REVERSE && channelB_status == REVERSE){
-				(channelA == MAX_PWM_SPEED) ? (channelA = MAX_PWM_SPEED) : (channelA += SPEED_INCREASE_RATE);
+				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
 				channelB = channelA;
 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
 				if(channelA > MIN_PWM_SPEED){
