@@ -86,97 +86,65 @@
   68               	.global	controlMotor
   70               	controlMotor:
   71               	.LFB9:
-  72               		.file 2 "main.c"
-   1:main.c        **** #define F_CPU 16000000UL
-   2:main.c        **** 
-   3:main.c        **** #define FORWARD 0x00
-   4:main.c        **** #define REVERSE	0x01
-   5:main.c        **** #define RIGHT	0x02
-   6:main.c        **** #define LEFT	0x03
-   7:main.c        **** #define STOP 	0x04
-   8:main.c        **** #define NEUTRAL	0x05
-   9:main.c        **** 
-  10:main.c        **** #define TRUE 	1
-  11:main.c        **** #define FALSE 	0
-  12:main.c        **** 
-  13:main.c        **** #define MOTOR_DDR	DDRC
-  14:main.c        **** #define MOTOR_PORT	PORTC
-  15:main.c        **** 
-  16:main.c        **** #define IR_DDR DDRD
-  17:main.c        **** #define IR_PIN PIND
-  18:main.c        **** #define IR_RIGHT PD4
-  19:main.c        **** #define IR_LEFT PD5
-  20:main.c        **** 
-  21:main.c        **** #define MOTOR_RIGHT_FWD_PIN		PC0
-  22:main.c        **** #define MOTOR_RIGHT_REV_PIN		PC1
-  23:main.c        **** #define MOTOR_LEFT_FWD_PIN		PC2
-  24:main.c        **** #define MOTOR_LEFT_REV_PIN		PC3
-  25:main.c        **** 
-  26:main.c        **** #define FORWARD_MODE() { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTO
-  27:main.c        **** #define REVERSE_MODE() { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTO
-  28:main.c        **** #define RIGHT_MODE()   { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTO
-  29:main.c        **** #define LEFT_MODE()    { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTO
-  30:main.c        **** 
-  31:main.c        **** #define MAX_PWM_SPEED	20000
-  32:main.c        **** #define MIN_PWM_SPEED	100
-  33:main.c        **** 
-  34:main.c        **** #define MAX_SPEED 10000
-  35:main.c        **** #define SPEED_INCREASE_RATE		10
-  36:main.c        **** #define SPEED_DECREASE_RATE		5
-  37:main.c        **** #define BREAK_RATE				30
-  38:main.c        **** 
-  39:main.c        **** //Comment the MCU which you're not using.
-  40:main.c        **** #define ATMEGA_328P
-  41:main.c        **** //#define ATMEGA_32A
-  42:main.c        **** 
-  43:main.c        **** #include <avr/io.h>
-  44:main.c        **** #include <util/delay.h>
-  45:main.c        **** #include "pwm.h"
-  46:main.c        **** 
-  47:main.c        **** void controlMotor(uint8_t status);
-  48:main.c        **** 
-  49:main.c        **** uint16_t channelA = 0, channelB = 0;
-  50:main.c        **** uint8_t channelA_status = FORWARD, channelB_status = FORWARD, left_status = FALSE, right_status=FAL
-  51:main.c        **** 
-  52:main.c        **** int main(void){
-  53:main.c        **** 
-  54:main.c        **** 	setupPWM();
-  55:main.c        **** 
-  56:main.c        **** 	MOTOR_DDR = 0x0F;
-  57:main.c        **** 
-  58:main.c        **** 	IR_DDR &= ~((1 << IR_LEFT) | (1 << IR_RIGHT));
-  59:main.c        **** 
-  60:main.c        **** 	pwm(CH_A, 0, MAX_PWM_SPEED);
-  61:main.c        **** 	pwm(CH_B, 0, MAX_PWM_SPEED);
-  62:main.c        **** 
-  63:main.c        **** 	controlMotor(NEUTRAL);
-  64:main.c        **** 
-  65:main.c        **** 	while(1){
-  66:main.c        **** 		if(IR_PIN & (1 << IR_RIGHT) && !(IR_PIN & (1 << IR_LEFT))){
-  67:main.c        **** 			controlMotor(LEFT);
-  68:main.c        **** 			_delay_ms(100);
-  69:main.c        **** 		}else if(IR_PIN & (1 << IR_LEFT) && !(IR_PIN & (1 << IR_RIGHT))){
-  70:main.c        **** 			controlMotor(RIGHT);
-  71:main.c        **** 			_delay_ms(100);
-  72:main.c        **** 		}else{
-  73:main.c        **** 			controlMotor(NEUTRAL);
-  74:main.c        **** 			controlMotor(FORWARD);
-  75:main.c        **** 		}
-  76:main.c        **** 	}
-  77:main.c        **** 	
-  78:main.c        **** 	return 0;
-  79:main.c        **** }
-  80:main.c        **** 
-  81:main.c        **** void controlMotor(uint8_t status){
-  73               		.loc 2 81 0
+  72               		.file 2 "motor_control.h"
+   1:motor_control.h **** #define FORWARD 0x00
+   2:motor_control.h **** #define REVERSE	0x01
+   3:motor_control.h **** #define RIGHT	0x02
+   4:motor_control.h **** #define LEFT	0x03
+   5:motor_control.h **** #define STOP 	0x04
+   6:motor_control.h **** #define NEUTRAL	0x05
+   7:motor_control.h **** 
+   8:motor_control.h **** #define TRUE 	1
+   9:motor_control.h **** #define FALSE 	0
+  10:motor_control.h **** 
+  11:motor_control.h **** #define MOTOR_DDR	DDRC
+  12:motor_control.h **** #define MOTOR_PORT	PORTC
+  13:motor_control.h **** 
+  14:motor_control.h **** #define MOTOR_RIGHT_FWD_PIN		PC0
+  15:motor_control.h **** #define MOTOR_RIGHT_REV_PIN		PC1
+  16:motor_control.h **** #define MOTOR_LEFT_FWD_PIN		PC2
+  17:motor_control.h **** #define MOTOR_LEFT_REV_PIN		PC3
+  18:motor_control.h **** 
+  19:motor_control.h **** #define FORWARD_MODE() { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTO
+  20:motor_control.h **** #define REVERSE_MODE() { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTO
+  21:motor_control.h **** #define RIGHT_MODE()   { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTO
+  22:motor_control.h **** #define LEFT_MODE()    { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTO
+  23:motor_control.h **** 
+  24:motor_control.h **** #define MAX_PWM_SPEED	20000
+  25:motor_control.h **** #define MIN_PWM_SPEED	2000
+  26:motor_control.h **** 
+  27:motor_control.h **** #define MAX_SPEED 10000
+  28:motor_control.h **** #define SPEED_INCREASE_RATE		10
+  29:motor_control.h **** #define SPEED_DECREASE_RATE		5
+  30:motor_control.h **** #define BREAK_RATE				30
+  31:motor_control.h **** 
+  32:motor_control.h **** #include "pwm.h"
+  33:motor_control.h **** 
+  34:motor_control.h **** uint16_t channelA = 0, channelB = 0;
+  35:motor_control.h **** uint8_t channelA_status = FORWARD, channelB_status = FORWARD, left_status = FALSE, right_status=FAL
+  36:motor_control.h **** 
+  37:motor_control.h **** void controlMotor(uint8_t status);
+  38:motor_control.h **** void setupMotor(void);
+  39:motor_control.h **** 
+  40:motor_control.h **** void setupMotor(void){
+  41:motor_control.h **** 	MOTOR_DDR = 0x0F;
+  42:motor_control.h **** 
+  43:motor_control.h **** 	pwm(CH_A, 0, MAX_PWM_SPEED);
+  44:motor_control.h **** 	pwm(CH_B, 0, MAX_PWM_SPEED);
+  45:motor_control.h **** 
+  46:motor_control.h **** 	controlMotor(NEUTRAL);
+  47:motor_control.h **** }
+  48:motor_control.h **** 
+  49:motor_control.h **** void controlMotor(uint8_t status){
+  73               		.loc 2 49 0
   74               		.cfi_startproc
   75               	.LVL1:
   76               	/* prologue: function */
   77               	/* frame size = 0 */
   78               	/* stack size = 0 */
   79               	.L__stack_usage = 0
-  82:main.c        **** 	switch(status){
-  80               		.loc 2 82 0
+  50:motor_control.h **** 	switch(status){
+  80               		.loc 2 50 0
   81 0034 8230      		cpi r24,lo8(2)
   82 0036 01F4      		brne .+2
   83 0038 00C0      		rjmp .L7
@@ -191,92 +159,92 @@
   92 004e 00C0      		rjmp .L10
   93               	.LVL2:
   94               	.L6:
-  83:main.c        **** 		case FORWARD:
-  84:main.c        **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
-  85:main.c        **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
-  86:main.c        **** 				channelB = channelA;
-  87:main.c        **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
-  88:main.c        **** 				if(channelA > MIN_PWM_SPEED){
-  89:main.c        **** 					channelA -= BREAK_RATE;
-  90:main.c        **** 					channelB = channelA;
-  91:main.c        **** 				}else{
-  92:main.c        **** 					FORWARD_MODE();
-  93:main.c        **** 					channelA_status = FORWARD;
-  94:main.c        **** 					channelB_status = FORWARD;
-  95:main.c        **** 				}
-  96:main.c        **** 			}
-  97:main.c        **** 			break;
-  98:main.c        **** 		
-  99:main.c        **** 		case REVERSE:
- 100:main.c        **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
- 101:main.c        **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
- 102:main.c        **** 				channelB = channelA;
- 103:main.c        **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
- 104:main.c        **** 				if(channelA > MIN_PWM_SPEED){
- 105:main.c        **** 					channelA -= BREAK_RATE;
- 106:main.c        **** 					channelB = channelA;
- 107:main.c        **** 				}else{
- 108:main.c        **** 					REVERSE_MODE();
- 109:main.c        **** 					channelA_status = REVERSE;
- 110:main.c        **** 					channelB_status = REVERSE;
- 111:main.c        **** 				}
- 112:main.c        **** 			}
- 113:main.c        **** 			break;
- 114:main.c        **** 		
- 115:main.c        **** 		case STOP:
- 116:main.c        **** 			channelA = 0x00;
- 117:main.c        **** 			channelB = 0x00;
- 118:main.c        **** 			break;
- 119:main.c        **** 
- 120:main.c        **** 		case NEUTRAL:
- 121:main.c        **** 			if(channelA > MIN_PWM_SPEED){
- 122:main.c        **** 				channelA -= SPEED_DECREASE_RATE;
- 123:main.c        **** 				channelB = channelA;
- 124:main.c        **** 			}
- 125:main.c        **** 
- 126:main.c        **** 			if(channelB_status == FORWARD && channelB_status == FORWARD){
- 127:main.c        **** 				FORWARD_MODE();
- 128:main.c        **** 			}
- 129:main.c        **** 			else{
- 130:main.c        **** 				REVERSE_MODE();
- 131:main.c        **** 			}
- 132:main.c        **** 
- 133:main.c        **** 			if(left_status || right_status){
- 134:main.c        **** 				channelA = 0x00;
- 135:main.c        **** 				channelB = 0x00;
- 136:main.c        **** 				left_status = FALSE;
- 137:main.c        **** 				right_status = FALSE;
- 138:main.c        **** 			}
- 139:main.c        **** 			break;
- 140:main.c        **** 
- 141:main.c        **** 		case RIGHT:
- 142:main.c        **** 			RIGHT_MODE();
- 143:main.c        **** 			if(channelA < MIN_PWM_SPEED){
- 144:main.c        **** 				left_status = FALSE;
- 145:main.c        **** 				right_status = TRUE;
- 146:main.c        **** 				channelA = 15000;
- 147:main.c        **** 				channelB = 15000;
- 148:main.c        **** 			}
- 149:main.c        **** 			break;
- 150:main.c        **** 
- 151:main.c        **** 		case LEFT:
- 152:main.c        **** 			LEFT_MODE();
- 153:main.c        **** 			if(channelA < MIN_PWM_SPEED){
- 154:main.c        **** 				left_status = TRUE;
- 155:main.c        **** 				right_status = FALSE;
- 156:main.c        **** 				channelA = MAX_PWM_SPEED / 2;
- 157:main.c        **** 				channelB = MAX_PWM_SPEED / 2;
- 158:main.c        **** 			}
- 159:main.c        **** 			break;
- 160:main.c        **** 	}
- 161:main.c        **** 
- 162:main.c        **** 	pwm(CH_A, channelA, MAX_PWM_SPEED);
-  95               		.loc 2 162 0
+  51:motor_control.h **** 		case FORWARD:
+  52:motor_control.h **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
+  53:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
+  54:motor_control.h **** 				channelB = channelA;
+  55:motor_control.h **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
+  56:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
+  57:motor_control.h **** 					channelA -= BREAK_RATE;
+  58:motor_control.h **** 					channelB = channelA;
+  59:motor_control.h **** 				}else{
+  60:motor_control.h **** 					FORWARD_MODE();
+  61:motor_control.h **** 					channelA_status = FORWARD;
+  62:motor_control.h **** 					channelB_status = FORWARD;
+  63:motor_control.h **** 				}
+  64:motor_control.h **** 			}
+  65:motor_control.h **** 			break;
+  66:motor_control.h **** 		
+  67:motor_control.h **** 		case REVERSE:
+  68:motor_control.h **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
+  69:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
+  70:motor_control.h **** 				channelB = channelA;
+  71:motor_control.h **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
+  72:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
+  73:motor_control.h **** 					channelA -= BREAK_RATE;
+  74:motor_control.h **** 					channelB = channelA;
+  75:motor_control.h **** 				}else{
+  76:motor_control.h **** 					REVERSE_MODE();
+  77:motor_control.h **** 					channelA_status = REVERSE;
+  78:motor_control.h **** 					channelB_status = REVERSE;
+  79:motor_control.h **** 				}
+  80:motor_control.h **** 			}
+  81:motor_control.h **** 			break;
+  82:motor_control.h **** 		
+  83:motor_control.h **** 		case STOP:
+  84:motor_control.h **** 			channelA = 0x00;
+  85:motor_control.h **** 			channelB = 0x00;
+  86:motor_control.h **** 			break;
+  87:motor_control.h **** 
+  88:motor_control.h **** 		case NEUTRAL:
+  89:motor_control.h **** 			if(channelA > MIN_PWM_SPEED){
+  90:motor_control.h **** 				channelA -= SPEED_DECREASE_RATE;
+  91:motor_control.h **** 				channelB = channelA;
+  92:motor_control.h **** 			}
+  93:motor_control.h **** 
+  94:motor_control.h **** 			if(channelB_status == FORWARD && channelB_status == FORWARD){
+  95:motor_control.h **** 				FORWARD_MODE();
+  96:motor_control.h **** 			}
+  97:motor_control.h **** 			else{
+  98:motor_control.h **** 				REVERSE_MODE();
+  99:motor_control.h **** 			}
+ 100:motor_control.h **** 
+ 101:motor_control.h **** 			if(left_status || right_status){
+ 102:motor_control.h **** 				channelA = 0x00;
+ 103:motor_control.h **** 				channelB = 0x00;
+ 104:motor_control.h **** 				left_status = FALSE;
+ 105:motor_control.h **** 				right_status = FALSE;
+ 106:motor_control.h **** 			}
+ 107:motor_control.h **** 			break;
+ 108:motor_control.h **** 
+ 109:motor_control.h **** 		case RIGHT:
+ 110:motor_control.h **** 			RIGHT_MODE();
+ 111:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
+ 112:motor_control.h **** 				left_status = FALSE;
+ 113:motor_control.h **** 				right_status = TRUE;
+ 114:motor_control.h **** 				channelA = 15000;
+ 115:motor_control.h **** 				channelB = 15000;
+ 116:motor_control.h **** 			}
+ 117:motor_control.h **** 			break;
+ 118:motor_control.h **** 
+ 119:motor_control.h **** 		case LEFT:
+ 120:motor_control.h **** 			LEFT_MODE();
+ 121:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
+ 122:motor_control.h **** 				left_status = TRUE;
+ 123:motor_control.h **** 				right_status = FALSE;
+ 124:motor_control.h **** 				channelA = MAX_PWM_SPEED / 2;
+ 125:motor_control.h **** 				channelB = MAX_PWM_SPEED / 2;
+ 126:motor_control.h **** 			}
+ 127:motor_control.h **** 			break;
+ 128:motor_control.h **** 	}
+ 129:motor_control.h **** 
+ 130:motor_control.h **** 	pwm(CH_A, channelA, MAX_PWM_SPEED);
+  95               		.loc 2 130 0
   96 0050 2091 0000 		lds r18,channelA
   97 0054 3091 0000 		lds r19,channelA+1
   98               	.LVL3:
-  99               	.LBB18:
- 100               	.LBB19:
+  99               	.LBB10:
+ 100               	.LBB11:
   20:pwm.h         **** 	ICR1 = period;
  101               		.loc 1 20 0
  102 0058 80E2      		ldi r24,lo8(32)
@@ -288,15 +256,15 @@
  107 0064 3093 8900 		sts 136+1,r19
  108 0068 2093 8800 		sts 136,r18
  109               	.LVL4:
- 110               	.LBE19:
- 111               	.LBE18:
- 163:main.c        **** 	pwm(CH_B, channelB, MAX_PWM_SPEED);
- 112               		.loc 2 163 0
+ 110               	.LBE11:
+ 111               	.LBE10:
+ 131:motor_control.h **** 	pwm(CH_B, channelB, MAX_PWM_SPEED);
+ 112               		.loc 2 131 0
  113 006c 2091 0000 		lds r18,channelB
  114 0070 3091 0000 		lds r19,channelB+1
  115               	.LVL5:
- 116               	.LBB20:
- 117               	.LBB21:
+ 116               	.LBB12:
+ 117               	.LBB13:
   20:pwm.h         **** 	ICR1 = period;
  118               		.loc 1 20 0
  119 0074 9093 8700 		sts 134+1,r25
@@ -307,15 +275,15 @@
  123 0080 2093 8A00 		sts 138,r18
  124               	.LVL6:
  125               	/* epilogue start */
- 126               	.LBE21:
- 127               	.LBE20:
- 164:main.c        **** }...
- 128               		.loc 2 164 0
+ 126               	.LBE13:
+ 127               	.LBE12:
+ 132:motor_control.h **** }...
+ 128               		.loc 2 132 0
  129 0084 0895      		ret
  130               	.LVL7:
  131               	.L8:
-  82:main.c        **** 	switch(status){
- 132               		.loc 2 82 0
+  50:motor_control.h **** 	switch(status){
+ 132               		.loc 2 50 0
  133 0086 8430      		cpi r24,lo8(4)
  134 0088 01F4      		brne .+2
  135 008a 00C0      		rjmp .L11
@@ -323,630 +291,816 @@
  137 008e 00C0      		rjmp .L12
  138 0090 8530      		cpi r24,lo8(5)
  139 0092 01F4      		brne .L6
- 121:main.c        **** 			if(channelA > MIN_PWM_SPEED){
- 140               		.loc 2 121 0
+  89:motor_control.h **** 			if(channelA > MIN_PWM_SPEED){
+ 140               		.loc 2 89 0
  141 0094 8091 0000 		lds r24,channelA
  142 0098 9091 0000 		lds r25,channelA+1
  143               	.LVL8:
- 144 009c 8536      		cpi r24,101
- 145 009e 9105      		cpc r25,__zero_reg__
- 146 00a0 00F0      		brlo .L22
- 122:main.c        **** 				channelA -= SPEED_DECREASE_RATE;
- 147               		.loc 2 122 0
- 148 00a2 0597      		sbiw r24,5
- 149 00a4 9093 0000 		sts channelA+1,r25
- 150 00a8 8093 0000 		sts channelA,r24
- 123:main.c        **** 				channelB = channelA;
- 151               		.loc 2 123 0
- 152 00ac 9093 0000 		sts channelB+1,r25
- 153 00b0 8093 0000 		sts channelB,r24
- 154               	.L22:
- 126:main.c        **** 			if(channelB_status == FORWARD && channelB_status == FORWARD){
- 155               		.loc 2 126 0
- 156 00b4 8091 0000 		lds r24,channelB_status
- 157 00b8 8111      		cpse r24,__zero_reg__
- 158 00ba 00C0      		rjmp .L23
- 127:main.c        **** 				FORWARD_MODE();
- 159               		.loc 2 127 0
- 160 00bc 88B1      		in r24,0x8
- 161 00be 8560      		ori r24,lo8(5)
- 162 00c0 88B9      		out 0x8,r24
- 163 00c2 88B1      		in r24,0x8
- 164 00c4 857F      		andi r24,lo8(-11)
- 165               	.L35:
- 130:main.c        **** 				REVERSE_MODE();
- 166               		.loc 2 130 0
- 167 00c6 88B9      		out 0x8,r24
- 133:main.c        **** 			if(left_status || right_status){
- 168               		.loc 2 133 0
- 169 00c8 8091 0000 		lds r24,left_status
- 170 00cc 8111      		cpse r24,__zero_reg__
- 171 00ce 00C0      		rjmp .L25
- 133:main.c        **** 			if(left_status || right_status){
- 172               		.loc 2 133 0 is_stmt 0 discriminator 1
- 173 00d0 8091 0000 		lds r24,right_status
- 174 00d4 8823      		tst r24
- 175 00d6 01F4      		brne .+2
- 176 00d8 00C0      		rjmp .L6
- 177               	.L25:
- 134:main.c        **** 				channelA = 0x00;
- 178               		.loc 2 134 0 is_stmt 1
- 179 00da 1092 0000 		sts channelA+1,__zero_reg__
- 180 00de 1092 0000 		sts channelA,__zero_reg__
- 135:main.c        **** 				channelB = 0x00;
- 181               		.loc 2 135 0
- 182 00e2 1092 0000 		sts channelB+1,__zero_reg__
- 183 00e6 1092 0000 		sts channelB,__zero_reg__
- 136:main.c        **** 				left_status = FALSE;
- 184               		.loc 2 136 0
- 185 00ea 1092 0000 		sts left_status,__zero_reg__
- 137:main.c        **** 				right_status = FALSE;
- 186               		.loc 2 137 0
- 187 00ee 1092 0000 		sts right_status,__zero_reg__
- 188 00f2 00C0      		rjmp .L6
- 189               	.LVL9:
- 190               	.L9:
-  84:main.c        **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
- 191               		.loc 2 84 0
- 192 00f4 8091 0000 		lds r24,channelA_status
- 193               	.LVL10:
- 194 00f8 8111      		cpse r24,__zero_reg__
- 195 00fa 00C0      		rjmp .L14
-  84:main.c        **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
- 196               		.loc 2 84 0 is_stmt 0 discriminator 1
- 197 00fc 8091 0000 		lds r24,channelB_status
- 198 0100 8111      		cpse r24,__zero_reg__
- 199 0102 00C0      		rjmp .L6
- 200               	.L40:
- 101:main.c        **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
- 201               		.loc 2 101 0 is_stmt 1
- 202 0104 2031      		cpi r18,16
- 203 0106 87E2      		ldi r24,39
- 204 0108 3807      		cpc r19,r24
- 205 010a 01F0      		breq .L20
- 101:main.c        **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
- 206               		.loc 2 101 0 is_stmt 0 discriminator 2
- 207 010c 265F      		subi r18,-10
- 208 010e 3F4F      		sbci r19,-1
- 209 0110 3093 0000 		sts channelA+1,r19
- 210 0114 2093 0000 		sts channelA,r18
- 211               	.L20:
- 102:main.c        **** 				channelB = channelA;
- 212               		.loc 2 102 0 is_stmt 1
- 213 0118 8091 0000 		lds r24,channelA
- 214 011c 9091 0000 		lds r25,channelA+1
- 215               	.L36:
- 157:main.c        **** 				channelB = MAX_PWM_SPEED / 2;
- 216               		.loc 2 157 0
- 217 0120 9093 0000 		sts channelB+1,r25
- 218 0124 8093 0000 		sts channelB,r24
- 219 0128 00C0      		rjmp .L6
- 220               	.L14:
-  87:main.c        **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
- 221               		.loc 2 87 0
- 222 012a 8130      		cpi r24,lo8(1)
- 223 012c 01F0      		breq .+2
- 224 012e 00C0      		rjmp .L6
-  87:main.c        **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
- 225               		.loc 2 87 0 is_stmt 0 discriminator 1
- 226 0130 8091 0000 		lds r24,channelB_status
- 227 0134 8130      		cpi r24,lo8(1)
- 228 0136 01F0      		breq .+2
- 229 0138 00C0      		rjmp .L6
-  88:main.c        **** 				if(channelA > MIN_PWM_SPEED){
- 230               		.loc 2 88 0 is_stmt 1
- 231 013a 2536      		cpi r18,101
- 232 013c 3105      		cpc r19,__zero_reg__
- 233 013e 00F0      		brlo .L18
- 234               	.L38:
- 105:main.c        **** 					channelA -= BREAK_RATE;
- 235               		.loc 2 105 0
- 236 0140 2E51      		subi r18,30
- 237 0142 3109      		sbc r19,__zero_reg__
- 238 0144 3093 0000 		sts channelA+1,r19
- 239 0148 2093 0000 		sts channelA,r18
- 106:main.c        **** 					channelB = channelA;
- 240               		.loc 2 106 0
- 241 014c 3093 0000 		sts channelB+1,r19
- 242 0150 2093 0000 		sts channelB,r18
- 243 0154 00C0      		rjmp .L6
- 244               	.L18:
-  92:main.c        **** 					FORWARD_MODE();
- 245               		.loc 2 92 0
- 246 0156 88B1      		in r24,0x8
- 247 0158 8560      		ori r24,lo8(5)
- 248 015a 88B9      		out 0x8,r24
- 249 015c 88B1      		in r24,0x8
- 250 015e 857F      		andi r24,lo8(-11)
- 251 0160 88B9      		out 0x8,r24
-  93:main.c        **** 					channelA_status = FORWARD;
- 252               		.loc 2 93 0
- 253 0162 1092 0000 		sts channelA_status,__zero_reg__
-  94:main.c        **** 					channelB_status = FORWARD;
- 254               		.loc 2 94 0
- 255 0166 1092 0000 		sts channelB_status,__zero_reg__
- 256 016a 00C0      		rjmp .L6
- 257               	.LVL11:
- 258               	.L10:
- 100:main.c        **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
- 259               		.loc 2 100 0
- 260 016c 9091 0000 		lds r25,channelA_status
- 261 0170 9130      		cpi r25,lo8(1)
- 262 0172 01F4      		brne .L19
- 100:main.c        **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
- 263               		.loc 2 100 0 is_stmt 0 discriminator 1
- 264 0174 8091 0000 		lds r24,channelB_status
- 265               	.LVL12:
- 266 0178 8130      		cpi r24,lo8(1)
- 267 017a 01F0      		breq .+2
- 268 017c 00C0      		rjmp .L6
- 269 017e 00C0      		rjmp .L40
- 270               	.LVL13:
- 271               	.L19:
- 103:main.c        **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
- 272               		.loc 2 103 0 is_stmt 1
- 273 0180 9111      		cpse r25,__zero_reg__
- 274 0182 00C0      		rjmp .L6
- 103:main.c        **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
- 275               		.loc 2 103 0 is_stmt 0 discriminator 1
- 276 0184 9091 0000 		lds r25,channelB_status
- 277 0188 9111      		cpse r25,__zero_reg__
- 278 018a 00C0      		rjmp .L6
- 104:main.c        **** 				if(channelA > MIN_PWM_SPEED){
- 279               		.loc 2 104 0 is_stmt 1
- 280 018c 2536      		cpi r18,101
- 281 018e 3105      		cpc r19,__zero_reg__
- 282 0190 00F4      		brsh .L38
- 108:main.c        **** 					REVERSE_MODE();
- 283               		.loc 2 108 0
- 284 0192 98B1      		in r25,0x8
- 285 0194 9A60      		ori r25,lo8(10)
- 286 0196 98B9      		out 0x8,r25
+ 144 009c 813D      		cpi r24,-47
+ 145 009e 27E0      		ldi r18,7
+ 146 00a0 9207      		cpc r25,r18
+ 147 00a2 00F0      		brlo .L22
+  90:motor_control.h **** 				channelA -= SPEED_DECREASE_RATE;
+ 148               		.loc 2 90 0
+ 149 00a4 0597      		sbiw r24,5
+ 150 00a6 9093 0000 		sts channelA+1,r25
+ 151 00aa 8093 0000 		sts channelA,r24
+  91:motor_control.h **** 				channelB = channelA;
+ 152               		.loc 2 91 0
+ 153 00ae 9093 0000 		sts channelB+1,r25
+ 154 00b2 8093 0000 		sts channelB,r24
+ 155               	.L22:
+  94:motor_control.h **** 			if(channelB_status == FORWARD && channelB_status == FORWARD){
+ 156               		.loc 2 94 0
+ 157 00b6 8091 0000 		lds r24,channelB_status
+ 158 00ba 8111      		cpse r24,__zero_reg__
+ 159 00bc 00C0      		rjmp .L23
+  95:motor_control.h **** 				FORWARD_MODE();
+ 160               		.loc 2 95 0
+ 161 00be 88B1      		in r24,0x8
+ 162 00c0 8560      		ori r24,lo8(5)
+ 163 00c2 88B9      		out 0x8,r24
+ 164 00c4 88B1      		in r24,0x8
+ 165 00c6 857F      		andi r24,lo8(-11)
+ 166               	.L35:
+  98:motor_control.h **** 				REVERSE_MODE();
+ 167               		.loc 2 98 0
+ 168 00c8 88B9      		out 0x8,r24
+ 101:motor_control.h **** 			if(left_status || right_status){
+ 169               		.loc 2 101 0
+ 170 00ca 8091 0000 		lds r24,left_status
+ 171 00ce 8111      		cpse r24,__zero_reg__
+ 172 00d0 00C0      		rjmp .L25
+ 101:motor_control.h **** 			if(left_status || right_status){
+ 173               		.loc 2 101 0 is_stmt 0 discriminator 1
+ 174 00d2 8091 0000 		lds r24,right_status
+ 175 00d6 8823      		tst r24
+ 176 00d8 01F4      		brne .+2
+ 177 00da 00C0      		rjmp .L6
+ 178               	.L25:
+ 102:motor_control.h **** 				channelA = 0x00;
+ 179               		.loc 2 102 0 is_stmt 1
+ 180 00dc 1092 0000 		sts channelA+1,__zero_reg__
+ 181 00e0 1092 0000 		sts channelA,__zero_reg__
+ 103:motor_control.h **** 				channelB = 0x00;
+ 182               		.loc 2 103 0
+ 183 00e4 1092 0000 		sts channelB+1,__zero_reg__
+ 184 00e8 1092 0000 		sts channelB,__zero_reg__
+ 104:motor_control.h **** 				left_status = FALSE;
+ 185               		.loc 2 104 0
+ 186 00ec 1092 0000 		sts left_status,__zero_reg__
+ 105:motor_control.h **** 				right_status = FALSE;
+ 187               		.loc 2 105 0
+ 188 00f0 1092 0000 		sts right_status,__zero_reg__
+ 189 00f4 00C0      		rjmp .L6
+ 190               	.LVL9:
+ 191               	.L9:
+  52:motor_control.h **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
+ 192               		.loc 2 52 0
+ 193 00f6 8091 0000 		lds r24,channelA_status
+ 194               	.LVL10:
+ 195 00fa 8111      		cpse r24,__zero_reg__
+ 196 00fc 00C0      		rjmp .L14
+  52:motor_control.h **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
+ 197               		.loc 2 52 0 is_stmt 0 discriminator 1
+ 198 00fe 8091 0000 		lds r24,channelB_status
+ 199 0102 8111      		cpse r24,__zero_reg__
+ 200 0104 00C0      		rjmp .L6
+ 201               	.L40:
+  69:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
+ 202               		.loc 2 69 0 is_stmt 1
+ 203 0106 2031      		cpi r18,16
+ 204 0108 87E2      		ldi r24,39
+ 205 010a 3807      		cpc r19,r24
+ 206 010c 01F0      		breq .L20
+  69:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
+ 207               		.loc 2 69 0 is_stmt 0 discriminator 2
+ 208 010e 265F      		subi r18,-10
+ 209 0110 3F4F      		sbci r19,-1
+ 210 0112 3093 0000 		sts channelA+1,r19
+ 211 0116 2093 0000 		sts channelA,r18
+ 212               	.L20:
+  70:motor_control.h **** 				channelB = channelA;
+ 213               		.loc 2 70 0 is_stmt 1
+ 214 011a 8091 0000 		lds r24,channelA
+ 215 011e 9091 0000 		lds r25,channelA+1
+ 216               	.L36:
+ 125:motor_control.h **** 				channelB = MAX_PWM_SPEED / 2;
+ 217               		.loc 2 125 0
+ 218 0122 9093 0000 		sts channelB+1,r25
+ 219 0126 8093 0000 		sts channelB,r24
+ 220 012a 00C0      		rjmp .L6
+ 221               	.L14:
+  55:motor_control.h **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
+ 222               		.loc 2 55 0
+ 223 012c 8130      		cpi r24,lo8(1)
+ 224 012e 01F0      		breq .+2
+ 225 0130 00C0      		rjmp .L6
+  55:motor_control.h **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
+ 226               		.loc 2 55 0 is_stmt 0 discriminator 1
+ 227 0132 8091 0000 		lds r24,channelB_status
+ 228 0136 8130      		cpi r24,lo8(1)
+ 229 0138 01F0      		breq .+2
+ 230 013a 00C0      		rjmp .L6
+  56:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
+ 231               		.loc 2 56 0 is_stmt 1
+ 232 013c 213D      		cpi r18,-47
+ 233 013e 97E0      		ldi r25,7
+ 234 0140 3907      		cpc r19,r25
+ 235 0142 00F0      		brlo .L18
+ 236               	.L38:
+  73:motor_control.h **** 					channelA -= BREAK_RATE;
+ 237               		.loc 2 73 0
+ 238 0144 2E51      		subi r18,30
+ 239 0146 3109      		sbc r19,__zero_reg__
+ 240 0148 3093 0000 		sts channelA+1,r19
+ 241 014c 2093 0000 		sts channelA,r18
+  74:motor_control.h **** 					channelB = channelA;
+ 242               		.loc 2 74 0
+ 243 0150 3093 0000 		sts channelB+1,r19
+ 244 0154 2093 0000 		sts channelB,r18
+ 245 0158 00C0      		rjmp .L6
+ 246               	.L18:
+  60:motor_control.h **** 					FORWARD_MODE();
+ 247               		.loc 2 60 0
+ 248 015a 88B1      		in r24,0x8
+ 249 015c 8560      		ori r24,lo8(5)
+ 250 015e 88B9      		out 0x8,r24
+ 251 0160 88B1      		in r24,0x8
+ 252 0162 857F      		andi r24,lo8(-11)
+ 253 0164 88B9      		out 0x8,r24
+  61:motor_control.h **** 					channelA_status = FORWARD;
+ 254               		.loc 2 61 0
+ 255 0166 1092 0000 		sts channelA_status,__zero_reg__
+  62:motor_control.h **** 					channelB_status = FORWARD;
+ 256               		.loc 2 62 0
+ 257 016a 1092 0000 		sts channelB_status,__zero_reg__
+ 258 016e 00C0      		rjmp .L6
+ 259               	.LVL11:
+ 260               	.L10:
+  68:motor_control.h **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
+ 261               		.loc 2 68 0
+ 262 0170 9091 0000 		lds r25,channelA_status
+ 263 0174 9130      		cpi r25,lo8(1)
+ 264 0176 01F4      		brne .L19
+  68:motor_control.h **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
+ 265               		.loc 2 68 0 is_stmt 0 discriminator 1
+ 266 0178 8091 0000 		lds r24,channelB_status
+ 267               	.LVL12:
+ 268 017c 8130      		cpi r24,lo8(1)
+ 269 017e 01F0      		breq .+2
+ 270 0180 00C0      		rjmp .L6
+ 271 0182 00C0      		rjmp .L40
+ 272               	.LVL13:
+ 273               	.L19:
+  71:motor_control.h **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
+ 274               		.loc 2 71 0 is_stmt 1
+ 275 0184 9111      		cpse r25,__zero_reg__
+ 276 0186 00C0      		rjmp .L6
+  71:motor_control.h **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
+ 277               		.loc 2 71 0 is_stmt 0 discriminator 1
+ 278 0188 9091 0000 		lds r25,channelB_status
+ 279 018c 9111      		cpse r25,__zero_reg__
+ 280 018e 00C0      		rjmp .L6
+  72:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
+ 281               		.loc 2 72 0 is_stmt 1
+ 282 0190 213D      		cpi r18,-47
+ 283 0192 97E0      		ldi r25,7
+ 284 0194 3907      		cpc r19,r25
+ 285 0196 00F4      		brsh .L38
+  76:motor_control.h **** 					REVERSE_MODE();
+ 286               		.loc 2 76 0
  287 0198 98B1      		in r25,0x8
- 288 019a 9A7F      		andi r25,lo8(-6)
+ 288 019a 9A60      		ori r25,lo8(10)
  289 019c 98B9      		out 0x8,r25
- 109:main.c        **** 					channelA_status = REVERSE;
- 290               		.loc 2 109 0
- 291 019e 8093 0000 		sts channelA_status,r24
- 110:main.c        **** 					channelB_status = REVERSE;
- 292               		.loc 2 110 0
- 293 01a2 8093 0000 		sts channelB_status,r24
- 294 01a6 00C0      		rjmp .L6
- 295               	.L11:
- 116:main.c        **** 			channelA = 0x00;
- 296               		.loc 2 116 0
- 297 01a8 1092 0000 		sts channelA+1,__zero_reg__
- 298 01ac 1092 0000 		sts channelA,__zero_reg__
- 117:main.c        **** 			channelB = 0x00;
- 299               		.loc 2 117 0
- 300 01b0 1092 0000 		sts channelB+1,__zero_reg__
- 301 01b4 1092 0000 		sts channelB,__zero_reg__
- 118:main.c        **** 			break;
- 302               		.loc 2 118 0
- 303 01b8 00C0      		rjmp .L6
- 304               	.LVL14:
- 305               	.L23:
- 130:main.c        **** 				REVERSE_MODE();
- 306               		.loc 2 130 0
- 307 01ba 88B1      		in r24,0x8
- 308 01bc 8A60      		ori r24,lo8(10)
- 309 01be 88B9      		out 0x8,r24
+ 290 019e 98B1      		in r25,0x8
+ 291 01a0 9A7F      		andi r25,lo8(-6)
+ 292 01a2 98B9      		out 0x8,r25
+  77:motor_control.h **** 					channelA_status = REVERSE;
+ 293               		.loc 2 77 0
+ 294 01a4 8093 0000 		sts channelA_status,r24
+  78:motor_control.h **** 					channelB_status = REVERSE;
+ 295               		.loc 2 78 0
+ 296 01a8 8093 0000 		sts channelB_status,r24
+ 297 01ac 00C0      		rjmp .L6
+ 298               	.L11:
+  84:motor_control.h **** 			channelA = 0x00;
+ 299               		.loc 2 84 0
+ 300 01ae 1092 0000 		sts channelA+1,__zero_reg__
+ 301 01b2 1092 0000 		sts channelA,__zero_reg__
+  85:motor_control.h **** 			channelB = 0x00;
+ 302               		.loc 2 85 0
+ 303 01b6 1092 0000 		sts channelB+1,__zero_reg__
+ 304 01ba 1092 0000 		sts channelB,__zero_reg__
+  86:motor_control.h **** 			break;
+ 305               		.loc 2 86 0
+ 306 01be 00C0      		rjmp .L6
+ 307               	.LVL14:
+ 308               	.L23:
+  98:motor_control.h **** 				REVERSE_MODE();
+ 309               		.loc 2 98 0
  310 01c0 88B1      		in r24,0x8
- 311 01c2 8A7F      		andi r24,lo8(-6)
- 312 01c4 00C0      		rjmp .L35
- 313               	.LVL15:
- 314               	.L7:
- 142:main.c        **** 			RIGHT_MODE();
- 315               		.loc 2 142 0
- 316 01c6 88B1      		in r24,0x8
- 317               	.LVL16:
- 318 01c8 8660      		ori r24,lo8(6)
- 319 01ca 88B9      		out 0x8,r24
- 320 01cc 88B1      		in r24,0x8
- 321 01ce 867F      		andi r24,lo8(-10)
+ 311 01c2 8A60      		ori r24,lo8(10)
+ 312 01c4 88B9      		out 0x8,r24
+ 313 01c6 88B1      		in r24,0x8
+ 314 01c8 8A7F      		andi r24,lo8(-6)
+ 315 01ca 00C0      		rjmp .L35
+ 316               	.LVL15:
+ 317               	.L7:
+ 110:motor_control.h **** 			RIGHT_MODE();
+ 318               		.loc 2 110 0
+ 319 01cc 88B1      		in r24,0x8
+ 320               	.LVL16:
+ 321 01ce 8660      		ori r24,lo8(6)
  322 01d0 88B9      		out 0x8,r24
- 143:main.c        **** 			if(channelA < MIN_PWM_SPEED){
- 323               		.loc 2 143 0
- 324 01d2 8091 0000 		lds r24,channelA
- 325 01d6 9091 0000 		lds r25,channelA+1
- 326 01da 8436      		cpi r24,100
- 327 01dc 9105      		cpc r25,__zero_reg__
- 328 01de 00F0      		brlo .+2
- 329 01e0 00C0      		rjmp .L6
- 144:main.c        **** 				left_status = FALSE;
- 330               		.loc 2 144 0
- 331 01e2 1092 0000 		sts left_status,__zero_reg__
- 145:main.c        **** 				right_status = TRUE;
- 332               		.loc 2 145 0
- 333 01e6 81E0      		ldi r24,lo8(1)
- 334 01e8 8093 0000 		sts right_status,r24
- 146:main.c        **** 				channelA = 15000;
- 335               		.loc 2 146 0
- 336 01ec 88E9      		ldi r24,lo8(-104)
- 337 01ee 9AE3      		ldi r25,lo8(58)
- 338               	.L37:
- 156:main.c        **** 				channelA = MAX_PWM_SPEED / 2;
- 339               		.loc 2 156 0
- 340 01f0 9093 0000 		sts channelA+1,r25
- 341 01f4 8093 0000 		sts channelA,r24
- 342 01f8 00C0      		rjmp .L36
- 343               	.LVL17:
- 344               	.L12:
- 152:main.c        **** 			LEFT_MODE();
- 345               		.loc 2 152 0
- 346 01fa 88B1      		in r24,0x8
- 347               	.LVL18:
- 348 01fc 8960      		ori r24,lo8(9)
- 349 01fe 88B9      		out 0x8,r24
- 350 0200 88B1      		in r24,0x8
- 351 0202 897F      		andi r24,lo8(-7)
+ 323 01d2 88B1      		in r24,0x8
+ 324 01d4 867F      		andi r24,lo8(-10)
+ 325 01d6 88B9      		out 0x8,r24
+ 111:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
+ 326               		.loc 2 111 0
+ 327 01d8 8091 0000 		lds r24,channelA
+ 328 01dc 9091 0000 		lds r25,channelA+1
+ 329 01e0 803D      		cpi r24,-48
+ 330 01e2 9740      		sbci r25,7
+ 331 01e4 00F0      		brlo .+2
+ 332 01e6 00C0      		rjmp .L6
+ 112:motor_control.h **** 				left_status = FALSE;
+ 333               		.loc 2 112 0
+ 334 01e8 1092 0000 		sts left_status,__zero_reg__
+ 113:motor_control.h **** 				right_status = TRUE;
+ 335               		.loc 2 113 0
+ 336 01ec 81E0      		ldi r24,lo8(1)
+ 337 01ee 8093 0000 		sts right_status,r24
+ 114:motor_control.h **** 				channelA = 15000;
+ 338               		.loc 2 114 0
+ 339 01f2 88E9      		ldi r24,lo8(-104)
+ 340 01f4 9AE3      		ldi r25,lo8(58)
+ 341               	.L37:
+ 124:motor_control.h **** 				channelA = MAX_PWM_SPEED / 2;
+ 342               		.loc 2 124 0
+ 343 01f6 9093 0000 		sts channelA+1,r25
+ 344 01fa 8093 0000 		sts channelA,r24
+ 345 01fe 00C0      		rjmp .L36
+ 346               	.LVL17:
+ 347               	.L12:
+ 120:motor_control.h **** 			LEFT_MODE();
+ 348               		.loc 2 120 0
+ 349 0200 88B1      		in r24,0x8
+ 350               	.LVL18:
+ 351 0202 8960      		ori r24,lo8(9)
  352 0204 88B9      		out 0x8,r24
- 153:main.c        **** 			if(channelA < MIN_PWM_SPEED){
- 353               		.loc 2 153 0
- 354 0206 8091 0000 		lds r24,channelA
- 355 020a 9091 0000 		lds r25,channelA+1
- 356 020e 8436      		cpi r24,100
- 357 0210 9105      		cpc r25,__zero_reg__
- 358 0212 00F0      		brlo .+2
- 359 0214 00C0      		rjmp .L6
- 154:main.c        **** 				left_status = TRUE;
- 360               		.loc 2 154 0
- 361 0216 81E0      		ldi r24,lo8(1)
- 362 0218 8093 0000 		sts left_status,r24
- 155:main.c        **** 				right_status = FALSE;
- 363               		.loc 2 155 0
- 364 021c 1092 0000 		sts right_status,__zero_reg__
- 156:main.c        **** 				channelA = MAX_PWM_SPEED / 2;
- 365               		.loc 2 156 0
- 366 0220 80E1      		ldi r24,lo8(16)
- 367 0222 97E2      		ldi r25,lo8(39)
- 368 0224 00C0      		rjmp .L37
- 369               		.cfi_endproc
- 370               	.LFE9:
- 372               		.section	.text.startup,"ax",@progbits
- 373               	.global	main
- 375               	main:
- 376               	.LFB8:
-  52:main.c        **** int main(void){
- 377               		.loc 2 52 0
- 378               		.cfi_startproc
- 379               	/* prologue: function */
- 380               	/* frame size = 0 */
- 381               	/* stack size = 0 */
- 382               	.L__stack_usage = 0
-  54:main.c        **** 	setupPWM();
- 383               		.loc 2 54 0
- 384 0000 0E94 0000 		call setupPWM
- 385               	.LVL19:
-  56:main.c        **** 	MOTOR_DDR = 0x0F;
- 386               		.loc 2 56 0
- 387 0004 8FE0      		ldi r24,lo8(15)
- 388 0006 87B9      		out 0x7,r24
-  58:main.c        **** 	IR_DDR &= ~((1 << IR_LEFT) | (1 << IR_RIGHT));
- 389               		.loc 2 58 0
- 390 0008 8AB1      		in r24,0xa
- 391 000a 8F7C      		andi r24,lo8(-49)
- 392 000c 8AB9      		out 0xa,r24
- 393               	.LVL20:
- 394               	.LBB22:
- 395               	.LBB23:
+ 353 0206 88B1      		in r24,0x8
+ 354 0208 897F      		andi r24,lo8(-7)
+ 355 020a 88B9      		out 0x8,r24
+ 121:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
+ 356               		.loc 2 121 0
+ 357 020c 8091 0000 		lds r24,channelA
+ 358 0210 9091 0000 		lds r25,channelA+1
+ 359 0214 803D      		cpi r24,-48
+ 360 0216 9740      		sbci r25,7
+ 361 0218 00F0      		brlo .+2
+ 362 021a 00C0      		rjmp .L6
+ 122:motor_control.h **** 				left_status = TRUE;
+ 363               		.loc 2 122 0
+ 364 021c 81E0      		ldi r24,lo8(1)
+ 365 021e 8093 0000 		sts left_status,r24
+ 123:motor_control.h **** 				right_status = FALSE;
+ 366               		.loc 2 123 0
+ 367 0222 1092 0000 		sts right_status,__zero_reg__
+ 124:motor_control.h **** 				channelA = MAX_PWM_SPEED / 2;
+ 368               		.loc 2 124 0
+ 369 0226 80E1      		ldi r24,lo8(16)
+ 370 0228 97E2      		ldi r25,lo8(39)
+ 371 022a 00C0      		rjmp .L37
+ 372               		.cfi_endproc
+ 373               	.LFE9:
+ 375               	.global	setupMotor
+ 377               	setupMotor:
+ 378               	.LFB8:
+  40:motor_control.h **** void setupMotor(void){
+ 379               		.loc 2 40 0
+ 380               		.cfi_startproc
+ 381               	/* prologue: function */
+ 382               	/* frame size = 0 */
+ 383               	/* stack size = 0 */
+ 384               	.L__stack_usage = 0
+  41:motor_control.h **** 	MOTOR_DDR = 0x0F;
+ 385               		.loc 2 41 0
+ 386 022c 8FE0      		ldi r24,lo8(15)
+ 387 022e 87B9      		out 0x7,r24
+ 388               	.LVL19:
+ 389               	.LBB14:
+ 390               	.LBB15:
   20:pwm.h         **** 	ICR1 = period;
- 396               		.loc 1 20 0
- 397 000e 80E2      		ldi r24,lo8(32)
- 398 0010 9EE4      		ldi r25,lo8(78)
- 399 0012 9093 8700 		sts 134+1,r25
- 400 0016 8093 8600 		sts 134,r24
+ 391               		.loc 1 20 0
+ 392 0230 E6E8      		ldi r30,lo8(-122)
+ 393 0232 F0E0      		ldi r31,0
+ 394 0234 80E2      		ldi r24,lo8(32)
+ 395 0236 9EE4      		ldi r25,lo8(78)
+ 396 0238 9183      		std Z+1,r25
+ 397 023a 8083      		st Z,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 401               		.loc 1 21 0
- 402 001a 1092 8900 		sts 136+1,__zero_reg__
- 403 001e 1092 8800 		sts 136,__zero_reg__
- 404               	.LVL21:
- 405               	.LBE23:
- 406               	.LBE22:
- 407               	.LBB24:
- 408               	.LBB25:
+ 398               		.loc 1 21 0
+ 399 023c 1092 8900 		sts 136+1,__zero_reg__
+ 400 0240 1092 8800 		sts 136,__zero_reg__
+ 401               	.LVL20:
+ 402               	.LBE15:
+ 403               	.LBE14:
+ 404               	.LBB16:
+ 405               	.LBB17:
   20:pwm.h         **** 	ICR1 = period;
- 409               		.loc 1 20 0
- 410 0022 9093 8700 		sts 134+1,r25
- 411 0026 8093 8600 		sts 134,r24
+ 406               		.loc 1 20 0
+ 407 0244 9183      		std Z+1,r25
+ 408 0246 8083      		st Z,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 412               		.loc 1 21 0
- 413 002a 1092 8B00 		sts 138+1,__zero_reg__
- 414 002e 1092 8A00 		sts 138,__zero_reg__
- 415               	.LVL22:
- 416               	.LBE25:
- 417               	.LBE24:
-  63:main.c        **** 	controlMotor(NEUTRAL);
- 418               		.loc 2 63 0
- 419 0032 85E0      		ldi r24,lo8(5)
- 420               	.L53:
- 421 0034 0E94 0000 		call controlMotor
- 422               	.LVL23:
- 423               	.L42:
-  66:main.c        **** 		if(IR_PIN & (1 << IR_RIGHT) && !(IR_PIN & (1 << IR_LEFT))){
- 424               		.loc 2 66 0
- 425 0038 4C9B      		sbis 0x9,4
- 426 003a 00C0      		rjmp .L43
-  66:main.c        **** 		if(IR_PIN & (1 << IR_RIGHT) && !(IR_PIN & (1 << IR_LEFT))){
- 427               		.loc 2 66 0 is_stmt 0 discriminator 1
- 428 003c 4D99      		sbic 0x9,5
- 429 003e 00C0      		rjmp .L43
-  67:main.c        **** 			controlMotor(LEFT);
- 430               		.loc 2 67 0 is_stmt 1
- 431 0040 83E0      		ldi r24,lo8(3)
- 432               	.L52:
-  70:main.c        **** 			controlMotor(RIGHT);
- 433               		.loc 2 70 0
- 434 0042 0E94 0000 		call controlMotor
- 435               	.LVL24:
- 436               	.LBB26:
- 437               	.LBB27:
- 438               		.file 3 "/usr/avr/include/util/delay.h"
-   1:/usr/avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
-   2:/usr/avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
-   3:/usr/avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
-   4:/usr/avr/include/util/delay.h ****    All rights reserved.
-   5:/usr/avr/include/util/delay.h **** 
-   6:/usr/avr/include/util/delay.h ****    Redistribution and use in source and binary forms, with or without
-   7:/usr/avr/include/util/delay.h ****    modification, are permitted provided that the following conditions are met:
-   8:/usr/avr/include/util/delay.h **** 
-   9:/usr/avr/include/util/delay.h ****    * Redistributions of source code must retain the above copyright
-  10:/usr/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer.
-  11:/usr/avr/include/util/delay.h **** 
-  12:/usr/avr/include/util/delay.h ****    * Redistributions in binary form must reproduce the above copyright
-  13:/usr/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer in
-  14:/usr/avr/include/util/delay.h ****      the documentation and/or other materials provided with the
-  15:/usr/avr/include/util/delay.h ****      distribution.
-  16:/usr/avr/include/util/delay.h **** 
-  17:/usr/avr/include/util/delay.h ****    * Neither the name of the copyright holders nor the names of
-  18:/usr/avr/include/util/delay.h ****      contributors may be used to endorse or promote products derived
-  19:/usr/avr/include/util/delay.h ****      from this software without specific prior written permission.
-  20:/usr/avr/include/util/delay.h **** 
-  21:/usr/avr/include/util/delay.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  22:/usr/avr/include/util/delay.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  23:/usr/avr/include/util/delay.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  24:/usr/avr/include/util/delay.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  25:/usr/avr/include/util/delay.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  26:/usr/avr/include/util/delay.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  27:/usr/avr/include/util/delay.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  28:/usr/avr/include/util/delay.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  29:/usr/avr/include/util/delay.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  30:/usr/avr/include/util/delay.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  31:/usr/avr/include/util/delay.h ****   POSSIBILITY OF SUCH DAMAGE. */
-  32:/usr/avr/include/util/delay.h **** 
-  33:/usr/avr/include/util/delay.h **** /* $Id: delay.h.in 2506 2016-02-08 10:05:45Z joerg_wunsch $ */
-  34:/usr/avr/include/util/delay.h **** 
-  35:/usr/avr/include/util/delay.h **** #ifndef _UTIL_DELAY_H_
-  36:/usr/avr/include/util/delay.h **** #define _UTIL_DELAY_H_ 1
-  37:/usr/avr/include/util/delay.h **** 
-  38:/usr/avr/include/util/delay.h **** #ifndef __DOXYGEN__
-  39:/usr/avr/include/util/delay.h **** #  ifndef __HAS_DELAY_CYCLES
-  40:/usr/avr/include/util/delay.h **** #    define __HAS_DELAY_CYCLES 1
-  41:/usr/avr/include/util/delay.h **** #  endif
-  42:/usr/avr/include/util/delay.h **** #endif  /* __DOXYGEN__ */
-  43:/usr/avr/include/util/delay.h **** 
-  44:/usr/avr/include/util/delay.h **** #include <inttypes.h>
-  45:/usr/avr/include/util/delay.h **** #include <util/delay_basic.h>
-  46:/usr/avr/include/util/delay.h **** #include <math.h>
-  47:/usr/avr/include/util/delay.h **** 
-  48:/usr/avr/include/util/delay.h **** /** \file */
-  49:/usr/avr/include/util/delay.h **** /** \defgroup util_delay <util/delay.h>: Convenience functions for busy-wait delay loops
-  50:/usr/avr/include/util/delay.h ****     \code
-  51:/usr/avr/include/util/delay.h ****     #define F_CPU 1000000UL  // 1 MHz
-  52:/usr/avr/include/util/delay.h ****     //#define F_CPU 14.7456E6
-  53:/usr/avr/include/util/delay.h ****     #include <util/delay.h>
-  54:/usr/avr/include/util/delay.h ****     \endcode
-  55:/usr/avr/include/util/delay.h **** 
-  56:/usr/avr/include/util/delay.h ****     \note As an alternative method, it is possible to pass the
-  57:/usr/avr/include/util/delay.h ****     F_CPU macro down to the compiler from the Makefile.
-  58:/usr/avr/include/util/delay.h ****     Obviously, in that case, no \c \#define statement should be
-  59:/usr/avr/include/util/delay.h ****     used.
-  60:/usr/avr/include/util/delay.h **** 
-  61:/usr/avr/include/util/delay.h ****     The functions in this header file are wrappers around the basic
-  62:/usr/avr/include/util/delay.h ****     busy-wait functions from <util/delay_basic.h>.  They are meant as
-  63:/usr/avr/include/util/delay.h ****     convenience functions where actual time values can be specified
-  64:/usr/avr/include/util/delay.h ****     rather than a number of cycles to wait for.  The idea behind is
-  65:/usr/avr/include/util/delay.h ****     that compile-time constant expressions will be eliminated by
-  66:/usr/avr/include/util/delay.h ****     compiler optimization so floating-point expressions can be used
-  67:/usr/avr/include/util/delay.h ****     to calculate the number of delay cycles needed based on the CPU
-  68:/usr/avr/include/util/delay.h ****     frequency passed by the macro F_CPU.
-  69:/usr/avr/include/util/delay.h **** 
-  70:/usr/avr/include/util/delay.h ****     \note In order for these functions to work as intended, compiler
-  71:/usr/avr/include/util/delay.h ****     optimizations <em>must</em> be enabled, and the delay time
-  72:/usr/avr/include/util/delay.h ****     <em>must</em> be an expression that is a known constant at
-  73:/usr/avr/include/util/delay.h ****     compile-time.  If these requirements are not met, the resulting
-  74:/usr/avr/include/util/delay.h ****     delay will be much longer (and basically unpredictable), and
-  75:/usr/avr/include/util/delay.h ****     applications that otherwise do not use floating-point calculations
-  76:/usr/avr/include/util/delay.h ****     will experience severe code bloat by the floating-point library
-  77:/usr/avr/include/util/delay.h ****     routines linked into the application.
-  78:/usr/avr/include/util/delay.h **** 
-  79:/usr/avr/include/util/delay.h ****     The functions available allow the specification of microsecond, and
-  80:/usr/avr/include/util/delay.h ****     millisecond delays directly, using the application-supplied macro
-  81:/usr/avr/include/util/delay.h ****     F_CPU as the CPU clock frequency (in Hertz).
-  82:/usr/avr/include/util/delay.h **** 
-  83:/usr/avr/include/util/delay.h **** */
-  84:/usr/avr/include/util/delay.h **** 
-  85:/usr/avr/include/util/delay.h **** #if !defined(__DOXYGEN__)
-  86:/usr/avr/include/util/delay.h **** static __inline__ void _delay_us(double __us) __attribute__((__always_inline__));
-  87:/usr/avr/include/util/delay.h **** static __inline__ void _delay_ms(double __ms) __attribute__((__always_inline__));
-  88:/usr/avr/include/util/delay.h **** #endif
-  89:/usr/avr/include/util/delay.h **** 
-  90:/usr/avr/include/util/delay.h **** #ifndef F_CPU
-  91:/usr/avr/include/util/delay.h **** /* prevent compiler error by supplying a default */
-  92:/usr/avr/include/util/delay.h **** # warning "F_CPU not defined for <util/delay.h>"
-  93:/usr/avr/include/util/delay.h **** /** \ingroup util_delay
-  94:/usr/avr/include/util/delay.h ****     \def F_CPU
-  95:/usr/avr/include/util/delay.h ****     \brief CPU frequency in Hz
-  96:/usr/avr/include/util/delay.h **** 
-  97:/usr/avr/include/util/delay.h ****     The macro F_CPU specifies the CPU frequency to be considered by
-  98:/usr/avr/include/util/delay.h ****     the delay macros.  This macro is normally supplied by the
-  99:/usr/avr/include/util/delay.h ****     environment (e.g. from within a project header, or the project's
- 100:/usr/avr/include/util/delay.h ****     Makefile).  The value 1 MHz here is only provided as a "vanilla"
- 101:/usr/avr/include/util/delay.h ****     fallback if no such user-provided definition could be found.
- 102:/usr/avr/include/util/delay.h **** 
- 103:/usr/avr/include/util/delay.h ****     In terms of the delay functions, the CPU frequency can be given as
- 104:/usr/avr/include/util/delay.h ****     a floating-point constant (e.g. 3.6864E6 for 3.6864 MHz).
- 105:/usr/avr/include/util/delay.h ****     However, the macros in <util/setbaud.h> require it to be an
- 106:/usr/avr/include/util/delay.h ****     integer value.
- 107:/usr/avr/include/util/delay.h ****  */
- 108:/usr/avr/include/util/delay.h **** # define F_CPU 1000000UL
- 109:/usr/avr/include/util/delay.h **** #endif
- 110:/usr/avr/include/util/delay.h **** 
- 111:/usr/avr/include/util/delay.h **** #ifndef __OPTIMIZE__
- 112:/usr/avr/include/util/delay.h **** # warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
- 113:/usr/avr/include/util/delay.h **** #endif
- 114:/usr/avr/include/util/delay.h **** 
- 115:/usr/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
- 116:/usr/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
- 117:/usr/avr/include/util/delay.h ****   __STDC_HOSTED__
- 118:/usr/avr/include/util/delay.h **** #  include <math.h>
- 119:/usr/avr/include/util/delay.h **** #endif
- 120:/usr/avr/include/util/delay.h **** 
- 121:/usr/avr/include/util/delay.h **** /**
- 122:/usr/avr/include/util/delay.h ****    \ingroup util_delay
- 123:/usr/avr/include/util/delay.h **** 
- 124:/usr/avr/include/util/delay.h ****    Perform a delay of \c __ms milliseconds, using _delay_loop_2().
- 125:/usr/avr/include/util/delay.h **** 
- 126:/usr/avr/include/util/delay.h ****    The macro F_CPU is supposed to be defined to a
- 127:/usr/avr/include/util/delay.h ****    constant defining the CPU clock frequency (in Hertz).
- 128:/usr/avr/include/util/delay.h **** 
- 129:/usr/avr/include/util/delay.h ****    The maximal possible delay is 262.14 ms / F_CPU in MHz.
- 130:/usr/avr/include/util/delay.h **** 
- 131:/usr/avr/include/util/delay.h ****    When the user request delay which exceed the maximum possible one,
- 132:/usr/avr/include/util/delay.h ****    _delay_ms() provides a decreased resolution functionality. In this
- 133:/usr/avr/include/util/delay.h ****    mode _delay_ms() will work with a resolution of 1/10 ms, providing
- 134:/usr/avr/include/util/delay.h ****    delays up to 6.5535 seconds (independent from CPU frequency).  The
- 135:/usr/avr/include/util/delay.h ****    user will not be informed about decreased resolution.
- 136:/usr/avr/include/util/delay.h **** 
- 137:/usr/avr/include/util/delay.h ****    If the avr-gcc toolchain has __builtin_avr_delay_cycles()
- 138:/usr/avr/include/util/delay.h ****    support, maximal possible delay is 4294967.295 ms/ F_CPU in MHz. For
- 139:/usr/avr/include/util/delay.h ****    values greater than the maximal possible delay, overflows results in
- 140:/usr/avr/include/util/delay.h ****    no delay i.e., 0ms.
- 141:/usr/avr/include/util/delay.h **** 
- 142:/usr/avr/include/util/delay.h ****    Conversion of \c __ms into clock cycles may not always result in
- 143:/usr/avr/include/util/delay.h ****    integer.  By default, the clock cycles rounded up to next
- 144:/usr/avr/include/util/delay.h ****    integer. This ensures that the user gets at least \c __ms
- 145:/usr/avr/include/util/delay.h ****    microseconds of delay.
- 146:/usr/avr/include/util/delay.h **** 
- 147:/usr/avr/include/util/delay.h ****    Alternatively, by defining the macro \c __DELAY_ROUND_DOWN__, or
- 148:/usr/avr/include/util/delay.h ****    \c __DELAY_ROUND_CLOSEST__, before including this header file, the
- 149:/usr/avr/include/util/delay.h ****    algorithm can be made to round down, or round to closest integer,
- 150:/usr/avr/include/util/delay.h ****    respectively.
- 151:/usr/avr/include/util/delay.h **** 
- 152:/usr/avr/include/util/delay.h ****    \note
- 153:/usr/avr/include/util/delay.h **** 
- 154:/usr/avr/include/util/delay.h ****    The implementation of _delay_ms() based on
- 155:/usr/avr/include/util/delay.h ****    __builtin_avr_delay_cycles() is not backward compatible with older
- 156:/usr/avr/include/util/delay.h ****    implementations.  In order to get functionality backward compatible
- 157:/usr/avr/include/util/delay.h ****    with previous versions, the macro \c "__DELAY_BACKWARD_COMPATIBLE__"
- 158:/usr/avr/include/util/delay.h ****    must be defined before including this header file. Also, the
- 159:/usr/avr/include/util/delay.h ****    backward compatible algorithm will be chosen if the code is
- 160:/usr/avr/include/util/delay.h ****    compiled in a <em>freestanding environment</em> (GCC option
- 161:/usr/avr/include/util/delay.h ****    \c -ffreestanding), as the math functions required for rounding are
- 162:/usr/avr/include/util/delay.h ****    not available to the compiler then.
- 163:/usr/avr/include/util/delay.h **** 
- 164:/usr/avr/include/util/delay.h ****  */
- 165:/usr/avr/include/util/delay.h **** void
- 166:/usr/avr/include/util/delay.h **** _delay_ms(double __ms)
- 167:/usr/avr/include/util/delay.h **** {
- 168:/usr/avr/include/util/delay.h **** 	double __tmp ;
- 169:/usr/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
- 170:/usr/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
- 171:/usr/avr/include/util/delay.h ****   __STDC_HOSTED__
- 172:/usr/avr/include/util/delay.h **** 	uint32_t __ticks_dc;
- 173:/usr/avr/include/util/delay.h **** 	extern void __builtin_avr_delay_cycles(unsigned long);
- 174:/usr/avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 1e3) * __ms;
- 175:/usr/avr/include/util/delay.h **** 
- 176:/usr/avr/include/util/delay.h **** 	#if defined(__DELAY_ROUND_DOWN__)
- 177:/usr/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)fabs(__tmp);
- 178:/usr/avr/include/util/delay.h **** 
- 179:/usr/avr/include/util/delay.h **** 	#elif defined(__DELAY_ROUND_CLOSEST__)
- 180:/usr/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(fabs(__tmp)+0.5);
- 181:/usr/avr/include/util/delay.h **** 
- 182:/usr/avr/include/util/delay.h **** 	#else
- 183:/usr/avr/include/util/delay.h **** 		//round up by default
- 184:/usr/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
- 185:/usr/avr/include/util/delay.h **** 	#endif
- 186:/usr/avr/include/util/delay.h **** 
- 187:/usr/avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
- 439               		.loc 3 187 0
- 440 0046 2FEF      		ldi r18,lo8(319999)
- 441 0048 81EE      		ldi r24,hi8(319999)
- 442 004a 94E0      		ldi r25,hlo8(319999)
- 443 004c 2150      	1:	subi r18,1
- 444 004e 8040      		sbci r24,0
- 445 0050 9040      		sbci r25,0
- 446 0052 01F4      		brne 1b
- 447 0054 00C0      		rjmp .
- 448 0056 0000      		nop
- 449 0058 00C0      		rjmp .L42
- 450               	.LVL25:
- 451               	.L43:
- 452               	.LBE27:
- 453               	.LBE26:
-  69:main.c        **** 		}else if(IR_PIN & (1 << IR_LEFT) && !(IR_PIN & (1 << IR_RIGHT))){
- 454               		.loc 2 69 0
- 455 005a 4D9B      		sbis 0x9,5
- 456 005c 00C0      		rjmp .L45
-  69:main.c        **** 		}else if(IR_PIN & (1 << IR_LEFT) && !(IR_PIN & (1 << IR_RIGHT))){
- 457               		.loc 2 69 0 is_stmt 0 discriminator 1
- 458 005e 4C99      		sbic 0x9,4
- 459 0060 00C0      		rjmp .L45
-  70:main.c        **** 			controlMotor(RIGHT);
- 460               		.loc 2 70 0 is_stmt 1
- 461 0062 82E0      		ldi r24,lo8(2)
- 462 0064 00C0      		rjmp .L52
- 463               	.L45:
-  73:main.c        **** 			controlMotor(NEUTRAL);
- 464               		.loc 2 73 0
- 465 0066 85E0      		ldi r24,lo8(5)
- 466 0068 0E94 0000 		call controlMotor
- 467               	.LVL26:
-  74:main.c        **** 			controlMotor(FORWARD);
- 468               		.loc 2 74 0
- 469 006c 80E0      		ldi r24,0
- 470 006e 00C0      		rjmp .L53
- 471               		.cfi_endproc
- 472               	.LFE8:
- 474               	.global	right_status
- 475               		.section .bss
- 478               	right_status:
- 479 0000 00        		.zero	1
- 480               	.global	left_status
- 483               	left_status:
- 484 0001 00        		.zero	1
- 485               	.global	channelB_status
- 488               	channelB_status:
- 489 0002 00        		.zero	1
- 490               	.global	channelA_status
- 493               	channelA_status:
- 494 0003 00        		.zero	1
- 495               	.global	channelB
- 498               	channelB:
- 499 0004 0000      		.zero	2
- 500               	.global	channelA
- 503               	channelA:
- 504 0006 0000      		.zero	2
- 505               		.text
- 506               	.Letext0:
- 507               		.file 4 "/usr/avr/include/stdint.h"
+ 409               		.loc 1 21 0
+ 410 0248 1092 8B00 		sts 138+1,__zero_reg__
+ 411 024c 1092 8A00 		sts 138,__zero_reg__
+ 412               	.LVL21:
+ 413               	.LBE17:
+ 414               	.LBE16:
+  46:motor_control.h **** 	controlMotor(NEUTRAL);
+ 415               		.loc 2 46 0
+ 416 0250 85E0      		ldi r24,lo8(5)
+ 417 0252 0C94 0000 		jmp controlMotor
+ 418               	.LVL22:
+ 419               		.cfi_endproc
+ 420               	.LFE8:
+ 422               	.global	initUSART
+ 424               	initUSART:
+ 425               	.LFB10:
+ 426               		.file 3 "serial.h"
+   1:serial.h      **** #define BAUD_RATE 9600
+   2:serial.h      **** 
+   3:serial.h      **** #include <avr/io.h>
+   4:serial.h      **** #include "cpu_def.h"
+   5:serial.h      **** 
+   6:serial.h      **** void initUSART(void);
+   7:serial.h      **** uint8_t getCh(void);
+   8:serial.h      **** void putCh(uint8_t data);
+   9:serial.h      **** 
+  10:serial.h      **** void initUSART(void){
+ 427               		.loc 3 10 0
+ 428               		.cfi_startproc
+ 429               	/* prologue: function */
+ 430               	/* frame size = 0 */
+ 431               	/* stack size = 0 */
+ 432               	.L__stack_usage = 0
+ 433               	.LVL23:
+  11:serial.h      ****    //Set Baud rate; ubrr_value = F_OSC/(16 x Baud_rate) - 1; e.g. 16e6/(9600*16) -1 = 103
+  12:serial.h      **** 	uint32_t ubrr_value;
+  13:serial.h      **** 	ubrr_value = F_CPU/16/BAUD_RATE -1; 
+  14:serial.h      **** 	UBRRL_REG = ubrr_value;
+ 434               		.loc 3 14 0
+ 435 0256 87E6      		ldi r24,lo8(103)
+ 436 0258 8093 C400 		sts 196,r24
+  15:serial.h      **** 	UBRRH_REG = (ubrr_value >> 8);
+ 437               		.loc 3 15 0
+ 438 025c 1092 C500 		sts 197,__zero_reg__
+  16:serial.h      **** 	UCSRC_REG |= (1 << UCSZ1_BIT) | (1 << UCSZ0_BIT);
+ 439               		.loc 3 16 0
+ 440 0260 E2EC      		ldi r30,lo8(-62)
+ 441 0262 F0E0      		ldi r31,0
+ 442 0264 8081      		ld r24,Z
+ 443 0266 8660      		ori r24,lo8(6)
+ 444 0268 8083      		st Z,r24
+  17:serial.h      **** 
+  18:serial.h      **** 	#ifdef ATMEGA_32A
+  19:serial.h      **** 	UCSRC_REG |= (1 << URSEL_BIT);
+  20:serial.h      **** 	#endif
+  21:serial.h      **** 
+  22:serial.h      **** 	//Enable The receiver and transmitter
+  23:serial.h      **** 	UCSRB_REG = (1 << RXEN_BIT) | (1 << TXEN_BIT);
+ 445               		.loc 3 23 0
+ 446 026a 88E1      		ldi r24,lo8(24)
+ 447 026c 8093 C100 		sts 193,r24
+ 448               	/* epilogue start */
+  24:serial.h      **** }
+ 449               		.loc 3 24 0
+ 450 0270 0895      		ret
+ 451               		.cfi_endproc
+ 452               	.LFE10:
+ 454               	.global	getCh
+ 456               	getCh:
+ 457               	.LFB11:
+  25:serial.h      **** 
+  26:serial.h      **** uint8_t getCh(void){
+ 458               		.loc 3 26 0
+ 459               		.cfi_startproc
+ 460               	/* prologue: function */
+ 461               	/* frame size = 0 */
+ 462               	/* stack size = 0 */
+ 463               	.L__stack_usage = 0
+ 464               	.L44:
+  27:serial.h      **** 	while(!(UCSRA_REG & (1 << RXC_BIT)));
+ 465               		.loc 3 27 0 discriminator 1
+ 466 0272 8091 C000 		lds r24,192
+ 467 0276 87FF      		sbrs r24,7
+ 468 0278 00C0      		rjmp .L44
+  28:serial.h      **** 	return UDR_REG;
+ 469               		.loc 3 28 0
+ 470 027a 8091 C600 		lds r24,198
+ 471               	/* epilogue start */
+  29:serial.h      **** }
+ 472               		.loc 3 29 0
+ 473 027e 0895      		ret
+ 474               		.cfi_endproc
+ 475               	.LFE11:
+ 477               	.global	putCh
+ 479               	putCh:
+ 480               	.LFB12:
+  30:serial.h      **** 
+  31:serial.h      **** void putCh(uint8_t data){
+ 481               		.loc 3 31 0
+ 482               		.cfi_startproc
+ 483               	/* prologue: function */
+ 484               	/* frame size = 0 */
+ 485               	/* stack size = 0 */
+ 486               	.L__stack_usage = 0
+ 487               	.LVL24:
+ 488               	.L47:
+  32:serial.h      **** 	while(!(UCSRA_REG & (1 << UDRE_BIT)));
+ 489               		.loc 3 32 0 discriminator 1
+ 490 0280 9091 C000 		lds r25,192
+ 491 0284 95FF      		sbrs r25,5
+ 492 0286 00C0      		rjmp .L47
+  33:serial.h      **** 	UDR_REG = data;
+ 493               		.loc 3 33 0
+ 494 0288 8093 C600 		sts 198,r24
+ 495               	/* epilogue start */
+  34:serial.h      **** }...
+ 496               		.loc 3 34 0
+ 497 028c 0895      		ret
+ 498               		.cfi_endproc
+ 499               	.LFE12:
+ 501               	.global	initIR
+ 503               	initIR:
+ 504               	.LFB13:
+ 505               		.file 4 "ir_array.h"
+   1:ir_array.h    **** #define IR_LEFT_DDR DDRD
+   2:ir_array.h    **** #define IR_LEFT_PIN PIND
+   3:ir_array.h    **** 
+   4:ir_array.h    **** #define IR_L_01 PD2
+   5:ir_array.h    **** #define IR_L_02 PD3
+   6:ir_array.h    **** #define IR_L_03 PD4
+   7:ir_array.h    **** #define IR_L_04 PD5
+   8:ir_array.h    **** 
+   9:ir_array.h    **** #define IR_RIGHT_DDR DDRB
+  10:ir_array.h    **** #define IR_RIGHT_PIN PINB
+  11:ir_array.h    **** 
+  12:ir_array.h    **** #define IR_R_05 PB5
+  13:ir_array.h    **** #define IR_R_06 PB3
+  14:ir_array.h    **** #define IR_R_07 PB4
+  15:ir_array.h    **** #define IR_R_08 PB0
+  16:ir_array.h    **** 
+  17:ir_array.h    **** #define IR01_VAL IR_LEFT_PIN & (1 << IR_L_01)
+  18:ir_array.h    **** #define IR02_VAL IR_LEFT_PIN & (1 << IR_L_02)
+  19:ir_array.h    **** #define IR03_VAL IR_LEFT_PIN & (1 << IR_L_03)
+  20:ir_array.h    **** #define IR04_VAL IR_LEFT_PIN & (1 << IR_L_04)
+  21:ir_array.h    **** #define IR05_VAL IR_RIGHT_PIN & (1 << IR_R_05)
+  22:ir_array.h    **** #define IR06_VAL IR_RIGHT_PIN & (1 << IR_R_06)
+  23:ir_array.h    **** #define IR07_VAL IR_RIGHT_PIN & (1 << IR_R_07)
+  24:ir_array.h    **** #define IR08_VAL IR_RIGHT_PIN & (1 << IR_R_08)
+  25:ir_array.h    **** 
+  26:ir_array.h    **** #define IR_ARR_VAL IR01_VAL | IR02_VAL | IR03_VAL | IR04_VAL | IR05_VAL | IR06_VAL | IR07_VAL | IR0
+  27:ir_array.h    **** 
+  28:ir_array.h    **** #define SETUP_IR() {IR_LEFT_DDR &= ~((1 << IR_L_01) | (1 << IR_L_02) | (1 << IR_L_03) | (1 << IR_L_
+  29:ir_array.h    **** 
+  30:ir_array.h    **** #include "motor_control.h"
+  31:ir_array.h    **** #include "serial.h"
+  32:ir_array.h    **** 
+  33:ir_array.h    **** uint8_t width = 0;
+  34:ir_array.h    **** uint32_t count = 0;
+  35:ir_array.h    **** 
+  36:ir_array.h    **** void initIR(void);
+  37:ir_array.h    **** void stableCar(void);
+  38:ir_array.h    **** uint8_t lineSize(void);
+  39:ir_array.h    **** 
+  40:ir_array.h    **** void initIR(void){
+ 506               		.loc 4 40 0
+ 507               		.cfi_startproc
+ 508               	/* prologue: function */
+ 509               	/* frame size = 0 */
+ 510               	/* stack size = 0 */
+ 511               	.L__stack_usage = 0
+  41:ir_array.h    **** 	SETUP_IR();
+ 512               		.loc 4 41 0
+ 513 028e 8AB1      		in r24,0xa
+ 514 0290 837C      		andi r24,lo8(-61)
+ 515 0292 8AB9      		out 0xa,r24
+ 516 0294 84B1      		in r24,0x4
+ 517 0296 867C      		andi r24,lo8(-58)
+ 518 0298 84B9      		out 0x4,r24
+  42:ir_array.h    **** 	initUSART();
+ 519               		.loc 4 42 0
+ 520 029a 0C94 0000 		jmp initUSART
+ 521               	.LVL25:
+ 522               		.cfi_endproc
+ 523               	.LFE13:
+ 525               	.global	lineSize
+ 527               	lineSize:
+ 528               	.LFB15:
+  43:ir_array.h    **** }
+  44:ir_array.h    **** 
+  45:ir_array.h    **** void stableCar(void){
+  46:ir_array.h    **** 	if(width == 0 || width >= 8){
+  47:ir_array.h    **** 		controlMotor(STOP);
+  48:ir_array.h    **** 	}else{
+  49:ir_array.h    **** 		controlMotor(FORWARD);
+  50:ir_array.h    **** 	}
+  51:ir_array.h    **** 
+  52:ir_array.h    **** 	uint8_t size = lineSize();
+  53:ir_array.h    **** 
+  54:ir_array.h    **** 	if(width == 0 && size != 0){
+  55:ir_array.h    **** 		width = size;
+  56:ir_array.h    **** 	}else if(width == size){
+  57:ir_array.h    **** 		count++;
+  58:ir_array.h    **** 	}
+  59:ir_array.h    **** 
+  60:ir_array.h    **** 	if(count >= 255){
+  61:ir_array.h    **** 		width = size;
+  62:ir_array.h    **** 
+  63:ir_array.h    **** 		if(width % 2 != 0)
+  64:ir_array.h    **** 			width --;
+  65:ir_array.h    **** 	}
+  66:ir_array.h    **** }
+  67:ir_array.h    **** 
+  68:ir_array.h    **** uint8_t lineSize(void){
+ 529               		.loc 4 68 0
+ 530               		.cfi_startproc
+ 531               	/* prologue: function */
+ 532               	/* frame size = 0 */
+ 533               	/* stack size = 0 */
+ 534               	.L__stack_usage = 0
+ 535               	.LVL26:
+  69:ir_array.h    **** 	uint8_t size = 0;
+  70:ir_array.h    **** 
+  71:ir_array.h    **** 	if(~IR01_VAL) size++;
+ 536               		.loc 4 71 0
+ 537 029e 89B1      		in r24,0x9
+ 538 02a0 82FB      		bst r24,2
+ 539 02a2 8827      		clr r24
+ 540 02a4 80F9      		bld r24,0
+ 541 02a6 91E0      		ldi r25,lo8(1)
+ 542 02a8 8927      		eor r24,r25
+ 543               	.LVL27:
+  72:ir_array.h    **** 	if(~IR02_VAL) size++;
+ 544               		.loc 4 72 0
+ 545 02aa 4B9B      		sbis 0x9,3
+ 546               		.loc 4 72 0 is_stmt 0 discriminator 1
+ 547 02ac 8F5F      		subi r24,lo8(-(1))
+ 548               	.LVL28:
+ 549               	.L52:
+  73:ir_array.h    **** 	if(~IR03_VAL) size++;
+ 550               		.loc 4 73 0 is_stmt 1
+ 551 02ae 4C9B      		sbis 0x9,4
+ 552               		.loc 4 73 0 is_stmt 0 discriminator 1
+ 553 02b0 8F5F      		subi r24,lo8(-(1))
+ 554               	.LVL29:
+ 555               	.L53:
+  74:ir_array.h    **** 	if(~IR04_VAL) size++;
+ 556               		.loc 4 74 0 is_stmt 1
+ 557 02b2 4D9B      		sbis 0x9,5
+ 558               		.loc 4 74 0 is_stmt 0 discriminator 1
+ 559 02b4 8F5F      		subi r24,lo8(-(1))
+ 560               	.LVL30:
+ 561               	.L54:
+  75:ir_array.h    **** 	if(~IR05_VAL) size++;
+ 562               		.loc 4 75 0 is_stmt 1
+ 563 02b6 1D9B      		sbis 0x3,5
+ 564               		.loc 4 75 0 is_stmt 0 discriminator 1
+ 565 02b8 8F5F      		subi r24,lo8(-(1))
+ 566               	.LVL31:
+ 567               	.L55:
+  76:ir_array.h    **** 	if(~IR06_VAL) size++;
+ 568               		.loc 4 76 0 is_stmt 1
+ 569 02ba 1B9B      		sbis 0x3,3
+ 570               		.loc 4 76 0 is_stmt 0 discriminator 1
+ 571 02bc 8F5F      		subi r24,lo8(-(1))
+ 572               	.LVL32:
+ 573               	.L56:
+  77:ir_array.h    **** 	if(~IR07_VAL) size++;
+ 574               		.loc 4 77 0 is_stmt 1
+ 575 02be 1C9B      		sbis 0x3,4
+ 576               		.loc 4 77 0 is_stmt 0 discriminator 1
+ 577 02c0 8F5F      		subi r24,lo8(-(1))
+ 578               	.LVL33:
+ 579               	.L57:
+  78:ir_array.h    **** 	if(~IR08_VAL) size++;
+ 580               		.loc 4 78 0 is_stmt 1
+ 581 02c2 189B      		sbis 0x3,0
+ 582               		.loc 4 78 0 is_stmt 0 discriminator 1
+ 583 02c4 8F5F      		subi r24,lo8(-(1))
+ 584               	.LVL34:
+ 585               	.L51:
+ 586               	/* epilogue start */
+  79:ir_array.h    **** 
+  80:ir_array.h    **** 	return size;
+  81:ir_array.h    **** }...
+ 587               		.loc 4 81 0 is_stmt 1
+ 588 02c6 0895      		ret
+ 589               		.cfi_endproc
+ 590               	.LFE15:
+ 592               	.global	stableCar
+ 594               	stableCar:
+ 595               	.LFB14:
+  45:ir_array.h    **** void stableCar(void){
+ 596               		.loc 4 45 0
+ 597               		.cfi_startproc
+ 598               	/* prologue: function */
+ 599               	/* frame size = 0 */
+ 600               	/* stack size = 0 */
+ 601               	.L__stack_usage = 0
+  46:ir_array.h    **** 	if(width == 0 || width >= 8){
+ 602               		.loc 4 46 0
+ 603 02c8 8091 0000 		lds r24,width
+ 604 02cc 8150      		subi r24,lo8(-(-1))
+ 605 02ce 8730      		cpi r24,lo8(7)
+ 606 02d0 00F0      		brlo .L60
+  47:ir_array.h    **** 		controlMotor(STOP);
+ 607               		.loc 4 47 0
+ 608 02d2 84E0      		ldi r24,lo8(4)
+ 609               	.L72:
+  49:ir_array.h    **** 		controlMotor(FORWARD);
+ 610               		.loc 4 49 0
+ 611 02d4 0E94 0000 		call controlMotor
+ 612               	.LVL35:
+  52:ir_array.h    **** 	uint8_t size = lineSize();
+ 613               		.loc 4 52 0
+ 614 02d8 0E94 0000 		call lineSize
+ 615               	.LVL36:
+  54:ir_array.h    **** 	if(width == 0 && size != 0){
+ 616               		.loc 4 54 0
+ 617 02dc 9091 0000 		lds r25,width
+ 618 02e0 9111      		cpse r25,__zero_reg__
+ 619 02e2 00C0      		rjmp .L62
+  54:ir_array.h    **** 	if(width == 0 && size != 0){
+ 620               		.loc 4 54 0 is_stmt 0 discriminator 1
+ 621 02e4 8823      		tst r24
+ 622 02e6 01F0      		breq .L63
+  55:ir_array.h    **** 		width = size;
+ 623               		.loc 4 55 0 is_stmt 1
+ 624 02e8 8093 0000 		sts width,r24
+ 625               	.L64:
+  60:ir_array.h    **** 	if(count >= 255){
+ 626               		.loc 4 60 0
+ 627 02ec 4091 0000 		lds r20,count
+ 628 02f0 5091 0000 		lds r21,count+1
+ 629 02f4 6091 0000 		lds r22,count+2
+ 630 02f8 7091 0000 		lds r23,count+3
+ 631 02fc 4F3F      		cpi r20,-1
+ 632 02fe 5105      		cpc r21,__zero_reg__
+ 633 0300 6105      		cpc r22,__zero_reg__
+ 634 0302 7105      		cpc r23,__zero_reg__
+ 635 0304 00F0      		brlo .L59
+  63:ir_array.h    **** 		if(width % 2 != 0)
+ 636               		.loc 4 63 0
+ 637 0306 80FD      		sbrc r24,0
+ 638 0308 00C0      		rjmp .L67
+ 639               	.LVL37:
+ 640               	.L73:
+  64:ir_array.h    **** 			width --;
+ 641               		.loc 4 64 0
+ 642 030a 8093 0000 		sts width,r24
+ 643               	.L59:
+ 644               	/* epilogue start */
+  66:ir_array.h    **** }
+ 645               		.loc 4 66 0
+ 646 030e 0895      		ret
+ 647               	.L60:
+  49:ir_array.h    **** 		controlMotor(FORWARD);
+ 648               		.loc 4 49 0
+ 649 0310 80E0      		ldi r24,0
+ 650 0312 00C0      		rjmp .L72
+ 651               	.LVL38:
+ 652               	.L62:
+  56:ir_array.h    **** 	}else if(width == size){
+ 653               		.loc 4 56 0
+ 654 0314 9813      		cpse r25,r24
+ 655 0316 00C0      		rjmp .L64
+ 656               	.L63:
+  57:ir_array.h    **** 		count++;
+ 657               		.loc 4 57 0
+ 658 0318 4091 0000 		lds r20,count
+ 659 031c 5091 0000 		lds r21,count+1
+ 660 0320 6091 0000 		lds r22,count+2
+ 661 0324 7091 0000 		lds r23,count+3
+ 662 0328 4F5F      		subi r20,-1
+ 663 032a 5F4F      		sbci r21,-1
+ 664 032c 6F4F      		sbci r22,-1
+ 665 032e 7F4F      		sbci r23,-1
+ 666 0330 4093 0000 		sts count,r20
+ 667 0334 5093 0000 		sts count+1,r21
+ 668 0338 6093 0000 		sts count+2,r22
+ 669 033c 7093 0000 		sts count+3,r23
+ 670 0340 00C0      		rjmp .L64
+ 671               	.L67:
+  64:ir_array.h    **** 			width --;
+ 672               		.loc 4 64 0
+ 673 0342 8150      		subi r24,lo8(-(-1))
+ 674               	.LVL39:
+ 675 0344 00C0      		rjmp .L73
+ 676               		.cfi_endproc
+ 677               	.LFE14:
+ 679               		.section	.text.startup,"ax",@progbits
+ 680               	.global	main
+ 682               	main:
+ 683               	.LFB16:
+ 684               		.file 5 "main.c"
+   1:main.c        **** #define F_CPU 16000000UL
+   2:main.c        **** 
+   3:main.c        **** //Comment the MCU which you're not using.
+   4:main.c        **** #define ATMEGA_328P
+   5:main.c        **** //#define ATMEGA_32A
+   6:main.c        **** 
+   7:main.c        **** #include <avr/io.h>
+   8:main.c        **** #include <util/delay.h>
+   9:main.c        **** #include "ir_array.h"
+  10:main.c        **** 
+  11:main.c        **** int main(void){
+ 685               		.loc 5 11 0
+ 686               		.cfi_startproc
+ 687               	/* prologue: function */
+ 688               	/* frame size = 0 */
+ 689               	/* stack size = 0 */
+ 690               	.L__stack_usage = 0
+  12:main.c        **** 
+  13:main.c        **** 	setupPWM();
+ 691               		.loc 5 13 0
+ 692 0000 0E94 0000 		call setupPWM
+ 693               	.LVL40:
+  14:main.c        **** 	setupMotor();
+ 694               		.loc 5 14 0
+ 695 0004 0E94 0000 		call setupMotor
+ 696               	.LVL41:
+  15:main.c        **** 	initIR();
+ 697               		.loc 5 15 0
+ 698 0008 0E94 0000 		call initIR
+ 699               	.LVL42:
+ 700               	.L75:
+  16:main.c        **** 
+  17:main.c        **** 	while(1){
+  18:main.c        **** 		stableCar();
+ 701               		.loc 5 18 0 discriminator 1
+ 702 000c 0E94 0000 		call stableCar
+ 703               	.LVL43:
+ 704 0010 00C0      		rjmp .L75
+ 705               		.cfi_endproc
+ 706               	.LFE16:
+ 708               	.global	count
+ 709               		.section .bss
+ 712               	count:
+ 713 0000 0000 0000 		.zero	4
+ 714               	.global	width
+ 717               	width:
+ 718 0004 00        		.zero	1
+ 719               	.global	right_status
+ 722               	right_status:
+ 723 0005 00        		.zero	1
+ 724               	.global	left_status
+ 727               	left_status:
+ 728 0006 00        		.zero	1
+ 729               	.global	channelB_status
+ 732               	channelB_status:
+ 733 0007 00        		.zero	1
+ 734               	.global	channelA_status
+ 737               	channelA_status:
+ 738 0008 00        		.zero	1
+ 739               	.global	channelB
+ 742               	channelB:
+ 743 0009 0000      		.zero	2
+ 744               	.global	channelA
+ 747               	channelA:
+ 748 000b 0000      		.zero	2
+ 749               		.text
+ 750               	.Letext0:
+ 751               		.file 6 "/usr/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccEQavQB.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccEQavQB.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccEQavQB.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccEQavQB.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccEQavQB.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccEQavQB.s:12     .text:0000000000000000 setupPWM
-     /tmp/ccEQavQB.s:39     .text:0000000000000014 pwm
-     /tmp/ccEQavQB.s:70     .text:0000000000000034 controlMotor
-     /tmp/ccEQavQB.s:503    .bss:0000000000000006 channelA
-     /tmp/ccEQavQB.s:498    .bss:0000000000000004 channelB
-     /tmp/ccEQavQB.s:488    .bss:0000000000000002 channelB_status
-     /tmp/ccEQavQB.s:483    .bss:0000000000000001 left_status
-     /tmp/ccEQavQB.s:478    .bss:0000000000000000 right_status
-     /tmp/ccEQavQB.s:493    .bss:0000000000000003 channelA_status
-     /tmp/ccEQavQB.s:375    .text.startup:0000000000000000 main
+     /tmp/ccBw2RD7.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccBw2RD7.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccBw2RD7.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccBw2RD7.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccBw2RD7.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccBw2RD7.s:12     .text:0000000000000000 setupPWM
+     /tmp/ccBw2RD7.s:39     .text:0000000000000014 pwm
+     /tmp/ccBw2RD7.s:70     .text:0000000000000034 controlMotor
+     /tmp/ccBw2RD7.s:747    .bss:000000000000000b channelA
+     /tmp/ccBw2RD7.s:742    .bss:0000000000000009 channelB
+     /tmp/ccBw2RD7.s:732    .bss:0000000000000007 channelB_status
+     /tmp/ccBw2RD7.s:727    .bss:0000000000000006 left_status
+     /tmp/ccBw2RD7.s:722    .bss:0000000000000005 right_status
+     /tmp/ccBw2RD7.s:737    .bss:0000000000000008 channelA_status
+     /tmp/ccBw2RD7.s:377    .text:000000000000022c setupMotor
+     /tmp/ccBw2RD7.s:424    .text:0000000000000256 initUSART
+     /tmp/ccBw2RD7.s:456    .text:0000000000000272 getCh
+     /tmp/ccBw2RD7.s:479    .text:0000000000000280 putCh
+     /tmp/ccBw2RD7.s:503    .text:000000000000028e initIR
+     /tmp/ccBw2RD7.s:527    .text:000000000000029e lineSize
+     /tmp/ccBw2RD7.s:594    .text:00000000000002c8 stableCar
+     /tmp/ccBw2RD7.s:717    .bss:0000000000000004 width
+     /tmp/ccBw2RD7.s:712    .bss:0000000000000000 count
+     /tmp/ccBw2RD7.s:682    .text.startup:0000000000000000 main
 
 UNDEFINED SYMBOLS
 __do_clear_bss
