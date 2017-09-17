@@ -49,7 +49,7 @@ while True:
         print(mu)
         print(sigma)
 
-        num_bins = 100
+        num_bins = 30
 
         # the histogram of the data
         plt.clf()
@@ -57,7 +57,7 @@ while True:
 
         # add a 'best fit' line
         y = mlab.normpdf(bins, mu, sigma)
-        plt.plot(bins, y*15, 'r--')
+        plt.plot(bins, y*4, 'r--')
         plt.xlabel('IR')
         plt.ylabel('Count')
         axes = plt.gca()
