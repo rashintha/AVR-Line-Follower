@@ -243,8 +243,8 @@
   96 0050 2091 0000 		lds r18,channelA
   97 0054 3091 0000 		lds r19,channelA+1
   98               	.LVL3:
-  99               	.LBB10:
- 100               	.LBB11:
+  99               	.LBB20:
+ 100               	.LBB21:
   20:pwm.h         **** 	ICR1 = period;
  101               		.loc 1 20 0
  102 0058 80E2      		ldi r24,lo8(32)
@@ -256,15 +256,15 @@
  107 0064 3093 8900 		sts 136+1,r19
  108 0068 2093 8800 		sts 136,r18
  109               	.LVL4:
- 110               	.LBE11:
- 111               	.LBE10:
+ 110               	.LBE21:
+ 111               	.LBE20:
  131:motor_control.h **** 	pwm(CH_B, channelB, MAX_PWM_SPEED);
  112               		.loc 2 131 0
  113 006c 2091 0000 		lds r18,channelB
  114 0070 3091 0000 		lds r19,channelB+1
  115               	.LVL5:
- 116               	.LBB12:
- 117               	.LBB13:
+ 116               	.LBB22:
+ 117               	.LBB23:
   20:pwm.h         **** 	ICR1 = period;
  118               		.loc 1 20 0
  119 0074 9093 8700 		sts 134+1,r25
@@ -275,8 +275,8 @@
  123 0080 2093 8A00 		sts 138,r18
  124               	.LVL6:
  125               	/* epilogue start */
- 126               	.LBE13:
- 127               	.LBE12:
+ 126               	.LBE23:
+ 127               	.LBE22:
  132:motor_control.h **** }...
  128               		.loc 2 132 0
  129 0084 0895      		ret
@@ -589,8 +589,8 @@
  386 022c 8FE0      		ldi r24,lo8(15)
  387 022e 87B9      		out 0x7,r24
  388               	.LVL19:
- 389               	.LBB14:
- 390               	.LBB15:
+ 389               	.LBB24:
+ 390               	.LBB25:
   20:pwm.h         **** 	ICR1 = period;
  391               		.loc 1 20 0
  392 0230 E6E8      		ldi r30,lo8(-122)
@@ -604,10 +604,10 @@
  399 023c 1092 8900 		sts 136+1,__zero_reg__
  400 0240 1092 8800 		sts 136,__zero_reg__
  401               	.LVL20:
- 402               	.LBE15:
- 403               	.LBE14:
- 404               	.LBB16:
- 405               	.LBB17:
+ 402               	.LBE25:
+ 403               	.LBE24:
+ 404               	.LBB26:
+ 405               	.LBB27:
   20:pwm.h         **** 	ICR1 = period;
  406               		.loc 1 20 0
  407 0244 9183      		std Z+1,r25
@@ -617,8 +617,8 @@
  410 0248 1092 8B00 		sts 138+1,__zero_reg__
  411 024c 1092 8A00 		sts 138,__zero_reg__
  412               	.LVL21:
- 413               	.LBE17:
- 414               	.LBE16:
+ 413               	.LBE27:
+ 414               	.LBE26:
   46:motor_control.h **** 	controlMotor(NEUTRAL);
  415               		.loc 2 46 0
  416 0250 85E0      		ldi r24,lo8(5)
@@ -753,16 +753,16 @@
   14:ir_array.h    **** #define IR_R_07 PB4
   15:ir_array.h    **** #define IR_R_08 PB0
   16:ir_array.h    **** 
-  17:ir_array.h    **** #define IR01_VAL IR_LEFT_PIN & (1 << IR_L_01)
-  18:ir_array.h    **** #define IR02_VAL IR_LEFT_PIN & (1 << IR_L_02)
-  19:ir_array.h    **** #define IR03_VAL IR_LEFT_PIN & (1 << IR_L_03)
-  20:ir_array.h    **** #define IR04_VAL IR_LEFT_PIN & (1 << IR_L_04)
-  21:ir_array.h    **** #define IR05_VAL IR_RIGHT_PIN & (1 << IR_R_05)
-  22:ir_array.h    **** #define IR06_VAL IR_RIGHT_PIN & (1 << IR_R_06)
-  23:ir_array.h    **** #define IR07_VAL IR_RIGHT_PIN & (1 << IR_R_07)
-  24:ir_array.h    **** #define IR08_VAL IR_RIGHT_PIN & (1 << IR_R_08)
+  17:ir_array.h    **** #define IR01_VAL() ({ uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_01)) ? (1 << 0) : 0; retVal;})
+  18:ir_array.h    **** #define IR02_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_02)) ? (1 << 1) : 0; retVal;})
+  19:ir_array.h    **** #define IR03_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_03)) ? (1 << 2) : 0; retVal;})
+  20:ir_array.h    **** #define IR04_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_04)) ? (1 << 3) : 0; retVal;})
+  21:ir_array.h    **** #define IR05_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_05)) ? (1 << 4) : 0; retVal;})
+  22:ir_array.h    **** #define IR06_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_06)) ? (1 << 5) : 0; retVal;})
+  23:ir_array.h    **** #define IR07_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_07)) ? (1 << 6) : 0; retVal;})
+  24:ir_array.h    **** #define IR08_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_08)) ? (1 << 7) : 0; retVal;})
   25:ir_array.h    **** 
-  26:ir_array.h    **** #define IR_ARR_VAL IR01_VAL | IR02_VAL | IR03_VAL | IR04_VAL | IR05_VAL | IR06_VAL | IR07_VAL | IR0
+  26:ir_array.h    **** #define IR_ARR_VAL IR01_VAL() | IR02_VAL() | IR03_VAL() | IR04_VAL() | IR05_VAL() | IR06_VAL() | IR
   27:ir_array.h    **** 
   28:ir_array.h    **** #define SETUP_IR() {IR_LEFT_DDR &= ~((1 << IR_L_01) | (1 << IR_L_02) | (1 << IR_L_03) | (1 << IR_L_
   29:ir_array.h    **** 
@@ -775,7 +775,7 @@
   36:ir_array.h    **** void initIR(void);
   37:ir_array.h    **** void stableCar(void);
   38:ir_array.h    **** uint8_t lineSize(void);
-  39:ir_array.h    **** 
+  39:ir_array.h    ****  
   40:ir_array.h    **** void initIR(void){
  506               		.loc 4 40 0
  507               		.cfi_startproc
@@ -803,210 +803,550 @@
   43:ir_array.h    **** }
   44:ir_array.h    **** 
   45:ir_array.h    **** void stableCar(void){
-  46:ir_array.h    **** 	if(width == 0 || width >= 8){
-  47:ir_array.h    **** 		controlMotor(STOP);
-  48:ir_array.h    **** 	}else{
-  49:ir_array.h    **** 		controlMotor(FORWARD);
-  50:ir_array.h    **** 	}
-  51:ir_array.h    **** 
-  52:ir_array.h    **** 	uint8_t size = lineSize();
-  53:ir_array.h    **** 
-  54:ir_array.h    **** 	if(width == 0 && size != 0){
-  55:ir_array.h    **** 		width = size;
-  56:ir_array.h    **** 	}else if(width == size){
-  57:ir_array.h    **** 		count++;
-  58:ir_array.h    **** 	}
-  59:ir_array.h    **** 
-  60:ir_array.h    **** 	if(count >= 255){
-  61:ir_array.h    **** 		width = size;
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+  47:ir_array.h    **** 	_delay_ms(100);
+  48:ir_array.h    **** 	if(width == 0 || width >= 8){
+  49:ir_array.h    **** 		controlMotor(STOP);
+  50:ir_array.h    **** 	}else{
+  51:ir_array.h    **** 		
+  52:ir_array.h    **** 		controlMotor(FORWARD);
+  53:ir_array.h    **** 	}
+  54:ir_array.h    **** 
+  55:ir_array.h    **** 	uint8_t size = lineSize();
+  56:ir_array.h    **** 
+  57:ir_array.h    **** 	if(width == 0 && size != 0){
+  58:ir_array.h    **** 		width = size;
+  59:ir_array.h    **** 	}else if(width == size){
+  60:ir_array.h    **** 		count++;
+  61:ir_array.h    **** 	}
   62:ir_array.h    **** 
-  63:ir_array.h    **** 		if(width % 2 != 0)
-  64:ir_array.h    **** 			width --;
-  65:ir_array.h    **** 	}
-  66:ir_array.h    **** }
-  67:ir_array.h    **** 
-  68:ir_array.h    **** uint8_t lineSize(void){
- 529               		.loc 4 68 0
+  63:ir_array.h    **** 	if(count >= 255){
+  64:ir_array.h    **** 		width = size;
+  65:ir_array.h    **** 
+  66:ir_array.h    **** 		if(width % 2 != 0)
+  67:ir_array.h    **** 			width --;
+  68:ir_array.h    **** 	}
+  69:ir_array.h    **** }
+  70:ir_array.h    **** 
+  71:ir_array.h    **** uint8_t lineSize(void){
+ 529               		.loc 4 71 0
  530               		.cfi_startproc
  531               	/* prologue: function */
  532               	/* frame size = 0 */
  533               	/* stack size = 0 */
  534               	.L__stack_usage = 0
  535               	.LVL26:
-  69:ir_array.h    **** 	uint8_t size = 0;
-  70:ir_array.h    **** 
-  71:ir_array.h    **** 	if(~IR01_VAL) size++;
- 536               		.loc 4 71 0
- 537 029e 89B1      		in r24,0x9
- 538 02a0 82FB      		bst r24,2
- 539 02a2 8827      		clr r24
- 540 02a4 80F9      		bld r24,0
- 541 02a6 91E0      		ldi r25,lo8(1)
- 542 02a8 8927      		eor r24,r25
- 543               	.LVL27:
-  72:ir_array.h    **** 	if(~IR02_VAL) size++;
- 544               		.loc 4 72 0
- 545 02aa 4B9B      		sbis 0x9,3
- 546               		.loc 4 72 0 is_stmt 0 discriminator 1
- 547 02ac 8F5F      		subi r24,lo8(-(1))
- 548               	.LVL28:
- 549               	.L52:
-  73:ir_array.h    **** 	if(~IR03_VAL) size++;
- 550               		.loc 4 73 0 is_stmt 1
- 551 02ae 4C9B      		sbis 0x9,4
- 552               		.loc 4 73 0 is_stmt 0 discriminator 1
- 553 02b0 8F5F      		subi r24,lo8(-(1))
- 554               	.LVL29:
- 555               	.L53:
-  74:ir_array.h    **** 	if(~IR04_VAL) size++;
- 556               		.loc 4 74 0 is_stmt 1
- 557 02b2 4D9B      		sbis 0x9,5
- 558               		.loc 4 74 0 is_stmt 0 discriminator 1
- 559 02b4 8F5F      		subi r24,lo8(-(1))
- 560               	.LVL30:
- 561               	.L54:
-  75:ir_array.h    **** 	if(~IR05_VAL) size++;
- 562               		.loc 4 75 0 is_stmt 1
- 563 02b6 1D9B      		sbis 0x3,5
- 564               		.loc 4 75 0 is_stmt 0 discriminator 1
- 565 02b8 8F5F      		subi r24,lo8(-(1))
- 566               	.LVL31:
- 567               	.L55:
-  76:ir_array.h    **** 	if(~IR06_VAL) size++;
- 568               		.loc 4 76 0 is_stmt 1
- 569 02ba 1B9B      		sbis 0x3,3
- 570               		.loc 4 76 0 is_stmt 0 discriminator 1
- 571 02bc 8F5F      		subi r24,lo8(-(1))
- 572               	.LVL32:
- 573               	.L56:
-  77:ir_array.h    **** 	if(~IR07_VAL) size++;
- 574               		.loc 4 77 0 is_stmt 1
- 575 02be 1C9B      		sbis 0x3,4
- 576               		.loc 4 77 0 is_stmt 0 discriminator 1
- 577 02c0 8F5F      		subi r24,lo8(-(1))
- 578               	.LVL33:
- 579               	.L57:
-  78:ir_array.h    **** 	if(~IR08_VAL) size++;
- 580               		.loc 4 78 0 is_stmt 1
- 581 02c2 189B      		sbis 0x3,0
- 582               		.loc 4 78 0 is_stmt 0 discriminator 1
- 583 02c4 8F5F      		subi r24,lo8(-(1))
- 584               	.LVL34:
- 585               	.L51:
- 586               	/* epilogue start */
-  79:ir_array.h    **** 
-  80:ir_array.h    **** 	return size;
-  81:ir_array.h    **** }...
- 587               		.loc 4 81 0 is_stmt 1
- 588 02c6 0895      		ret
- 589               		.cfi_endproc
- 590               	.LFE15:
- 592               	.global	stableCar
- 594               	stableCar:
- 595               	.LFB14:
+ 536               	.LBB28:
+  72:ir_array.h    **** 	uint8_t size = 0;
+  73:ir_array.h    **** 
+  74:ir_array.h    **** 	if(~IR01_VAL()) size++;
+ 537               		.loc 4 74 0
+ 538 029e 89B1      		in r24,0x9
+ 539               	.LVL27:
+ 540               	.LBE28:
+ 541               	.LBB29:
+  75:ir_array.h    **** 	if(~IR02_VAL()) size++;
+ 542               		.loc 4 75 0
+ 543 02a0 89B1      		in r24,0x9
+ 544               	.LVL28:
+ 545               	.LBE29:
+ 546               	.LBB30:
+  76:ir_array.h    **** 	if(~IR03_VAL()) size++;
+ 547               		.loc 4 76 0
+ 548 02a2 89B1      		in r24,0x9
+ 549               	.LVL29:
+ 550               	.LBE30:
+ 551               	.LBB31:
+  77:ir_array.h    **** 	if(~IR04_VAL()) size++;
+ 552               		.loc 4 77 0
+ 553 02a4 89B1      		in r24,0x9
+ 554               	.LVL30:
+ 555               	.LBE31:
+ 556               	.LBB32:
+  78:ir_array.h    **** 	if(~IR05_VAL()) size++;
+ 557               		.loc 4 78 0
+ 558 02a6 83B1      		in r24,0x3
+ 559               	.LVL31:
+ 560               	.LBE32:
+ 561               	.LBB33:
+  79:ir_array.h    **** 	if(~IR06_VAL()) size++;
+ 562               		.loc 4 79 0
+ 563 02a8 83B1      		in r24,0x3
+ 564               	.LVL32:
+ 565               	.LBE33:
+ 566               	.LBB34:
+  80:ir_array.h    **** 	if(~IR07_VAL()) size++;
+ 567               		.loc 4 80 0
+ 568 02aa 83B1      		in r24,0x3
+ 569               	.LVL33:
+ 570               	.LBE34:
+ 571               	.LBB35:
+  81:ir_array.h    **** 	if(~IR08_VAL()) size++;
+ 572               		.loc 4 81 0
+ 573 02ac 83B1      		in r24,0x3
+ 574               	.LVL34:
+ 575               	.LBE35:
+  82:ir_array.h    **** 
+  83:ir_array.h    **** 	return size;
+  84:ir_array.h    **** }...
+ 576               		.loc 4 84 0
+ 577 02ae 88E0      		ldi r24,lo8(8)
+ 578               	/* epilogue start */
+ 579 02b0 0895      		ret
+ 580               		.cfi_endproc
+ 581               	.LFE15:
+ 583               	.global	stableCar
+ 585               	stableCar:
+ 586               	.LFB14:
   45:ir_array.h    **** void stableCar(void){
- 596               		.loc 4 45 0
- 597               		.cfi_startproc
- 598               	/* prologue: function */
- 599               	/* frame size = 0 */
- 600               	/* stack size = 0 */
- 601               	.L__stack_usage = 0
-  46:ir_array.h    **** 	if(width == 0 || width >= 8){
- 602               		.loc 4 46 0
- 603 02c8 8091 0000 		lds r24,width
- 604 02cc 8150      		subi r24,lo8(-(-1))
- 605 02ce 8730      		cpi r24,lo8(7)
- 606 02d0 00F0      		brlo .L60
-  47:ir_array.h    **** 		controlMotor(STOP);
- 607               		.loc 4 47 0
- 608 02d2 84E0      		ldi r24,lo8(4)
- 609               	.L72:
-  49:ir_array.h    **** 		controlMotor(FORWARD);
- 610               		.loc 4 49 0
- 611 02d4 0E94 0000 		call controlMotor
- 612               	.LVL35:
-  52:ir_array.h    **** 	uint8_t size = lineSize();
- 613               		.loc 4 52 0
- 614 02d8 0E94 0000 		call lineSize
- 615               	.LVL36:
-  54:ir_array.h    **** 	if(width == 0 && size != 0){
- 616               		.loc 4 54 0
- 617 02dc 9091 0000 		lds r25,width
- 618 02e0 9111      		cpse r25,__zero_reg__
- 619 02e2 00C0      		rjmp .L62
-  54:ir_array.h    **** 	if(width == 0 && size != 0){
- 620               		.loc 4 54 0 is_stmt 0 discriminator 1
- 621 02e4 8823      		tst r24
- 622 02e6 01F0      		breq .L63
-  55:ir_array.h    **** 		width = size;
- 623               		.loc 4 55 0 is_stmt 1
- 624 02e8 8093 0000 		sts width,r24
- 625               	.L64:
-  60:ir_array.h    **** 	if(count >= 255){
- 626               		.loc 4 60 0
- 627 02ec 4091 0000 		lds r20,count
- 628 02f0 5091 0000 		lds r21,count+1
- 629 02f4 6091 0000 		lds r22,count+2
- 630 02f8 7091 0000 		lds r23,count+3
- 631 02fc 4F3F      		cpi r20,-1
- 632 02fe 5105      		cpc r21,__zero_reg__
- 633 0300 6105      		cpc r22,__zero_reg__
- 634 0302 7105      		cpc r23,__zero_reg__
- 635 0304 00F0      		brlo .L59
-  63:ir_array.h    **** 		if(width % 2 != 0)
- 636               		.loc 4 63 0
- 637 0306 80FD      		sbrc r24,0
- 638 0308 00C0      		rjmp .L67
- 639               	.LVL37:
- 640               	.L73:
-  64:ir_array.h    **** 			width --;
- 641               		.loc 4 64 0
- 642 030a 8093 0000 		sts width,r24
- 643               	.L59:
- 644               	/* epilogue start */
-  66:ir_array.h    **** }
- 645               		.loc 4 66 0
- 646 030e 0895      		ret
- 647               	.L60:
-  49:ir_array.h    **** 		controlMotor(FORWARD);
- 648               		.loc 4 49 0
- 649 0310 80E0      		ldi r24,0
- 650 0312 00C0      		rjmp .L72
- 651               	.LVL38:
- 652               	.L62:
-  56:ir_array.h    **** 	}else if(width == size){
- 653               		.loc 4 56 0
- 654 0314 9813      		cpse r25,r24
- 655 0316 00C0      		rjmp .L64
- 656               	.L63:
-  57:ir_array.h    **** 		count++;
- 657               		.loc 4 57 0
- 658 0318 4091 0000 		lds r20,count
- 659 031c 5091 0000 		lds r21,count+1
- 660 0320 6091 0000 		lds r22,count+2
- 661 0324 7091 0000 		lds r23,count+3
- 662 0328 4F5F      		subi r20,-1
- 663 032a 5F4F      		sbci r21,-1
- 664 032c 6F4F      		sbci r22,-1
- 665 032e 7F4F      		sbci r23,-1
- 666 0330 4093 0000 		sts count,r20
- 667 0334 5093 0000 		sts count+1,r21
- 668 0338 6093 0000 		sts count+2,r22
- 669 033c 7093 0000 		sts count+3,r23
- 670 0340 00C0      		rjmp .L64
- 671               	.L67:
-  64:ir_array.h    **** 			width --;
- 672               		.loc 4 64 0
- 673 0342 8150      		subi r24,lo8(-(-1))
- 674               	.LVL39:
- 675 0344 00C0      		rjmp .L73
- 676               		.cfi_endproc
- 677               	.LFE14:
- 679               		.section	.text.startup,"ax",@progbits
- 680               	.global	main
- 682               	main:
- 683               	.LFB16:
- 684               		.file 5 "main.c"
+ 587               		.loc 4 45 0
+ 588               		.cfi_startproc
+ 589               	/* prologue: function */
+ 590               	/* frame size = 0 */
+ 591               	/* stack size = 0 */
+ 592               	.L__stack_usage = 0
+ 593               	.LBB36:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 594               		.loc 4 46 0
+ 595 02b2 89B1      		in r24,0x9
+ 596 02b4 82FB      		bst r24,2
+ 597 02b6 9927      		clr r25
+ 598 02b8 90F9      		bld r25,0
+ 599               	.LVL35:
+ 600               	.LBE36:
+ 601               	.LBB37:
+ 602 02ba 4B99      		sbic 0x9,3
+ 603 02bc 00C0      		rjmp .L69
+ 604 02be 80E0      		ldi r24,0
+ 605               	.L53:
+ 606               	.LVL36:
+ 607               	.LBE37:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 608               		.loc 4 46 0 is_stmt 0 discriminator 4
+ 609 02c0 892B      		or r24,r25
+ 610               	.LVL37:
+ 611               	.LBB38:
+ 612 02c2 4C99      		sbic 0x9,4
+ 613 02c4 00C0      		rjmp .L70
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 614               		.loc 4 46 0
+ 615 02c6 90E0      		ldi r25,0
+ 616               	.LVL38:
+ 617               	.L54:
+ 618               	.LBE38:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 619               		.loc 4 46 0 discriminator 8
+ 620 02c8 892B      		or r24,r25
+ 621               	.LBB39:
+ 622 02ca 4D99      		sbic 0x9,5
+ 623 02cc 00C0      		rjmp .L71
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 624               		.loc 4 46 0
+ 625 02ce 90E0      		ldi r25,0
+ 626               	.LVL39:
+ 627               	.L55:
+ 628               	.LBE39:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 629               		.loc 4 46 0 discriminator 12
+ 630 02d0 892B      		or r24,r25
+ 631               	.LBB40:
+ 632 02d2 1D99      		sbic 0x3,5
+ 633 02d4 00C0      		rjmp .L72
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 634               		.loc 4 46 0
+ 635 02d6 90E0      		ldi r25,0
+ 636               	.LVL40:
+ 637               	.L56:
+ 638               	.LBE40:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 639               		.loc 4 46 0 discriminator 16
+ 640 02d8 892B      		or r24,r25
+ 641               	.LBB41:
+ 642 02da 1B99      		sbic 0x3,3
+ 643 02dc 00C0      		rjmp .L73
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 644               		.loc 4 46 0
+ 645 02de 90E0      		ldi r25,0
+ 646               	.LVL41:
+ 647               	.L57:
+ 648               	.LBE41:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 649               		.loc 4 46 0 discriminator 20
+ 650 02e0 892B      		or r24,r25
+ 651               	.LBB42:
+ 652 02e2 1C99      		sbic 0x3,4
+ 653 02e4 00C0      		rjmp .L74
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 654               		.loc 4 46 0
+ 655 02e6 90E0      		ldi r25,0
+ 656               	.LVL42:
+ 657               	.L58:
+ 658               	.LBE42:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 659               		.loc 4 46 0 discriminator 24
+ 660 02e8 892B      		or r24,r25
+ 661               	.LBB43:
+ 662 02ea 1899      		sbic 0x3,0
+ 663 02ec 00C0      		rjmp .L75
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 664               		.loc 4 46 0
+ 665 02ee 90E0      		ldi r25,0
+ 666               	.LVL43:
+ 667               	.L59:
+ 668               	.LBE43:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 669               		.loc 4 46 0 discriminator 28
+ 670 02f0 892B      		or r24,r25
+ 671 02f2 0E94 0000 		call putCh
+ 672               	.LVL44:
+ 673               	.LBB44:
+ 674               	.LBB45:
+ 675               		.file 5 "/usr/avr/include/util/delay.h"
+   1:/usr/avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
+   3:/usr/avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
+   4:/usr/avr/include/util/delay.h ****    All rights reserved.
+   5:/usr/avr/include/util/delay.h **** 
+   6:/usr/avr/include/util/delay.h ****    Redistribution and use in source and binary forms, with or without
+   7:/usr/avr/include/util/delay.h ****    modification, are permitted provided that the following conditions are met:
+   8:/usr/avr/include/util/delay.h **** 
+   9:/usr/avr/include/util/delay.h ****    * Redistributions of source code must retain the above copyright
+  10:/usr/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer.
+  11:/usr/avr/include/util/delay.h **** 
+  12:/usr/avr/include/util/delay.h ****    * Redistributions in binary form must reproduce the above copyright
+  13:/usr/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer in
+  14:/usr/avr/include/util/delay.h ****      the documentation and/or other materials provided with the
+  15:/usr/avr/include/util/delay.h ****      distribution.
+  16:/usr/avr/include/util/delay.h **** 
+  17:/usr/avr/include/util/delay.h ****    * Neither the name of the copyright holders nor the names of
+  18:/usr/avr/include/util/delay.h ****      contributors may be used to endorse or promote products derived
+  19:/usr/avr/include/util/delay.h ****      from this software without specific prior written permission.
+  20:/usr/avr/include/util/delay.h **** 
+  21:/usr/avr/include/util/delay.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:/usr/avr/include/util/delay.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:/usr/avr/include/util/delay.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:/usr/avr/include/util/delay.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  25:/usr/avr/include/util/delay.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:/usr/avr/include/util/delay.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:/usr/avr/include/util/delay.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:/usr/avr/include/util/delay.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:/usr/avr/include/util/delay.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:/usr/avr/include/util/delay.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:/usr/avr/include/util/delay.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  32:/usr/avr/include/util/delay.h **** 
+  33:/usr/avr/include/util/delay.h **** /* $Id: delay.h.in 2506 2016-02-08 10:05:45Z joerg_wunsch $ */
+  34:/usr/avr/include/util/delay.h **** 
+  35:/usr/avr/include/util/delay.h **** #ifndef _UTIL_DELAY_H_
+  36:/usr/avr/include/util/delay.h **** #define _UTIL_DELAY_H_ 1
+  37:/usr/avr/include/util/delay.h **** 
+  38:/usr/avr/include/util/delay.h **** #ifndef __DOXYGEN__
+  39:/usr/avr/include/util/delay.h **** #  ifndef __HAS_DELAY_CYCLES
+  40:/usr/avr/include/util/delay.h **** #    define __HAS_DELAY_CYCLES 1
+  41:/usr/avr/include/util/delay.h **** #  endif
+  42:/usr/avr/include/util/delay.h **** #endif  /* __DOXYGEN__ */
+  43:/usr/avr/include/util/delay.h **** 
+  44:/usr/avr/include/util/delay.h **** #include <inttypes.h>
+  45:/usr/avr/include/util/delay.h **** #include <util/delay_basic.h>
+  46:/usr/avr/include/util/delay.h **** #include <math.h>
+  47:/usr/avr/include/util/delay.h **** 
+  48:/usr/avr/include/util/delay.h **** /** \file */
+  49:/usr/avr/include/util/delay.h **** /** \defgroup util_delay <util/delay.h>: Convenience functions for busy-wait delay loops
+  50:/usr/avr/include/util/delay.h ****     \code
+  51:/usr/avr/include/util/delay.h ****     #define F_CPU 1000000UL  // 1 MHz
+  52:/usr/avr/include/util/delay.h ****     //#define F_CPU 14.7456E6
+  53:/usr/avr/include/util/delay.h ****     #include <util/delay.h>
+  54:/usr/avr/include/util/delay.h ****     \endcode
+  55:/usr/avr/include/util/delay.h **** 
+  56:/usr/avr/include/util/delay.h ****     \note As an alternative method, it is possible to pass the
+  57:/usr/avr/include/util/delay.h ****     F_CPU macro down to the compiler from the Makefile.
+  58:/usr/avr/include/util/delay.h ****     Obviously, in that case, no \c \#define statement should be
+  59:/usr/avr/include/util/delay.h ****     used.
+  60:/usr/avr/include/util/delay.h **** 
+  61:/usr/avr/include/util/delay.h ****     The functions in this header file are wrappers around the basic
+  62:/usr/avr/include/util/delay.h ****     busy-wait functions from <util/delay_basic.h>.  They are meant as
+  63:/usr/avr/include/util/delay.h ****     convenience functions where actual time values can be specified
+  64:/usr/avr/include/util/delay.h ****     rather than a number of cycles to wait for.  The idea behind is
+  65:/usr/avr/include/util/delay.h ****     that compile-time constant expressions will be eliminated by
+  66:/usr/avr/include/util/delay.h ****     compiler optimization so floating-point expressions can be used
+  67:/usr/avr/include/util/delay.h ****     to calculate the number of delay cycles needed based on the CPU
+  68:/usr/avr/include/util/delay.h ****     frequency passed by the macro F_CPU.
+  69:/usr/avr/include/util/delay.h **** 
+  70:/usr/avr/include/util/delay.h ****     \note In order for these functions to work as intended, compiler
+  71:/usr/avr/include/util/delay.h ****     optimizations <em>must</em> be enabled, and the delay time
+  72:/usr/avr/include/util/delay.h ****     <em>must</em> be an expression that is a known constant at
+  73:/usr/avr/include/util/delay.h ****     compile-time.  If these requirements are not met, the resulting
+  74:/usr/avr/include/util/delay.h ****     delay will be much longer (and basically unpredictable), and
+  75:/usr/avr/include/util/delay.h ****     applications that otherwise do not use floating-point calculations
+  76:/usr/avr/include/util/delay.h ****     will experience severe code bloat by the floating-point library
+  77:/usr/avr/include/util/delay.h ****     routines linked into the application.
+  78:/usr/avr/include/util/delay.h **** 
+  79:/usr/avr/include/util/delay.h ****     The functions available allow the specification of microsecond, and
+  80:/usr/avr/include/util/delay.h ****     millisecond delays directly, using the application-supplied macro
+  81:/usr/avr/include/util/delay.h ****     F_CPU as the CPU clock frequency (in Hertz).
+  82:/usr/avr/include/util/delay.h **** 
+  83:/usr/avr/include/util/delay.h **** */
+  84:/usr/avr/include/util/delay.h **** 
+  85:/usr/avr/include/util/delay.h **** #if !defined(__DOXYGEN__)
+  86:/usr/avr/include/util/delay.h **** static __inline__ void _delay_us(double __us) __attribute__((__always_inline__));
+  87:/usr/avr/include/util/delay.h **** static __inline__ void _delay_ms(double __ms) __attribute__((__always_inline__));
+  88:/usr/avr/include/util/delay.h **** #endif
+  89:/usr/avr/include/util/delay.h **** 
+  90:/usr/avr/include/util/delay.h **** #ifndef F_CPU
+  91:/usr/avr/include/util/delay.h **** /* prevent compiler error by supplying a default */
+  92:/usr/avr/include/util/delay.h **** # warning "F_CPU not defined for <util/delay.h>"
+  93:/usr/avr/include/util/delay.h **** /** \ingroup util_delay
+  94:/usr/avr/include/util/delay.h ****     \def F_CPU
+  95:/usr/avr/include/util/delay.h ****     \brief CPU frequency in Hz
+  96:/usr/avr/include/util/delay.h **** 
+  97:/usr/avr/include/util/delay.h ****     The macro F_CPU specifies the CPU frequency to be considered by
+  98:/usr/avr/include/util/delay.h ****     the delay macros.  This macro is normally supplied by the
+  99:/usr/avr/include/util/delay.h ****     environment (e.g. from within a project header, or the project's
+ 100:/usr/avr/include/util/delay.h ****     Makefile).  The value 1 MHz here is only provided as a "vanilla"
+ 101:/usr/avr/include/util/delay.h ****     fallback if no such user-provided definition could be found.
+ 102:/usr/avr/include/util/delay.h **** 
+ 103:/usr/avr/include/util/delay.h ****     In terms of the delay functions, the CPU frequency can be given as
+ 104:/usr/avr/include/util/delay.h ****     a floating-point constant (e.g. 3.6864E6 for 3.6864 MHz).
+ 105:/usr/avr/include/util/delay.h ****     However, the macros in <util/setbaud.h> require it to be an
+ 106:/usr/avr/include/util/delay.h ****     integer value.
+ 107:/usr/avr/include/util/delay.h ****  */
+ 108:/usr/avr/include/util/delay.h **** # define F_CPU 1000000UL
+ 109:/usr/avr/include/util/delay.h **** #endif
+ 110:/usr/avr/include/util/delay.h **** 
+ 111:/usr/avr/include/util/delay.h **** #ifndef __OPTIMIZE__
+ 112:/usr/avr/include/util/delay.h **** # warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+ 113:/usr/avr/include/util/delay.h **** #endif
+ 114:/usr/avr/include/util/delay.h **** 
+ 115:/usr/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+ 116:/usr/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 117:/usr/avr/include/util/delay.h ****   __STDC_HOSTED__
+ 118:/usr/avr/include/util/delay.h **** #  include <math.h>
+ 119:/usr/avr/include/util/delay.h **** #endif
+ 120:/usr/avr/include/util/delay.h **** 
+ 121:/usr/avr/include/util/delay.h **** /**
+ 122:/usr/avr/include/util/delay.h ****    \ingroup util_delay
+ 123:/usr/avr/include/util/delay.h **** 
+ 124:/usr/avr/include/util/delay.h ****    Perform a delay of \c __ms milliseconds, using _delay_loop_2().
+ 125:/usr/avr/include/util/delay.h **** 
+ 126:/usr/avr/include/util/delay.h ****    The macro F_CPU is supposed to be defined to a
+ 127:/usr/avr/include/util/delay.h ****    constant defining the CPU clock frequency (in Hertz).
+ 128:/usr/avr/include/util/delay.h **** 
+ 129:/usr/avr/include/util/delay.h ****    The maximal possible delay is 262.14 ms / F_CPU in MHz.
+ 130:/usr/avr/include/util/delay.h **** 
+ 131:/usr/avr/include/util/delay.h ****    When the user request delay which exceed the maximum possible one,
+ 132:/usr/avr/include/util/delay.h ****    _delay_ms() provides a decreased resolution functionality. In this
+ 133:/usr/avr/include/util/delay.h ****    mode _delay_ms() will work with a resolution of 1/10 ms, providing
+ 134:/usr/avr/include/util/delay.h ****    delays up to 6.5535 seconds (independent from CPU frequency).  The
+ 135:/usr/avr/include/util/delay.h ****    user will not be informed about decreased resolution.
+ 136:/usr/avr/include/util/delay.h **** 
+ 137:/usr/avr/include/util/delay.h ****    If the avr-gcc toolchain has __builtin_avr_delay_cycles()
+ 138:/usr/avr/include/util/delay.h ****    support, maximal possible delay is 4294967.295 ms/ F_CPU in MHz. For
+ 139:/usr/avr/include/util/delay.h ****    values greater than the maximal possible delay, overflows results in
+ 140:/usr/avr/include/util/delay.h ****    no delay i.e., 0ms.
+ 141:/usr/avr/include/util/delay.h **** 
+ 142:/usr/avr/include/util/delay.h ****    Conversion of \c __ms into clock cycles may not always result in
+ 143:/usr/avr/include/util/delay.h ****    integer.  By default, the clock cycles rounded up to next
+ 144:/usr/avr/include/util/delay.h ****    integer. This ensures that the user gets at least \c __ms
+ 145:/usr/avr/include/util/delay.h ****    microseconds of delay.
+ 146:/usr/avr/include/util/delay.h **** 
+ 147:/usr/avr/include/util/delay.h ****    Alternatively, by defining the macro \c __DELAY_ROUND_DOWN__, or
+ 148:/usr/avr/include/util/delay.h ****    \c __DELAY_ROUND_CLOSEST__, before including this header file, the
+ 149:/usr/avr/include/util/delay.h ****    algorithm can be made to round down, or round to closest integer,
+ 150:/usr/avr/include/util/delay.h ****    respectively.
+ 151:/usr/avr/include/util/delay.h **** 
+ 152:/usr/avr/include/util/delay.h ****    \note
+ 153:/usr/avr/include/util/delay.h **** 
+ 154:/usr/avr/include/util/delay.h ****    The implementation of _delay_ms() based on
+ 155:/usr/avr/include/util/delay.h ****    __builtin_avr_delay_cycles() is not backward compatible with older
+ 156:/usr/avr/include/util/delay.h ****    implementations.  In order to get functionality backward compatible
+ 157:/usr/avr/include/util/delay.h ****    with previous versions, the macro \c "__DELAY_BACKWARD_COMPATIBLE__"
+ 158:/usr/avr/include/util/delay.h ****    must be defined before including this header file. Also, the
+ 159:/usr/avr/include/util/delay.h ****    backward compatible algorithm will be chosen if the code is
+ 160:/usr/avr/include/util/delay.h ****    compiled in a <em>freestanding environment</em> (GCC option
+ 161:/usr/avr/include/util/delay.h ****    \c -ffreestanding), as the math functions required for rounding are
+ 162:/usr/avr/include/util/delay.h ****    not available to the compiler then.
+ 163:/usr/avr/include/util/delay.h **** 
+ 164:/usr/avr/include/util/delay.h ****  */
+ 165:/usr/avr/include/util/delay.h **** void
+ 166:/usr/avr/include/util/delay.h **** _delay_ms(double __ms)
+ 167:/usr/avr/include/util/delay.h **** {
+ 168:/usr/avr/include/util/delay.h **** 	double __tmp ;
+ 169:/usr/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+ 170:/usr/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 171:/usr/avr/include/util/delay.h ****   __STDC_HOSTED__
+ 172:/usr/avr/include/util/delay.h **** 	uint32_t __ticks_dc;
+ 173:/usr/avr/include/util/delay.h **** 	extern void __builtin_avr_delay_cycles(unsigned long);
+ 174:/usr/avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 1e3) * __ms;
+ 175:/usr/avr/include/util/delay.h **** 
+ 176:/usr/avr/include/util/delay.h **** 	#if defined(__DELAY_ROUND_DOWN__)
+ 177:/usr/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)fabs(__tmp);
+ 178:/usr/avr/include/util/delay.h **** 
+ 179:/usr/avr/include/util/delay.h **** 	#elif defined(__DELAY_ROUND_CLOSEST__)
+ 180:/usr/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(fabs(__tmp)+0.5);
+ 181:/usr/avr/include/util/delay.h **** 
+ 182:/usr/avr/include/util/delay.h **** 	#else
+ 183:/usr/avr/include/util/delay.h **** 		//round up by default
+ 184:/usr/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+ 185:/usr/avr/include/util/delay.h **** 	#endif
+ 186:/usr/avr/include/util/delay.h **** 
+ 187:/usr/avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
+ 676               		.loc 5 187 0 is_stmt 1 discriminator 28
+ 677 02f6 2FEF      		ldi r18,lo8(319999)
+ 678 02f8 81EE      		ldi r24,hi8(319999)
+ 679 02fa 94E0      		ldi r25,hlo8(319999)
+ 680 02fc 2150      	1:	subi r18,1
+ 681 02fe 8040      		sbci r24,0
+ 682 0300 9040      		sbci r25,0
+ 683 0302 01F4      		brne 1b
+ 684 0304 00C0      		rjmp .
+ 685 0306 0000      		nop
+ 686               	.LVL45:
+ 687               	.LBE45:
+ 688               	.LBE44:
+  48:ir_array.h    **** 	if(width == 0 || width >= 8){
+ 689               		.loc 4 48 0 discriminator 28
+ 690 0308 8091 0000 		lds r24,width
+ 691 030c 8150      		subi r24,lo8(-(-1))
+ 692 030e 8730      		cpi r24,lo8(7)
+ 693 0310 00F0      		brlo .L60
+  49:ir_array.h    **** 		controlMotor(STOP);
+ 694               		.loc 4 49 0
+ 695 0312 84E0      		ldi r24,lo8(4)
+ 696               	.L79:
+  52:ir_array.h    **** 		controlMotor(FORWARD);
+ 697               		.loc 4 52 0
+ 698 0314 0E94 0000 		call controlMotor
+ 699               	.LVL46:
+  55:ir_array.h    **** 	uint8_t size = lineSize();
+ 700               		.loc 4 55 0
+ 701 0318 0E94 0000 		call lineSize
+ 702               	.LVL47:
+  57:ir_array.h    **** 	if(width == 0 && size != 0){
+ 703               		.loc 4 57 0
+ 704 031c 9091 0000 		lds r25,width
+ 705 0320 9111      		cpse r25,__zero_reg__
+ 706 0322 00C0      		rjmp .L62
+  57:ir_array.h    **** 	if(width == 0 && size != 0){
+ 707               		.loc 4 57 0 is_stmt 0 discriminator 1
+ 708 0324 8823      		tst r24
+ 709 0326 01F0      		breq .L63
+  58:ir_array.h    **** 		width = size;
+ 710               		.loc 4 58 0 is_stmt 1
+ 711 0328 8093 0000 		sts width,r24
+ 712               	.L64:
+  63:ir_array.h    **** 	if(count >= 255){
+ 713               		.loc 4 63 0
+ 714 032c 4091 0000 		lds r20,count
+ 715 0330 5091 0000 		lds r21,count+1
+ 716 0334 6091 0000 		lds r22,count+2
+ 717 0338 7091 0000 		lds r23,count+3
+ 718 033c 4F3F      		cpi r20,-1
+ 719 033e 5105      		cpc r21,__zero_reg__
+ 720 0340 6105      		cpc r22,__zero_reg__
+ 721 0342 7105      		cpc r23,__zero_reg__
+ 722 0344 00F0      		brlo .L52
+  66:ir_array.h    **** 		if(width % 2 != 0)
+ 723               		.loc 4 66 0
+ 724 0346 80FD      		sbrc r24,0
+ 725 0348 00C0      		rjmp .L67
+ 726               	.LVL48:
+ 727               	.L80:
+  67:ir_array.h    **** 			width --;
+ 728               		.loc 4 67 0
+ 729 034a 8093 0000 		sts width,r24
+ 730               	.L52:
+ 731               	/* epilogue start */
+  69:ir_array.h    **** }
+ 732               		.loc 4 69 0
+ 733 034e 0895      		ret
+ 734               	.LVL49:
+ 735               	.L69:
+ 736               	.LBB46:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 737               		.loc 4 46 0
+ 738 0350 82E0      		ldi r24,lo8(2)
+ 739 0352 00C0      		rjmp .L53
+ 740               	.L70:
+ 741               	.LBE46:
+ 742               	.LBB47:
+ 743 0354 94E0      		ldi r25,lo8(4)
+ 744               	.LVL50:
+ 745 0356 00C0      		rjmp .L54
+ 746               	.LVL51:
+ 747               	.L71:
+ 748               	.LBE47:
+ 749               	.LBB48:
+ 750 0358 98E0      		ldi r25,lo8(8)
+ 751               	.LVL52:
+ 752 035a 00C0      		rjmp .L55
+ 753               	.LVL53:
+ 754               	.L72:
+ 755               	.LBE48:
+ 756               	.LBB49:
+ 757 035c 90E1      		ldi r25,lo8(16)
+ 758               	.LVL54:
+ 759 035e 00C0      		rjmp .L56
+ 760               	.LVL55:
+ 761               	.L73:
+ 762               	.LBE49:
+ 763               	.LBB50:
+ 764 0360 90E2      		ldi r25,lo8(32)
+ 765               	.LVL56:
+ 766 0362 00C0      		rjmp .L57
+ 767               	.LVL57:
+ 768               	.L74:
+ 769               	.LBE50:
+ 770               	.LBB51:
+ 771 0364 90E4      		ldi r25,lo8(64)
+ 772               	.LVL58:
+ 773 0366 00C0      		rjmp .L58
+ 774               	.LVL59:
+ 775               	.L75:
+ 776               	.LBE51:
+ 777               	.LBB52:
+ 778 0368 90E8      		ldi r25,lo8(-128)
+ 779               	.LVL60:
+ 780 036a 00C0      		rjmp .L59
+ 781               	.L60:
+ 782               	.LBE52:
+  52:ir_array.h    **** 		controlMotor(FORWARD);
+ 783               		.loc 4 52 0
+ 784 036c 80E0      		ldi r24,0
+ 785 036e 00C0      		rjmp .L79
+ 786               	.LVL61:
+ 787               	.L62:
+  59:ir_array.h    **** 	}else if(width == size){
+ 788               		.loc 4 59 0
+ 789 0370 9813      		cpse r25,r24
+ 790 0372 00C0      		rjmp .L64
+ 791               	.L63:
+  60:ir_array.h    **** 		count++;
+ 792               		.loc 4 60 0
+ 793 0374 4091 0000 		lds r20,count
+ 794 0378 5091 0000 		lds r21,count+1
+ 795 037c 6091 0000 		lds r22,count+2
+ 796 0380 7091 0000 		lds r23,count+3
+ 797 0384 4F5F      		subi r20,-1
+ 798 0386 5F4F      		sbci r21,-1
+ 799 0388 6F4F      		sbci r22,-1
+ 800 038a 7F4F      		sbci r23,-1
+ 801 038c 4093 0000 		sts count,r20
+ 802 0390 5093 0000 		sts count+1,r21
+ 803 0394 6093 0000 		sts count+2,r22
+ 804 0398 7093 0000 		sts count+3,r23
+ 805 039c 00C0      		rjmp .L64
+ 806               	.L67:
+  67:ir_array.h    **** 			width --;
+ 807               		.loc 4 67 0
+ 808 039e 8150      		subi r24,lo8(-(-1))
+ 809               	.LVL62:
+ 810 03a0 00C0      		rjmp .L80
+ 811               		.cfi_endproc
+ 812               	.LFE14:
+ 814               		.section	.text.startup,"ax",@progbits
+ 815               	.global	main
+ 817               	main:
+ 818               	.LFB16:
+ 819               		.file 6 "main.c"
    1:main.c        **** #define F_CPU 16000000UL
    2:main.c        **** 
    3:main.c        **** //Comment the MCU which you're not using.
@@ -1018,89 +1358,89 @@
    9:main.c        **** #include "ir_array.h"
   10:main.c        **** 
   11:main.c        **** int main(void){
- 685               		.loc 5 11 0
- 686               		.cfi_startproc
- 687               	/* prologue: function */
- 688               	/* frame size = 0 */
- 689               	/* stack size = 0 */
- 690               	.L__stack_usage = 0
+ 820               		.loc 6 11 0
+ 821               		.cfi_startproc
+ 822               	/* prologue: function */
+ 823               	/* frame size = 0 */
+ 824               	/* stack size = 0 */
+ 825               	.L__stack_usage = 0
   12:main.c        **** 
   13:main.c        **** 	setupPWM();
- 691               		.loc 5 13 0
- 692 0000 0E94 0000 		call setupPWM
- 693               	.LVL40:
+ 826               		.loc 6 13 0
+ 827 0000 0E94 0000 		call setupPWM
+ 828               	.LVL63:
   14:main.c        **** 	setupMotor();
- 694               		.loc 5 14 0
- 695 0004 0E94 0000 		call setupMotor
- 696               	.LVL41:
+ 829               		.loc 6 14 0
+ 830 0004 0E94 0000 		call setupMotor
+ 831               	.LVL64:
   15:main.c        **** 	initIR();
- 697               		.loc 5 15 0
- 698 0008 0E94 0000 		call initIR
- 699               	.LVL42:
- 700               	.L75:
+ 832               		.loc 6 15 0
+ 833 0008 0E94 0000 		call initIR
+ 834               	.LVL65:
+ 835               	.L82:
   16:main.c        **** 
   17:main.c        **** 	while(1){
   18:main.c        **** 		stableCar();
- 701               		.loc 5 18 0 discriminator 1
- 702 000c 0E94 0000 		call stableCar
- 703               	.LVL43:
- 704 0010 00C0      		rjmp .L75
- 705               		.cfi_endproc
- 706               	.LFE16:
- 708               	.global	count
- 709               		.section .bss
- 712               	count:
- 713 0000 0000 0000 		.zero	4
- 714               	.global	width
- 717               	width:
- 718 0004 00        		.zero	1
- 719               	.global	right_status
- 722               	right_status:
- 723 0005 00        		.zero	1
- 724               	.global	left_status
- 727               	left_status:
- 728 0006 00        		.zero	1
- 729               	.global	channelB_status
- 732               	channelB_status:
- 733 0007 00        		.zero	1
- 734               	.global	channelA_status
- 737               	channelA_status:
- 738 0008 00        		.zero	1
- 739               	.global	channelB
- 742               	channelB:
- 743 0009 0000      		.zero	2
- 744               	.global	channelA
- 747               	channelA:
- 748 000b 0000      		.zero	2
- 749               		.text
- 750               	.Letext0:
- 751               		.file 6 "/usr/avr/include/stdint.h"
+ 836               		.loc 6 18 0 discriminator 1
+ 837 000c 0E94 0000 		call stableCar
+ 838               	.LVL66:
+ 839 0010 00C0      		rjmp .L82
+ 840               		.cfi_endproc
+ 841               	.LFE16:
+ 843               	.global	count
+ 844               		.section .bss
+ 847               	count:
+ 848 0000 0000 0000 		.zero	4
+ 849               	.global	width
+ 852               	width:
+ 853 0004 00        		.zero	1
+ 854               	.global	right_status
+ 857               	right_status:
+ 858 0005 00        		.zero	1
+ 859               	.global	left_status
+ 862               	left_status:
+ 863 0006 00        		.zero	1
+ 864               	.global	channelB_status
+ 867               	channelB_status:
+ 868 0007 00        		.zero	1
+ 869               	.global	channelA_status
+ 872               	channelA_status:
+ 873 0008 00        		.zero	1
+ 874               	.global	channelB
+ 877               	channelB:
+ 878 0009 0000      		.zero	2
+ 879               	.global	channelA
+ 882               	channelA:
+ 883 000b 0000      		.zero	2
+ 884               		.text
+ 885               	.Letext0:
+ 886               		.file 7 "/usr/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccBw2RD7.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccBw2RD7.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccBw2RD7.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccBw2RD7.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccBw2RD7.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccBw2RD7.s:12     .text:0000000000000000 setupPWM
-     /tmp/ccBw2RD7.s:39     .text:0000000000000014 pwm
-     /tmp/ccBw2RD7.s:70     .text:0000000000000034 controlMotor
-     /tmp/ccBw2RD7.s:747    .bss:000000000000000b channelA
-     /tmp/ccBw2RD7.s:742    .bss:0000000000000009 channelB
-     /tmp/ccBw2RD7.s:732    .bss:0000000000000007 channelB_status
-     /tmp/ccBw2RD7.s:727    .bss:0000000000000006 left_status
-     /tmp/ccBw2RD7.s:722    .bss:0000000000000005 right_status
-     /tmp/ccBw2RD7.s:737    .bss:0000000000000008 channelA_status
-     /tmp/ccBw2RD7.s:377    .text:000000000000022c setupMotor
-     /tmp/ccBw2RD7.s:424    .text:0000000000000256 initUSART
-     /tmp/ccBw2RD7.s:456    .text:0000000000000272 getCh
-     /tmp/ccBw2RD7.s:479    .text:0000000000000280 putCh
-     /tmp/ccBw2RD7.s:503    .text:000000000000028e initIR
-     /tmp/ccBw2RD7.s:527    .text:000000000000029e lineSize
-     /tmp/ccBw2RD7.s:594    .text:00000000000002c8 stableCar
-     /tmp/ccBw2RD7.s:717    .bss:0000000000000004 width
-     /tmp/ccBw2RD7.s:712    .bss:0000000000000000 count
-     /tmp/ccBw2RD7.s:682    .text.startup:0000000000000000 main
+     /tmp/ccNbSYQY.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccNbSYQY.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccNbSYQY.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccNbSYQY.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccNbSYQY.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccNbSYQY.s:12     .text:0000000000000000 setupPWM
+     /tmp/ccNbSYQY.s:39     .text:0000000000000014 pwm
+     /tmp/ccNbSYQY.s:70     .text:0000000000000034 controlMotor
+     /tmp/ccNbSYQY.s:882    .bss:000000000000000b channelA
+     /tmp/ccNbSYQY.s:877    .bss:0000000000000009 channelB
+     /tmp/ccNbSYQY.s:867    .bss:0000000000000007 channelB_status
+     /tmp/ccNbSYQY.s:862    .bss:0000000000000006 left_status
+     /tmp/ccNbSYQY.s:857    .bss:0000000000000005 right_status
+     /tmp/ccNbSYQY.s:872    .bss:0000000000000008 channelA_status
+     /tmp/ccNbSYQY.s:377    .text:000000000000022c setupMotor
+     /tmp/ccNbSYQY.s:424    .text:0000000000000256 initUSART
+     /tmp/ccNbSYQY.s:456    .text:0000000000000272 getCh
+     /tmp/ccNbSYQY.s:479    .text:0000000000000280 putCh
+     /tmp/ccNbSYQY.s:503    .text:000000000000028e initIR
+     /tmp/ccNbSYQY.s:527    .text:000000000000029e lineSize
+     /tmp/ccNbSYQY.s:585    .text:00000000000002b2 stableCar
+     /tmp/ccNbSYQY.s:852    .bss:0000000000000004 width
+     /tmp/ccNbSYQY.s:847    .bss:0000000000000000 count
+     /tmp/ccNbSYQY.s:817    .text.startup:0000000000000000 main
 
 UNDEFINED SYMBOLS
 __do_clear_bss
