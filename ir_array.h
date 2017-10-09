@@ -43,8 +43,9 @@ void initIR(void){
 }
 
 void stableCar(void){
-	putCh(IR_ARR_VAL);
-	_delay_ms(100);
+	//putCh(IR_ARR_VAL);
+	//_delay_ms(100);
+	controlMotor(FORWARD);
 	if(width == 0 || width >= 8){
 		controlMotor(STOP);
 	}else{
