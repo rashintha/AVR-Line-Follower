@@ -48,6 +48,7 @@ while True:
 
     plotList = plotList + valList
     #print(plotList)
+    print(valList)
 
     # calculating mean
     mu = sum(plotList) / len(plotList)

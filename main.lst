@@ -797,210 +797,253 @@
  521               	.LVL25:
  522               		.cfi_endproc
  523               	.LFE13:
- 525               	.global	lineSize
- 527               	lineSize:
- 528               	.LFB15:
+ 525               	.global	stableCar
+ 527               	stableCar:
+ 528               	.LFB14:
   43:ir_array.h    **** }
   44:ir_array.h    **** 
   45:ir_array.h    **** void stableCar(void){
-  46:ir_array.h    **** 	//putCh(IR_ARR_VAL);
-  47:ir_array.h    **** 	//_delay_ms(100);
-  48:ir_array.h    **** 	if(width == 0 || width >= 8){
-  49:ir_array.h    **** 		controlMotor(STOP);
-  50:ir_array.h    **** 	}else{
-  51:ir_array.h    **** 		
-  52:ir_array.h    **** 		controlMotor(FORWARD);
-  53:ir_array.h    **** 	}
-  54:ir_array.h    **** 
-  55:ir_array.h    **** 	uint8_t size = lineSize();
-  56:ir_array.h    **** 
-  57:ir_array.h    **** 	if(width == 0 && size != 0){
-  58:ir_array.h    **** 		width = size;
-  59:ir_array.h    **** 	}else if(width == size){
-  60:ir_array.h    **** 		count++;
-  61:ir_array.h    **** 	}
-  62:ir_array.h    **** 
-  63:ir_array.h    **** 	if(count >= 255){
-  64:ir_array.h    **** 		width = size;
-  65:ir_array.h    **** 
-  66:ir_array.h    **** 		if(width % 2 != 0)
-  67:ir_array.h    **** 			width --;
-  68:ir_array.h    **** 	}
-  69:ir_array.h    **** }
-  70:ir_array.h    **** 
-  71:ir_array.h    **** uint8_t lineSize(void){
- 529               		.loc 4 71 0
+ 529               		.loc 4 45 0
  530               		.cfi_startproc
  531               	/* prologue: function */
  532               	/* frame size = 0 */
  533               	/* stack size = 0 */
  534               	.L__stack_usage = 0
- 535               	.LVL26:
- 536               	.LBB18:
-  72:ir_array.h    **** 	uint8_t size = 0;
-  73:ir_array.h    **** 
-  74:ir_array.h    **** 	if(~IR01_VAL()) size++;
- 537               		.loc 4 74 0
- 538 029e 89B1      		in r24,0x9
- 539               	.LVL27:
- 540               	.LBE18:
- 541               	.LBB19:
-  75:ir_array.h    **** 	if(~IR02_VAL()) size++;
- 542               		.loc 4 75 0
- 543 02a0 89B1      		in r24,0x9
- 544               	.LVL28:
- 545               	.LBE19:
- 546               	.LBB20:
-  76:ir_array.h    **** 	if(~IR03_VAL()) size++;
- 547               		.loc 4 76 0
- 548 02a2 89B1      		in r24,0x9
- 549               	.LVL29:
- 550               	.LBE20:
- 551               	.LBB21:
-  77:ir_array.h    **** 	if(~IR04_VAL()) size++;
- 552               		.loc 4 77 0
- 553 02a4 89B1      		in r24,0x9
- 554               	.LVL30:
- 555               	.LBE21:
- 556               	.LBB22:
-  78:ir_array.h    **** 	if(~IR05_VAL()) size++;
- 557               		.loc 4 78 0
- 558 02a6 83B1      		in r24,0x3
- 559               	.LVL31:
- 560               	.LBE22:
- 561               	.LBB23:
-  79:ir_array.h    **** 	if(~IR06_VAL()) size++;
- 562               		.loc 4 79 0
- 563 02a8 83B1      		in r24,0x3
- 564               	.LVL32:
- 565               	.LBE23:
- 566               	.LBB24:
-  80:ir_array.h    **** 	if(~IR07_VAL()) size++;
- 567               		.loc 4 80 0
- 568 02aa 83B1      		in r24,0x3
- 569               	.LVL33:
- 570               	.LBE24:
- 571               	.LBB25:
-  81:ir_array.h    **** 	if(~IR08_VAL()) size++;
- 572               		.loc 4 81 0
- 573 02ac 83B1      		in r24,0x3
- 574               	.LVL34:
- 575               	.LBE25:
-  82:ir_array.h    **** 
-  83:ir_array.h    **** 	return size;
-  84:ir_array.h    **** }...
- 576               		.loc 4 84 0
- 577 02ae 88E0      		ldi r24,lo8(8)
- 578               	/* epilogue start */
- 579 02b0 0895      		ret
- 580               		.cfi_endproc
- 581               	.LFE15:
- 583               	.global	stableCar
- 585               	stableCar:
- 586               	.LFB14:
-  45:ir_array.h    **** void stableCar(void){
- 587               		.loc 4 45 0
- 588               		.cfi_startproc
- 589               	/* prologue: function */
- 590               	/* frame size = 0 */
- 591               	/* stack size = 0 */
- 592               	.L__stack_usage = 0
-  48:ir_array.h    **** 	if(width == 0 || width >= 8){
- 593               		.loc 4 48 0
- 594 02b2 8091 0000 		lds r24,width
- 595 02b6 8150      		subi r24,lo8(-(-1))
- 596 02b8 8730      		cpi r24,lo8(7)
- 597 02ba 00F0      		brlo .L53
-  49:ir_array.h    **** 		controlMotor(STOP);
- 598               		.loc 4 49 0
- 599 02bc 84E0      		ldi r24,lo8(4)
- 600               	.L65:
-  52:ir_array.h    **** 		controlMotor(FORWARD);
- 601               		.loc 4 52 0
- 602 02be 0E94 0000 		call controlMotor
- 603               	.LVL35:
-  55:ir_array.h    **** 	uint8_t size = lineSize();
- 604               		.loc 4 55 0
- 605 02c2 0E94 0000 		call lineSize
- 606               	.LVL36:
-  57:ir_array.h    **** 	if(width == 0 && size != 0){
- 607               		.loc 4 57 0
- 608 02c6 9091 0000 		lds r25,width
- 609 02ca 9111      		cpse r25,__zero_reg__
- 610 02cc 00C0      		rjmp .L55
-  57:ir_array.h    **** 	if(width == 0 && size != 0){
- 611               		.loc 4 57 0 is_stmt 0 discriminator 1
- 612 02ce 8823      		tst r24
- 613 02d0 01F0      		breq .L56
-  58:ir_array.h    **** 		width = size;
- 614               		.loc 4 58 0 is_stmt 1
- 615 02d2 8093 0000 		sts width,r24
- 616               	.L57:
-  63:ir_array.h    **** 	if(count >= 255){
- 617               		.loc 4 63 0
- 618 02d6 4091 0000 		lds r20,count
- 619 02da 5091 0000 		lds r21,count+1
- 620 02de 6091 0000 		lds r22,count+2
- 621 02e2 7091 0000 		lds r23,count+3
- 622 02e6 4F3F      		cpi r20,-1
- 623 02e8 5105      		cpc r21,__zero_reg__
- 624 02ea 6105      		cpc r22,__zero_reg__
- 625 02ec 7105      		cpc r23,__zero_reg__
- 626 02ee 00F0      		brlo .L52
-  66:ir_array.h    **** 		if(width % 2 != 0)
- 627               		.loc 4 66 0
- 628 02f0 80FD      		sbrc r24,0
- 629 02f2 00C0      		rjmp .L60
- 630               	.LVL37:
- 631               	.L66:
-  67:ir_array.h    **** 			width --;
- 632               		.loc 4 67 0
- 633 02f4 8093 0000 		sts width,r24
- 634               	.L52:
- 635               	/* epilogue start */
-  69:ir_array.h    **** }
- 636               		.loc 4 69 0
- 637 02f8 0895      		ret
- 638               	.L53:
-  52:ir_array.h    **** 		controlMotor(FORWARD);
- 639               		.loc 4 52 0
- 640 02fa 80E0      		ldi r24,0
- 641 02fc 00C0      		rjmp .L65
- 642               	.LVL38:
- 643               	.L55:
-  59:ir_array.h    **** 	}else if(width == size){
- 644               		.loc 4 59 0
- 645 02fe 9813      		cpse r25,r24
- 646 0300 00C0      		rjmp .L57
- 647               	.L56:
-  60:ir_array.h    **** 		count++;
- 648               		.loc 4 60 0
- 649 0302 4091 0000 		lds r20,count
- 650 0306 5091 0000 		lds r21,count+1
- 651 030a 6091 0000 		lds r22,count+2
- 652 030e 7091 0000 		lds r23,count+3
- 653 0312 4F5F      		subi r20,-1
- 654 0314 5F4F      		sbci r21,-1
- 655 0316 6F4F      		sbci r22,-1
- 656 0318 7F4F      		sbci r23,-1
- 657 031a 4093 0000 		sts count,r20
- 658 031e 5093 0000 		sts count+1,r21
- 659 0322 6093 0000 		sts count+2,r22
- 660 0326 7093 0000 		sts count+3,r23
- 661 032a 00C0      		rjmp .L57
- 662               	.L60:
-  67:ir_array.h    **** 			width --;
- 663               		.loc 4 67 0
- 664 032c 8150      		subi r24,lo8(-(-1))
- 665               	.LVL39:
- 666 032e 00C0      		rjmp .L66
- 667               		.cfi_endproc
- 668               	.LFE14:
- 670               		.section	.text.startup,"ax",@progbits
- 671               	.global	main
- 673               	main:
- 674               	.LFB16:
- 675               		.file 5 "main.c"
+ 535               	.LBB18:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 536               		.loc 4 46 0
+ 537 029e 89B1      		in r24,0x9
+ 538 02a0 82FB      		bst r24,2
+ 539 02a2 9927      		clr r25
+ 540 02a4 90F9      		bld r25,0
+ 541               	.LVL26:
+ 542               	.LBE18:
+ 543               	.LBB19:
+ 544 02a6 4B99      		sbic 0x9,3
+ 545 02a8 00C0      		rjmp .L59
+ 546 02aa 80E0      		ldi r24,0
+ 547               	.L52:
+ 548               	.LVL27:
+ 549               	.LBE19:
+ 550               		.loc 4 46 0 is_stmt 0 discriminator 4
+ 551 02ac 892B      		or r24,r25
+ 552               	.LVL28:
+ 553               	.LBB20:
+ 554 02ae 4C99      		sbic 0x9,4
+ 555 02b0 00C0      		rjmp .L60
+ 556               		.loc 4 46 0
+ 557 02b2 90E0      		ldi r25,0
+ 558               	.LVL29:
+ 559               	.L53:
+ 560               	.LBE20:
+ 561               		.loc 4 46 0 discriminator 8
+ 562 02b4 892B      		or r24,r25
+ 563               	.LBB21:
+ 564 02b6 4D99      		sbic 0x9,5
+ 565 02b8 00C0      		rjmp .L61
+ 566               		.loc 4 46 0
+ 567 02ba 90E0      		ldi r25,0
+ 568               	.LVL30:
+ 569               	.L54:
+ 570               	.LBE21:
+ 571               		.loc 4 46 0 discriminator 12
+ 572 02bc 892B      		or r24,r25
+ 573               	.LBB22:
+ 574 02be 1D99      		sbic 0x3,5
+ 575 02c0 00C0      		rjmp .L62
+ 576               		.loc 4 46 0
+ 577 02c2 90E0      		ldi r25,0
+ 578               	.LVL31:
+ 579               	.L55:
+ 580               	.LBE22:
+ 581               		.loc 4 46 0 discriminator 16
+ 582 02c4 892B      		or r24,r25
+ 583               	.LBB23:
+ 584 02c6 1B99      		sbic 0x3,3
+ 585 02c8 00C0      		rjmp .L63
+ 586               		.loc 4 46 0
+ 587 02ca 90E0      		ldi r25,0
+ 588               	.LVL32:
+ 589               	.L56:
+ 590               	.LBE23:
+ 591               		.loc 4 46 0 discriminator 20
+ 592 02cc 892B      		or r24,r25
+ 593               	.LBB24:
+ 594 02ce 1C99      		sbic 0x3,4
+ 595 02d0 00C0      		rjmp .L64
+ 596               		.loc 4 46 0
+ 597 02d2 90E0      		ldi r25,0
+ 598               	.LVL33:
+ 599               	.L57:
+ 600               	.LBE24:
+ 601               		.loc 4 46 0 discriminator 24
+ 602 02d4 892B      		or r24,r25
+ 603               	.LBB25:
+ 604 02d6 1899      		sbic 0x3,0
+ 605 02d8 00C0      		rjmp .L65
+ 606               		.loc 4 46 0
+ 607 02da 90E0      		ldi r25,0
+ 608               	.LVL34:
+ 609               	.L58:
+ 610               	.LBE25:
+ 611               		.loc 4 46 0 discriminator 28
+ 612 02dc 892B      		or r24,r25
+ 613 02de 0E94 0000 		call putCh
+ 614               	.LVL35:
+  47:ir_array.h    **** 	//_delay_ms(100);
+  48:ir_array.h    **** 	controlMotor(FORWARD);
+ 615               		.loc 4 48 0 is_stmt 1 discriminator 28
+ 616 02e2 80E0      		ldi r24,0
+ 617 02e4 0C94 0000 		jmp controlMotor
+ 618               	.LVL36:
+ 619               	.L59:
+ 620               	.LBB26:
+  46:ir_array.h    **** 	putCh(IR_ARR_VAL);
+ 621               		.loc 4 46 0
+ 622 02e8 82E0      		ldi r24,lo8(2)
+ 623 02ea 00C0      		rjmp .L52
+ 624               	.L60:
+ 625               	.LBE26:
+ 626               	.LBB27:
+ 627 02ec 94E0      		ldi r25,lo8(4)
+ 628               	.LVL37:
+ 629 02ee 00C0      		rjmp .L53
+ 630               	.LVL38:
+ 631               	.L61:
+ 632               	.LBE27:
+ 633               	.LBB28:
+ 634 02f0 98E0      		ldi r25,lo8(8)
+ 635               	.LVL39:
+ 636 02f2 00C0      		rjmp .L54
+ 637               	.LVL40:
+ 638               	.L62:
+ 639               	.LBE28:
+ 640               	.LBB29:
+ 641 02f4 90E1      		ldi r25,lo8(16)
+ 642               	.LVL41:
+ 643 02f6 00C0      		rjmp .L55
+ 644               	.LVL42:
+ 645               	.L63:
+ 646               	.LBE29:
+ 647               	.LBB30:
+ 648 02f8 90E2      		ldi r25,lo8(32)
+ 649               	.LVL43:
+ 650 02fa 00C0      		rjmp .L56
+ 651               	.LVL44:
+ 652               	.L64:
+ 653               	.LBE30:
+ 654               	.LBB31:
+ 655 02fc 90E4      		ldi r25,lo8(64)
+ 656               	.LVL45:
+ 657 02fe 00C0      		rjmp .L57
+ 658               	.LVL46:
+ 659               	.L65:
+ 660               	.LBE31:
+ 661               	.LBB32:
+ 662 0300 90E8      		ldi r25,lo8(-128)
+ 663               	.LVL47:
+ 664 0302 00C0      		rjmp .L58
+ 665               	.LBE32:
+ 666               		.cfi_endproc
+ 667               	.LFE14:
+ 669               	.global	lineSize
+ 671               	lineSize:
+ 672               	.LFB15:
+  49:ir_array.h    **** 	/*if(width == 0 || width >= 8){
+  50:ir_array.h    **** 		controlMotor(STOP);
+  51:ir_array.h    **** 	}else{
+  52:ir_array.h    **** 		
+  53:ir_array.h    **** 		controlMotor(FORWARD);
+  54:ir_array.h    **** 	}
+  55:ir_array.h    **** 
+  56:ir_array.h    **** 	uint8_t size = lineSize();
+  57:ir_array.h    **** 
+  58:ir_array.h    **** 	if(width == 0 && size != 0){
+  59:ir_array.h    **** 		width = size;
+  60:ir_array.h    **** 	}else if(width == size){
+  61:ir_array.h    **** 		count++;
+  62:ir_array.h    **** 	}
+  63:ir_array.h    **** 
+  64:ir_array.h    **** 	if(count >= 255){
+  65:ir_array.h    **** 		width = size;
+  66:ir_array.h    **** 
+  67:ir_array.h    **** 		if(width % 2 != 0)
+  68:ir_array.h    **** 			width --;
+  69:ir_array.h    **** 	}*/
+  70:ir_array.h    **** }
+  71:ir_array.h    **** 
+  72:ir_array.h    **** uint8_t lineSize(void){
+ 673               		.loc 4 72 0
+ 674               		.cfi_startproc
+ 675               	/* prologue: function */
+ 676               	/* frame size = 0 */
+ 677               	/* stack size = 0 */
+ 678               	.L__stack_usage = 0
+ 679               	.LVL48:
+ 680               	.LBB33:
+  73:ir_array.h    **** 	uint8_t size = 0;
+  74:ir_array.h    **** 
+  75:ir_array.h    **** 	if(~IR01_VAL()) size++;
+ 681               		.loc 4 75 0
+ 682 0304 89B1      		in r24,0x9
+ 683               	.LVL49:
+ 684               	.LBE33:
+ 685               	.LBB34:
+  76:ir_array.h    **** 	if(~IR02_VAL()) size++;
+ 686               		.loc 4 76 0
+ 687 0306 89B1      		in r24,0x9
+ 688               	.LVL50:
+ 689               	.LBE34:
+ 690               	.LBB35:
+  77:ir_array.h    **** 	if(~IR03_VAL()) size++;
+ 691               		.loc 4 77 0
+ 692 0308 89B1      		in r24,0x9
+ 693               	.LVL51:
+ 694               	.LBE35:
+ 695               	.LBB36:
+  78:ir_array.h    **** 	if(~IR04_VAL()) size++;
+ 696               		.loc 4 78 0
+ 697 030a 89B1      		in r24,0x9
+ 698               	.LVL52:
+ 699               	.LBE36:
+ 700               	.LBB37:
+  79:ir_array.h    **** 	if(~IR05_VAL()) size++;
+ 701               		.loc 4 79 0
+ 702 030c 83B1      		in r24,0x3
+ 703               	.LVL53:
+ 704               	.LBE37:
+ 705               	.LBB38:
+  80:ir_array.h    **** 	if(~IR06_VAL()) size++;
+ 706               		.loc 4 80 0
+ 707 030e 83B1      		in r24,0x3
+ 708               	.LVL54:
+ 709               	.LBE38:
+ 710               	.LBB39:
+  81:ir_array.h    **** 	if(~IR07_VAL()) size++;
+ 711               		.loc 4 81 0
+ 712 0310 83B1      		in r24,0x3
+ 713               	.LVL55:
+ 714               	.LBE39:
+ 715               	.LBB40:
+  82:ir_array.h    **** 	if(~IR08_VAL()) size++;
+ 716               		.loc 4 82 0
+ 717 0312 83B1      		in r24,0x3
+ 718               	.LVL56:
+ 719               	.LBE40:
+  83:ir_array.h    **** 
+  84:ir_array.h    **** 	return size;
+  85:ir_array.h    **** }...
+ 720               		.loc 4 85 0
+ 721 0314 88E0      		ldi r24,lo8(8)
+ 722               	/* epilogue start */
+ 723 0316 0895      		ret
+ 724               		.cfi_endproc
+ 725               	.LFE15:
+ 727               		.section	.text.startup,"ax",@progbits
+ 728               	.global	main
+ 730               	main:
+ 731               	.LFB16:
+ 732               		.file 5 "main.c"
    1:main.c        **** #define F_CPU 16000000UL
    2:main.c        **** 
    3:main.c        **** //Comment the MCU which you're not using.
@@ -1012,91 +1055,89 @@
    9:main.c        **** #include "ir_array.h"
   10:main.c        **** 
   11:main.c        **** int main(void){
- 676               		.loc 5 11 0
- 677               		.cfi_startproc
- 678               	/* prologue: function */
- 679               	/* frame size = 0 */
- 680               	/* stack size = 0 */
- 681               	.L__stack_usage = 0
+ 733               		.loc 5 11 0
+ 734               		.cfi_startproc
+ 735               	/* prologue: function */
+ 736               	/* frame size = 0 */
+ 737               	/* stack size = 0 */
+ 738               	.L__stack_usage = 0
   12:main.c        **** 
   13:main.c        **** 	setupPWM();
- 682               		.loc 5 13 0
- 683 0000 0E94 0000 		call setupPWM
- 684               	.LVL40:
+ 739               		.loc 5 13 0
+ 740 0000 0E94 0000 		call setupPWM
+ 741               	.LVL57:
   14:main.c        **** 	setupMotor();
- 685               		.loc 5 14 0
- 686 0004 0E94 0000 		call setupMotor
- 687               	.LVL41:
+ 742               		.loc 5 14 0
+ 743 0004 0E94 0000 		call setupMotor
+ 744               	.LVL58:
   15:main.c        **** 	initIR();
- 688               		.loc 5 15 0
- 689 0008 0E94 0000 		call initIR
- 690               	.LVL42:
- 691               	.L68:
+ 745               		.loc 5 15 0
+ 746 0008 0E94 0000 		call initIR
+ 747               	.LVL59:
+ 748               	.L68:
   16:main.c        **** 
   17:main.c        **** 	while(1){
-  18:main.c        **** 		//stableCar();
-  19:main.c        **** 		controlMotor(FORWARD);
- 692               		.loc 5 19 0 discriminator 1
- 693 000c 80E0      		ldi r24,0
- 694 000e 0E94 0000 		call controlMotor
- 695               	.LVL43:
- 696 0012 00C0      		rjmp .L68
- 697               		.cfi_endproc
- 698               	.LFE16:
- 700               	.global	count
- 701               		.section .bss
- 704               	count:
- 705 0000 0000 0000 		.zero	4
- 706               	.global	width
- 709               	width:
- 710 0004 00        		.zero	1
- 711               	.global	right_status
- 714               	right_status:
- 715 0005 00        		.zero	1
- 716               	.global	left_status
- 719               	left_status:
- 720 0006 00        		.zero	1
- 721               	.global	channelB_status
- 724               	channelB_status:
- 725 0007 00        		.zero	1
- 726               	.global	channelA_status
- 729               	channelA_status:
- 730 0008 00        		.zero	1
- 731               	.global	channelB
- 734               	channelB:
- 735 0009 0000      		.zero	2
- 736               	.global	channelA
- 739               	channelA:
- 740 000b 0000      		.zero	2
- 741               		.text
- 742               	.Letext0:
- 743               		.file 6 "/usr/avr/include/stdint.h"
+  18:main.c        **** 		stableCar();
+ 749               		.loc 5 18 0 discriminator 1
+ 750 000c 0E94 0000 		call stableCar
+ 751               	.LVL60:
+ 752 0010 00C0      		rjmp .L68
+ 753               		.cfi_endproc
+ 754               	.LFE16:
+ 756               	.global	count
+ 757               		.section .bss
+ 760               	count:
+ 761 0000 0000 0000 		.zero	4
+ 762               	.global	width
+ 765               	width:
+ 766 0004 00        		.zero	1
+ 767               	.global	right_status
+ 770               	right_status:
+ 771 0005 00        		.zero	1
+ 772               	.global	left_status
+ 775               	left_status:
+ 776 0006 00        		.zero	1
+ 777               	.global	channelB_status
+ 780               	channelB_status:
+ 781 0007 00        		.zero	1
+ 782               	.global	channelA_status
+ 785               	channelA_status:
+ 786 0008 00        		.zero	1
+ 787               	.global	channelB
+ 790               	channelB:
+ 791 0009 0000      		.zero	2
+ 792               	.global	channelA
+ 795               	channelA:
+ 796 000b 0000      		.zero	2
+ 797               		.text
+ 798               	.Letext0:
+ 799               		.file 6 "/usr/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccx3RB7T.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccx3RB7T.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccx3RB7T.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccx3RB7T.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccx3RB7T.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccx3RB7T.s:12     .text:0000000000000000 setupPWM
-     /tmp/ccx3RB7T.s:39     .text:0000000000000014 pwm
-     /tmp/ccx3RB7T.s:70     .text:0000000000000034 controlMotor
-     /tmp/ccx3RB7T.s:739    .bss:000000000000000b channelA
-     /tmp/ccx3RB7T.s:734    .bss:0000000000000009 channelB
-     /tmp/ccx3RB7T.s:724    .bss:0000000000000007 channelB_status
-     /tmp/ccx3RB7T.s:719    .bss:0000000000000006 left_status
-     /tmp/ccx3RB7T.s:714    .bss:0000000000000005 right_status
-     /tmp/ccx3RB7T.s:729    .bss:0000000000000008 channelA_status
-     /tmp/ccx3RB7T.s:377    .text:000000000000022c setupMotor
-     /tmp/ccx3RB7T.s:424    .text:0000000000000256 initUSART
-     /tmp/ccx3RB7T.s:456    .text:0000000000000272 getCh
-     /tmp/ccx3RB7T.s:479    .text:0000000000000280 putCh
-     /tmp/ccx3RB7T.s:503    .text:000000000000028e initIR
-     /tmp/ccx3RB7T.s:527    .text:000000000000029e lineSize
-     /tmp/ccx3RB7T.s:585    .text:00000000000002b2 stableCar
-     /tmp/ccx3RB7T.s:709    .bss:0000000000000004 width
-     /tmp/ccx3RB7T.s:704    .bss:0000000000000000 count
-     /tmp/ccx3RB7T.s:673    .text.startup:0000000000000000 main
+     /tmp/cctUMo2U.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cctUMo2U.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cctUMo2U.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cctUMo2U.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cctUMo2U.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cctUMo2U.s:12     .text:0000000000000000 setupPWM
+     /tmp/cctUMo2U.s:39     .text:0000000000000014 pwm
+     /tmp/cctUMo2U.s:70     .text:0000000000000034 controlMotor
+     /tmp/cctUMo2U.s:795    .bss:000000000000000b channelA
+     /tmp/cctUMo2U.s:790    .bss:0000000000000009 channelB
+     /tmp/cctUMo2U.s:780    .bss:0000000000000007 channelB_status
+     /tmp/cctUMo2U.s:775    .bss:0000000000000006 left_status
+     /tmp/cctUMo2U.s:770    .bss:0000000000000005 right_status
+     /tmp/cctUMo2U.s:785    .bss:0000000000000008 channelA_status
+     /tmp/cctUMo2U.s:377    .text:000000000000022c setupMotor
+     /tmp/cctUMo2U.s:424    .text:0000000000000256 initUSART
+     /tmp/cctUMo2U.s:456    .text:0000000000000272 getCh
+     /tmp/cctUMo2U.s:479    .text:0000000000000280 putCh
+     /tmp/cctUMo2U.s:503    .text:000000000000028e initIR
+     /tmp/cctUMo2U.s:527    .text:000000000000029e stableCar
+     /tmp/cctUMo2U.s:671    .text:0000000000000304 lineSize
+     /tmp/cctUMo2U.s:730    .text.startup:0000000000000000 main
+     /tmp/cctUMo2U.s:760    .bss:0000000000000000 count
+     /tmp/cctUMo2U.s:765    .bss:0000000000000004 width
 
 UNDEFINED SYMBOLS
 __do_clear_bss
