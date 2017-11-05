@@ -1,10 +1,10 @@
 #define IR_LEFT_DDR DDRD
 #define IR_LEFT_PIN PIND
 
-#define IR_L_01 PD2
-#define IR_L_02 PD3
-#define IR_L_03 PD4
-#define IR_L_04 PD5
+#define IR_L_01 PD4
+#define IR_L_02 PD5
+#define IR_L_03 PD6
+#define IR_L_04 PD7
 
 #define IR_RIGHT_DDR DDRB
 #define IR_RIGHT_PIN PINB
@@ -25,49 +25,131 @@
 
 #define IR_ARR_VAL IR01_VAL() | IR02_VAL() | IR03_VAL() | IR04_VAL() | IR05_VAL() | IR06_VAL() | IR07_VAL() | IR08_VAL()
 
+#define IR_POSITION IR01_VAL() * 0 | IR02_VAL() * 1000 | IR03_VAL() * 2000 | IR04_VAL() * 3000 | IR05_VAL() * 4000 | IR06_VAL() * 5000 | IR07_VAL() * 6000 | IR08_VAL() * 7000
+
 #define SETUP_IR() {IR_LEFT_DDR &= ~((1 << IR_L_01) | (1 << IR_L_02) | (1 << IR_L_03) | (1 << IR_L_04)); IR_RIGHT_DDR &= ~((1 << IR_R_05) | (1 << IR_R_06) | (1 << IR_R_07) | (1 << IR_R_08));}
 
-#include "motor_control.h"
 #include "serial.h"
 
 uint8_t width = 0;
-uint32_t count = 0;
 
 void initIR(void);
 void stableCar(void);
 uint8_t lineSize(void);
+int getPosition(void);
  
 void initIR(void){
 	SETUP_IR();
 	initUSART();
 }
 
-void stableCar(void){
-	putCh(IR_ARR_VAL);
-	//_delay_ms(100);
-	controlMotor(FORWARD);
-	/*if(width == 0 || width >= 8){
-		controlMotor(STOP);
-	}else{
-		
-		controlMotor(FORWARD);
+int getPosition(void){
+	int position = IR_POSITION / 2;
+
+	if(position > 7000){
+		while(position >= 7000){
+			position /= 2;
+		}
 	}
 
-	uint8_t size = lineSize();
+	return position;
 
-	if(width == 0 && size != 0){
-		width = size;
-	}else if(width == size){
-		count++;
-	}
-
-	if(count >= 255){
-		width = size;
-
-		if(width % 2 != 0)
-			width --;
-	}*/
 }
+
+int getError(){
+
+	return 3500 - getPosition();
+	/*if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && IR08_VAL()) return 7;
+
+	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && IR07_VAL() && IR08_VAL()) return 6;
+
+	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && IR07_VAL() && ~IR08_VAL()) return 5;
+
+	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && IR06_VAL() && IR07_VAL() && ~IR08_VAL()) return 4;
+
+	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return 3;
+
+	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && IR05_VAL() && IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return 2;
+
+	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return 1;
+
+	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && IR04_VAL() && IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return 0;
+
+	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return -1;
+
+	if(~IR01_VAL() && ~IR02_VAL() && IR03_VAL() && IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return -2;
+
+	if(~IR01_VAL() && ~IR02_VAL() && IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return -3;
+
+	if(~IR01_VAL() && IR02_VAL() && IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return -4;
+
+	if(~IR01_VAL() && IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return -5;
+
+	if(IR01_VAL() && IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return -6;
+
+	if(IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_VAL() && ~IR08_VAL()) return -7;
+	*/
+}
+
+/*void stableCar(void){
+
+	count++;
+	uint8_t ir_val = IR_ARR_VAL;
+
+	if(count == 200000){
+		putCh(ir_val);
+		count = 0;
+	}
+
+	controlMotor(NEUTRAL);
+	controlMotor(FORWARD);
+
+	if(ir_val == 0x00){
+		controlMotor(STOP);
+	}
+
+	//LEFT
+	if(ir_val == 0x01){
+		controlMotor(LEFT);
+		_delay_ms(100);
+	}
+	
+	if(ir_val == 0x02){
+		controlMotor(LEFT);
+		_delay_ms(10);
+	}
+
+	if(ir_val == 0x04){
+		controlMotor(LEFT);
+		_delay_ms(1);
+	}
+
+	if(ir_val == 0x0F){
+		controlMotor(LEFT);
+		_delay_ms(200);
+	}
+
+	//RIGHT
+	if(ir_val == 0x80){
+		controlMotor(RIGHT);
+		_delay_ms(100);
+	}
+
+	if(ir_val == 0x40){
+		controlMotor(RIGHT);
+		_delay_ms(10);
+	}
+
+	if(ir_val == 0x20){
+		controlMotor(RIGHT);
+		_delay_ms(1);
+	}
+
+	if(ir_val == 0xF0){
+		controlMotor(RIGHT);
+		_delay_ms(200);
+	}
+}*/
 
 uint8_t lineSize(void){
 	uint8_t size = 0;

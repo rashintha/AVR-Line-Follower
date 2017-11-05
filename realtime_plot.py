@@ -13,7 +13,7 @@ socket.connect((MAC, port))
 
 print("Connected")
 
-socket.settimeout(1.0)
+socket.settimeout(100.0)
 plotList = [1, 2, 3, 4, 5, 6, 7, 8]
 
 while True:
@@ -22,28 +22,28 @@ while True:
     print(x)
     valList = []
 
-    if not (1 & ord(x)):
+    if (1 & ord(x)):
         valList.append(1)
 
-    if not (2 & ord(x)):
+    if (2 & ord(x)):
         valList.append(2)
 
-    if not (4 & ord(x)):
+    if (4 & ord(x)):
         valList.append(3)
 
-    if not (8 & ord(x)):
+    if (8 & ord(x)):
         valList.append(4)
 
-    if not (16 & ord(x)):
+    if (16 & ord(x)):
         valList.append(5)
 
-    if not (32 & ord(x)):
+    if (32 & ord(x)):
         valList.append(6)
 
-    if not (64 & ord(x)):
+    if (64 & ord(x)):
         valList.append(7)
 
-    if not (128 & ord(x)):
+    if (128 & ord(x)):
         valList.append(8)
 
     plotList = plotList + valList

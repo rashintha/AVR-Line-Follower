@@ -1,13 +1,3 @@
-#define FORWARD 0x00
-#define REVERSE	0x01
-#define RIGHT	0x02
-#define LEFT	0x03
-#define STOP 	0x04
-#define NEUTRAL	0x05
-
-#define TRUE 	1
-#define FALSE 	0
-
 #define MOTOR_DDR	DDRC
 #define MOTOR_PORT	PORTC
 
@@ -21,33 +11,108 @@
 #define RIGHT_MODE()   { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTOR_PORT &= ~((1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_REV_PIN)); }
 #define LEFT_MODE()    { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTOR_PORT &= ~((1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_FWD_PIN)); }
 
-#define MAX_PWM_SPEED	20000
-#define MIN_PWM_SPEED	2000
+#define Kp 27
+#define Ki 0
+#define Kd 20
 
-#define MAX_SPEED 10000
-#define SPEED_INCREASE_RATE		10
-#define SPEED_DECREASE_RATE		5
-#define BREAK_RATE				30
+#define MAX_SPEED 2000
+#define RIGHT_MAX 1500 //Maximum Speed
+#define LEFT_MAX 1500 //Maximum Speed
+#define RIGHT_NORMAL_SPEED 1300 //Normal Speed
+#define LEFT_NORMAL_SPEED 1300 //Normal Speed
 
 #include "pwm.h"
+#include "ir_array.h"
+#include "srf05.h"
 
-uint16_t channelA = 0, channelB = 0;
-uint8_t channelA_status = FORWARD, channelB_status = FORWARD, left_status = FALSE, right_status=FALSE;
+uint32_t count = 0;
+uint8_t count2 = 0;
+int P = 0, I = 0, D = 0, PID = 0;
+int right_motor_pwm = 0, left_motor_pwm = 0;
+//uint8_t channelA_status = FORWARD, channelB_status = FORWARD, left_status = FALSE, right_status=FALSE;
+int previous_error = 0;
 
-void controlMotor(uint8_t status);
+void controlMotor(void);
 void setupMotor(void);
 
 void setupMotor(void){
 	MOTOR_DDR = 0x0F;
 
-	pwm(CH_A, 0, MAX_PWM_SPEED);
-	pwm(CH_B, 0, MAX_PWM_SPEED);
+	pwm(CH_A, 0, MAX_SPEED);
+	pwm(CH_B, 0, MAX_SPEED);
 
-	controlMotor(NEUTRAL);
+	//controlMotor(NEUTRAL);
 }
 
-void controlMotor(uint8_t status){
-	switch(status){
+void controlMotor(){
+
+	count++;
+	uint8_t ir_val = IR_ARR_VAL;
+
+	if(count == 200000){
+		putCh(distance);
+		count = 0;
+	}
+
+	int error = getError();
+	P = error;
+	I +=  error;
+	D = error - previous_error;
+	previous_error = error;
+
+	PID = Kp * P + Ki * I + Kd * D;
+
+	right_motor_pwm = RIGHT_NORMAL_SPEED + PID;
+	left_motor_pwm = LEFT_NORMAL_SPEED - PID;
+
+	FORWARD_MODE();
+
+	if(ir_val == 0x00){
+		if(error > 1000 && count2 <= 5){
+			REVERSE_MODE();
+			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
+			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+			_delay_ms(100);
+			FORWARD_MODE();
+			pwm(CH_A, RIGHT_NORMAL_SPEED/2, MAX_SPEED);
+			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+			_delay_ms(10);
+			count2++;
+		}else if(error < -1000 && count2 <= 5){
+			REVERSE_MODE();
+			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
+			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+			_delay_ms(1000);
+			FORWARD_MODE();
+			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
+			pwm(CH_B, LEFT_NORMAL_SPEED/2, MAX_SPEED);
+			_delay_ms(100);
+			count2++;
+		}else{
+			pwm(CH_A, 0, MAX_SPEED);
+			pwm(CH_B, 0, MAX_SPEED);
+		}
+
+		return;
+	}
+
+	if(right_motor_pwm > RIGHT_MAX)
+		right_motor_pwm = RIGHT_MAX;
+
+	if(left_motor_pwm > LEFT_MAX)
+		left_motor_pwm = LEFT_MAX;
+
+	if(right_motor_pwm < 0)
+		right_motor_pwm = 0;
+
+	if(left_motor_pwm < 0)
+		left_motor_pwm = 0;
+
+	count2 = 0;
+
+	pwm(CH_A, right_motor_pwm, MAX_SPEED);
+	pwm(CH_B, left_motor_pwm, MAX_SPEED);
+	/*switch(status){
 		case FORWARD:
 			if(channelA_status == FORWARD && channelB_status == FORWARD){
 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
@@ -81,6 +146,7 @@ void controlMotor(uint8_t status){
 			break;
 		
 		case STOP:
+			MOTOR_PORT = 0x00;
 			channelA = 0x00;
 			channelB = 0x00;
 			break;
@@ -107,21 +173,21 @@ void controlMotor(uint8_t status){
 			break;
 
 		case RIGHT:
-			RIGHT_MODE();
+			//RIGHT_MODE();
 			if(channelA < MIN_PWM_SPEED){
 				left_status = FALSE;
 				right_status = TRUE;
 				channelA = 15000;
-				channelB = 15000;
+				channelB -= 30;
 			}
 			break;
 
 		case LEFT:
-			LEFT_MODE();
+			//LEFT_MODE();
 			if(channelA < MIN_PWM_SPEED){
 				left_status = TRUE;
 				right_status = FALSE;
-				channelA = MAX_PWM_SPEED / 2;
+				channelA -= 30;
 				channelB = MAX_PWM_SPEED / 2;
 			}
 			break;
@@ -129,4 +195,5 @@ void controlMotor(uint8_t status){
 
 	pwm(CH_A, channelA, MAX_PWM_SPEED);
 	pwm(CH_B, channelB, MAX_PWM_SPEED);
+	*/
 }

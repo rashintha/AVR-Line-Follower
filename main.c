@@ -6,16 +6,18 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
-#include "ir_array.h"
+#include "motor_control.h"
 
 int main(void){
 
 	setupPWM();
 	setupMotor();
 	initIR();
+	init_SRF05();
+	SRF05_Start();
 
 	while(1){
-		stableCar();
+		controlMotor();
 	}
 	
 	return 0;
