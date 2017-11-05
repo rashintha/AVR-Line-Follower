@@ -27,6 +27,8 @@ int main(void){
 		if(count3 == 50000){
 			putCh(6666);
 			putCh(6666 >> 8);
+			putCh(5555);
+			putCh(5555 >> 8);
 			count3 = 0;
 		}
 	}

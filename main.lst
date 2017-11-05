@@ -2317,98 +2317,108 @@
  1460 0062 8AE1      		ldi r24,lo8(26)
  1461 0064 0E94 0000 		call putCh
  1462               	.LVL103:
-  30:main.c        **** 			count3 = 0;
+  30:main.c        **** 			putCh(5555);
  1463               		.loc 8 30 0
- 1464 0068 1092 0000 		sts count3,__zero_reg__
- 1465 006c 1092 0000 		sts count3+1,__zero_reg__
- 1466 0070 1092 0000 		sts count3+2,__zero_reg__
- 1467 0074 1092 0000 		sts count3+3,__zero_reg__
- 1468 0078 00C0      		rjmp .L69
- 1469               		.cfi_endproc
- 1470               	.LFE23:
- 1472               	.global	count3
- 1473               		.section .bss
- 1476               	count3:
- 1477 0000 0000 0000 		.zero	4
- 1478               	.global	previous_error
- 1481               	previous_error:
- 1482 0004 0000      		.zero	2
- 1483               	.global	left_motor_pwm
- 1486               	left_motor_pwm:
- 1487 0006 0000      		.zero	2
- 1488               	.global	right_motor_pwm
- 1491               	right_motor_pwm:
- 1492 0008 0000      		.zero	2
- 1493               	.global	PID
- 1496               	PID:
- 1497 000a 0000      		.zero	2
- 1498               	.global	D
- 1501               	D:
- 1502 000c 0000      		.zero	2
- 1503               	.global	I
- 1506               	I:
- 1507 000e 0000      		.zero	2
- 1508               	.global	P
- 1511               	P:
- 1512 0010 0000      		.zero	2
- 1513               	.global	count2
- 1516               	count2:
- 1517 0012 00        		.zero	1
- 1518               	.global	count
- 1521               	count:
- 1522 0013 0000 0000 		.zero	4
- 1523               	.global	interrupt
- 1526               	interrupt:
- 1527 0017 00        		.zero	1
- 1528               	.global	mseconds
- 1531               	mseconds:
- 1532 0018 0000      		.zero	2
- 1533               		.comm	distance,2,1
- 1534               	.global	width
- 1537               	width:
- 1538 001a 00        		.zero	1
- 1539               		.text
- 1540               	.Letext0:
- 1541               		.file 9 "/usr/avr/include/stdint.h"
+ 1464 0068 83EB      		ldi r24,lo8(-77)
+ 1465 006a 0E94 0000 		call putCh
+ 1466               	.LVL104:
+  31:main.c        **** 			putCh(5555 >> 8);
+ 1467               		.loc 8 31 0
+ 1468 006e 85E1      		ldi r24,lo8(21)
+ 1469 0070 0E94 0000 		call putCh
+ 1470               	.LVL105:
+  32:main.c        **** 			count3 = 0;
+ 1471               		.loc 8 32 0
+ 1472 0074 1092 0000 		sts count3,__zero_reg__
+ 1473 0078 1092 0000 		sts count3+1,__zero_reg__
+ 1474 007c 1092 0000 		sts count3+2,__zero_reg__
+ 1475 0080 1092 0000 		sts count3+3,__zero_reg__
+ 1476 0084 00C0      		rjmp .L69
+ 1477               		.cfi_endproc
+ 1478               	.LFE23:
+ 1480               	.global	count3
+ 1481               		.section .bss
+ 1484               	count3:
+ 1485 0000 0000 0000 		.zero	4
+ 1486               	.global	previous_error
+ 1489               	previous_error:
+ 1490 0004 0000      		.zero	2
+ 1491               	.global	left_motor_pwm
+ 1494               	left_motor_pwm:
+ 1495 0006 0000      		.zero	2
+ 1496               	.global	right_motor_pwm
+ 1499               	right_motor_pwm:
+ 1500 0008 0000      		.zero	2
+ 1501               	.global	PID
+ 1504               	PID:
+ 1505 000a 0000      		.zero	2
+ 1506               	.global	D
+ 1509               	D:
+ 1510 000c 0000      		.zero	2
+ 1511               	.global	I
+ 1514               	I:
+ 1515 000e 0000      		.zero	2
+ 1516               	.global	P
+ 1519               	P:
+ 1520 0010 0000      		.zero	2
+ 1521               	.global	count2
+ 1524               	count2:
+ 1525 0012 00        		.zero	1
+ 1526               	.global	count
+ 1529               	count:
+ 1530 0013 0000 0000 		.zero	4
+ 1531               	.global	interrupt
+ 1534               	interrupt:
+ 1535 0017 00        		.zero	1
+ 1536               	.global	mseconds
+ 1539               	mseconds:
+ 1540 0018 0000      		.zero	2
+ 1541               		.comm	distance,2,1
+ 1542               	.global	width
+ 1545               	width:
+ 1546 001a 00        		.zero	1
+ 1547               		.text
+ 1548               	.Letext0:
+ 1549               		.file 9 "/usr/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccojqGtL.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccojqGtL.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccojqGtL.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccojqGtL.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccojqGtL.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccojqGtL.s:12     .text:0000000000000000 init_ADC
-     /tmp/ccojqGtL.s:45     .text:000000000000001c read_ADC
-     /tmp/ccojqGtL.s:74     .text:0000000000000036 setupPWM
-     /tmp/ccojqGtL.s:101    .text:000000000000004a pwm
-     /tmp/ccojqGtL.s:132    .text:000000000000006a initUSART
-     /tmp/ccojqGtL.s:164    .text:0000000000000086 getCh
-     /tmp/ccojqGtL.s:187    .text:0000000000000094 putCh
-     /tmp/ccojqGtL.s:211    .text:00000000000000a2 initIR
-     /tmp/ccojqGtL.s:235    .text:00000000000000b2 getPosition
-     /tmp/ccojqGtL.s:445    .text:000000000000018c getError
-     /tmp/ccojqGtL.s:470    .text:000000000000019e lineSize
-     /tmp/ccojqGtL.s:528    .text:00000000000001b2 init_SRF05
-     /tmp/ccojqGtL.s:564    .text:00000000000001ce SRF05_Start
-     /tmp/ccojqGtL.s:1531   .bss:0000000000000018 mseconds
-     /tmp/ccojqGtL.s:609    .text:00000000000001ec __vector_1
-     /tmp/ccojqGtL.s:1526   .bss:0000000000000017 interrupt
+     /tmp/cco3DGWa.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cco3DGWa.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cco3DGWa.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cco3DGWa.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cco3DGWa.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cco3DGWa.s:12     .text:0000000000000000 init_ADC
+     /tmp/cco3DGWa.s:45     .text:000000000000001c read_ADC
+     /tmp/cco3DGWa.s:74     .text:0000000000000036 setupPWM
+     /tmp/cco3DGWa.s:101    .text:000000000000004a pwm
+     /tmp/cco3DGWa.s:132    .text:000000000000006a initUSART
+     /tmp/cco3DGWa.s:164    .text:0000000000000086 getCh
+     /tmp/cco3DGWa.s:187    .text:0000000000000094 putCh
+     /tmp/cco3DGWa.s:211    .text:00000000000000a2 initIR
+     /tmp/cco3DGWa.s:235    .text:00000000000000b2 getPosition
+     /tmp/cco3DGWa.s:445    .text:000000000000018c getError
+     /tmp/cco3DGWa.s:470    .text:000000000000019e lineSize
+     /tmp/cco3DGWa.s:528    .text:00000000000001b2 init_SRF05
+     /tmp/cco3DGWa.s:564    .text:00000000000001ce SRF05_Start
+     /tmp/cco3DGWa.s:1539   .bss:0000000000000018 mseconds
+     /tmp/cco3DGWa.s:609    .text:00000000000001ec __vector_1
+     /tmp/cco3DGWa.s:1534   .bss:0000000000000017 interrupt
                             *COM*:0000000000000002 distance
-     /tmp/ccojqGtL.s:735    .text:0000000000000272 __vector_14
-     /tmp/ccojqGtL.s:782    .text:00000000000002a0 setupMotor
-     /tmp/ccojqGtL.s:829    .text:00000000000002c6 controlMotor
-     /tmp/ccojqGtL.s:1521   .bss:0000000000000013 count
-     /tmp/ccojqGtL.s:1511   .bss:0000000000000010 P
-     /tmp/ccojqGtL.s:1506   .bss:000000000000000e I
-     /tmp/ccojqGtL.s:1481   .bss:0000000000000004 previous_error
-     /tmp/ccojqGtL.s:1501   .bss:000000000000000c D
-     /tmp/ccojqGtL.s:1496   .bss:000000000000000a PID
-     /tmp/ccojqGtL.s:1491   .bss:0000000000000008 right_motor_pwm
-     /tmp/ccojqGtL.s:1486   .bss:0000000000000006 left_motor_pwm
-     /tmp/ccojqGtL.s:1516   .bss:0000000000000012 count2
-     /tmp/ccojqGtL.s:1402   .text.startup:0000000000000000 main
-     /tmp/ccojqGtL.s:1476   .bss:0000000000000000 count3
-     /tmp/ccojqGtL.s:1537   .bss:000000000000001a width
+     /tmp/cco3DGWa.s:735    .text:0000000000000272 __vector_14
+     /tmp/cco3DGWa.s:782    .text:00000000000002a0 setupMotor
+     /tmp/cco3DGWa.s:829    .text:00000000000002c6 controlMotor
+     /tmp/cco3DGWa.s:1529   .bss:0000000000000013 count
+     /tmp/cco3DGWa.s:1519   .bss:0000000000000010 P
+     /tmp/cco3DGWa.s:1514   .bss:000000000000000e I
+     /tmp/cco3DGWa.s:1489   .bss:0000000000000004 previous_error
+     /tmp/cco3DGWa.s:1509   .bss:000000000000000c D
+     /tmp/cco3DGWa.s:1504   .bss:000000000000000a PID
+     /tmp/cco3DGWa.s:1499   .bss:0000000000000008 right_motor_pwm
+     /tmp/cco3DGWa.s:1494   .bss:0000000000000006 left_motor_pwm
+     /tmp/cco3DGWa.s:1524   .bss:0000000000000012 count2
+     /tmp/cco3DGWa.s:1402   .text.startup:0000000000000000 main
+     /tmp/cco3DGWa.s:1484   .bss:0000000000000000 count3
+     /tmp/cco3DGWa.s:1545   .bss:000000000000001a width
 
 UNDEFINED SYMBOLS
 __udivmodhi4

@@ -4,6 +4,8 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 import bluetooth
+import os
+import _thread
 
 MAC = '98:D3:32:30:DE:FF'
 port = 1
@@ -20,6 +22,9 @@ plotval = []
 count = 0
 countx = 0
 
+def beep(freq, duration):
+    os.system('(speaker-test -t sine -f %f) & pid=$!; sleep %ss; kill -9 $pid' % (freq, duration))
+
 while True:
     x = socket.recv(1)
     y = socket.recv(1)
@@ -29,7 +34,7 @@ while True:
 
     if val == 5555:
         #red
-        red = 0
+        _thread.start_new_thread(beep, (600, 0.5))
     elif val == 6666:
         #green
         count = count - 1
@@ -57,8 +62,8 @@ while True:
 
     print(ord(x))
 
-    plt.plot(plotx, ploty)
-    plt.axis([0, countx, 0, 300])
+    plt.plot(plotx, ploty, 'b--')
+    plt.axis([0, countx, 0, 200])
     plt.pause(0.005)
 
     #plotList = plotList + valList
