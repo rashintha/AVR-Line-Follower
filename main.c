@@ -6,6 +6,8 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+
+#include "color_sensor.h"
 #include "motor_control.h"
 
 int main(void){
@@ -15,6 +17,7 @@ int main(void){
 	initIR();
 	init_SRF05();
 	SRF05_Start();
+	init_ADC();
 
 	while(1){
 		controlMotor();

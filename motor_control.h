@@ -49,8 +49,8 @@ void controlMotor(){
 	count++;
 	uint8_t ir_val = IR_ARR_VAL;
 
-	if(count == 200000){
-		putCh(distance);
+	if(count == 7000){
+		putCh(read_ADC());
 		count = 0;
 	}
 

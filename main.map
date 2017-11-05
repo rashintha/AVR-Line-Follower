@@ -134,7 +134,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000      0x690
+.text           0x0000000000000000      0x6ca
  *(.vectors)
  .vectors       0x0000000000000000       0x68 /usr/lib/gcc/avr/7.2.0/../../../../avr/lib/avr5/crtatmega328p.o
                 0x0000000000000000                __vectors
@@ -213,74 +213,76 @@ END GROUP
                 0x000000000000008c                __vector_16
                 0x000000000000008c                __vector_18
                 0x000000000000008c                __vector_20
- .text          0x0000000000000090      0x5ba main.o
-                0x0000000000000090                setupPWM
-                0x00000000000000a4                pwm
-                0x00000000000000c4                initUSART
-                0x00000000000000e0                getCh
-                0x00000000000000ee                putCh
-                0x00000000000000fc                initIR
-                0x000000000000010c                getPosition
-                0x00000000000001e6                getError
-                0x00000000000001f8                lineSize
-                0x000000000000020c                init_SRF05
-                0x0000000000000228                SRF05_Start
-                0x0000000000000246                __vector_1
-                0x00000000000002cc                __vector_14
-                0x00000000000002fa                setupMotor
-                0x0000000000000320                controlMotor
- .text          0x000000000000064a        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
- .text          0x000000000000064a        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
- .text          0x000000000000064a        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
-                0x000000000000064a                . = ALIGN (0x2)
+ .text          0x0000000000000090      0x5f0 main.o
+                0x0000000000000090                init_ADC
+                0x00000000000000ac                read_ADC
+                0x00000000000000c6                setupPWM
+                0x00000000000000da                pwm
+                0x00000000000000fa                initUSART
+                0x0000000000000116                getCh
+                0x0000000000000124                putCh
+                0x0000000000000132                initIR
+                0x0000000000000142                getPosition
+                0x000000000000021c                getError
+                0x000000000000022e                lineSize
+                0x0000000000000242                init_SRF05
+                0x000000000000025e                SRF05_Start
+                0x000000000000027c                __vector_1
+                0x0000000000000302                __vector_14
+                0x0000000000000330                setupMotor
+                0x0000000000000356                controlMotor
+ .text          0x0000000000000680        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
+ .text          0x0000000000000680        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+ .text          0x0000000000000680        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x0000000000000680                . = ALIGN (0x2)
  *(.text.*)
- .text.startup  0x000000000000064a       0x1a main.o
-                0x000000000000064a                main
+ .text.startup  0x0000000000000680       0x1e main.o
+                0x0000000000000680                main
  .text.libgcc.mul
-                0x0000000000000664        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x000000000000069e        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.div
-                0x0000000000000664       0x28 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
-                0x0000000000000664                __udivmodhi4
- .text.libgcc   0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x000000000000069e       0x28 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x000000000000069e                __udivmodhi4
+ .text.libgcc   0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.prologue
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.builtins
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.fmul
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.fixed
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.mul
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
  .text.libgcc.div
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
- .text.libgcc   0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+ .text.libgcc   0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
  .text.libgcc.fixed
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
  .text.libgcc.mul
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.div
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
- .text.libgcc   0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.prologue
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.builtins
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.fmul
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.fixed
-                0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
-                0x000000000000068c                . = ALIGN (0x2)
+                0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x00000000000006c6                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000000000068c        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
-                0x000000000000068c                exit
-                0x000000000000068c                _exit
+ .fini9         0x00000000000006c6        0x0 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000000006c6                exit
+                0x00000000000006c6                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -299,17 +301,17 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000000000068c        0x4 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
+ .fini0         0x00000000000006c6        0x4 /usr/lib/gcc/avr/7.2.0/avr5/libgcc.a(_exit.o)
  *(.fini0)
  *(.hightext)
  *(.hightext*)
  *(.progmemx.*)
-                0x0000000000000690                . = ALIGN (0x2)
+                0x00000000000006ca                . = ALIGN (0x2)
  *(.jumptables)
  *(.jumptables*)
-                0x0000000000000690                _etext = .
+                0x00000000000006ca                _etext = .
 
-.data           0x0000000000800100        0x0 load address 0x0000000000000690
+.data           0x0000000000800100        0x0 load address 0x00000000000006ca
                 [!provide]                        PROVIDE (__data_start, .)
  *(.data)
  .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/7.2.0/../../../../avr/lib/avr5/crtatmega328p.o
@@ -351,8 +353,8 @@ END GROUP
  COMMON         0x0000000000800117        0x2 main.o
                 0x0000000000800117                distance
                 0x0000000000800119                PROVIDE (__bss_end, .)
-                0x0000000000000690                __data_load_start = LOADADDR (.data)
-                0x0000000000000690                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000000000006ca                __data_load_start = LOADADDR (.data)
+                0x00000000000006ca                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0000000000800119        0x0
                 [!provide]                        PROVIDE (__noinit_start, .)
@@ -428,30 +430,30 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x1099
+.debug_info     0x0000000000000000     0x10db
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x5f4 /usr/lib/gcc/avr/7.2.0/../../../../avr/lib/avr5/crtatmega328p.o
- .debug_info    0x00000000000005f4      0xaa5 main.o
+ .debug_info    0x00000000000005f4      0xae7 main.o
 
 .debug_abbrev   0x0000000000000000      0x813
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x5a2 /usr/lib/gcc/avr/7.2.0/../../../../avr/lib/avr5/crtatmega328p.o
  .debug_abbrev  0x00000000000005a2      0x271 main.o
 
-.debug_line     0x0000000000000000      0x5db
+.debug_line     0x0000000000000000      0x631
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000       0x1d /usr/lib/gcc/avr/7.2.0/../../../../avr/lib/avr5/crtatmega328p.o
- .debug_line    0x000000000000001d      0x5be main.o
+ .debug_line    0x000000000000001d      0x614 main.o
 
-.debug_frame    0x0000000000000000      0x188
+.debug_frame    0x0000000000000000      0x1a8
  *(.debug_frame)
- .debug_frame   0x0000000000000000      0x188 main.o
+ .debug_frame   0x0000000000000000      0x1a8 main.o
 
-.debug_str      0x0000000000000000      0x4c9
+.debug_str      0x0000000000000000      0x4db
  *(.debug_str)
  .debug_str     0x0000000000000000      0x208 /usr/lib/gcc/avr/7.2.0/../../../../avr/lib/avr5/crtatmega328p.o
- .debug_str     0x0000000000000208      0x2c1 main.o
-                                        0x2fb (size before relaxing)
+ .debug_str     0x0000000000000208      0x2d3 main.o
+                                        0x30d (size before relaxing)
 
 .debug_loc      0x0000000000000000      0x830
  *(.debug_loc)
@@ -546,6 +548,7 @@ getError                                          main.o
 getPosition                                       main.o
 initIR                                            main.o
 initUSART                                         main.o
+init_ADC                                          main.o
 init_SRF05                                        main.o
 interrupt                                         main.o
 left_motor_pwm                                    main.o
@@ -556,6 +559,7 @@ mseconds                                          main.o
 previous_error                                    main.o
 putCh                                             main.o
 pwm                                               main.o
+read_ADC                                          main.o
 right_motor_pwm                                   main.o
 setupMotor                                        main.o
 setupPWM                                          main.o
