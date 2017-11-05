@@ -1573,658 +1573,663 @@
  935 0332 6105      		cpc r22,__zero_reg__
  936 0334 7105      		cpc r23,__zero_reg__
  937 0336 01F4      		brne .L51
-  53:motor_control.h **** 		putCh(read_ADC());
+  53:motor_control.h **** 		putCh(distance);
  938               		.loc 7 53 0
- 939 0338 0E94 0000 		call read_ADC
+ 939 0338 8091 0000 		lds r24,distance
  940               	.LVL52:
  941 033c 0E94 0000 		call putCh
  942               	.LVL53:
-  54:motor_control.h **** 		count = 0;
+  54:motor_control.h **** 		putCh(distance >> 8);
  943               		.loc 7 54 0
- 944 0340 1092 0000 		sts count,__zero_reg__
- 945 0344 1092 0000 		sts count+1,__zero_reg__
- 946 0348 1092 0000 		sts count+2,__zero_reg__
- 947 034c 1092 0000 		sts count+3,__zero_reg__
- 948               	.L51:
-  55:motor_control.h **** 	}
-  56:motor_control.h **** 
-  57:motor_control.h **** 	int error = getError();
- 949               		.loc 7 57 0
- 950 0350 0E94 0000 		call getError
- 951               	.LVL54:
-  58:motor_control.h **** 	P = error;
- 952               		.loc 7 58 0
- 953 0354 9093 0000 		sts P+1,r25
- 954 0358 8093 0000 		sts P,r24
-  59:motor_control.h **** 	I +=  error;
- 955               		.loc 7 59 0
- 956 035c 2091 0000 		lds r18,I
- 957 0360 3091 0000 		lds r19,I+1
- 958 0364 280F      		add r18,r24
- 959 0366 391F      		adc r19,r25
- 960 0368 3093 0000 		sts I+1,r19
- 961 036c 2093 0000 		sts I,r18
-  60:motor_control.h **** 	D = error - previous_error;
- 962               		.loc 7 60 0
- 963 0370 2091 0000 		lds r18,previous_error
- 964 0374 3091 0000 		lds r19,previous_error+1
- 965 0378 AC01      		movw r20,r24
- 966 037a 421B      		sub r20,r18
- 967 037c 530B      		sbc r21,r19
- 968 037e 9A01      		movw r18,r20
- 969 0380 5093 0000 		sts D+1,r21
- 970 0384 4093 0000 		sts D,r20
-  61:motor_control.h **** 	previous_error = error;
- 971               		.loc 7 61 0
- 972 0388 9093 0000 		sts previous_error+1,r25
- 973 038c 8093 0000 		sts previous_error,r24
-  62:motor_control.h **** 
-  63:motor_control.h **** 	PID = Kp * P + Ki * I + Kd * D;
- 974               		.loc 7 63 0
- 975 0390 6BE1      		ldi r22,lo8(27)
- 976 0392 689F      		mul r22,r24
- 977 0394 A001      		movw r20,r0
- 978 0396 699F      		mul r22,r25
- 979 0398 500D      		add r21,r0
- 980 039a 1124      		clr __zero_reg__
- 981 039c E4E1      		ldi r30,lo8(20)
- 982 039e E29F      		mul r30,r18
- 983 03a0 B001      		movw r22,r0
- 984 03a2 E39F      		mul r30,r19
- 985 03a4 700D      		add r23,r0
- 986 03a6 1124      		clr __zero_reg__
- 987 03a8 460F      		add r20,r22
- 988 03aa 571F      		adc r21,r23
- 989 03ac 5093 0000 		sts PID+1,r21
- 990 03b0 4093 0000 		sts PID,r20
-  64:motor_control.h **** 
-  65:motor_control.h **** 	right_motor_pwm = RIGHT_NORMAL_SPEED + PID;
- 991               		.loc 7 65 0
- 992 03b4 9A01      		movw r18,r20
- 993 03b6 2C5E      		subi r18,-20
- 994 03b8 3A4F      		sbci r19,-6
- 995 03ba 3093 0000 		sts right_motor_pwm+1,r19
- 996 03be 2093 0000 		sts right_motor_pwm,r18
-  66:motor_control.h **** 	left_motor_pwm = LEFT_NORMAL_SPEED - PID;
- 997               		.loc 7 66 0
- 998 03c2 24E1      		ldi r18,lo8(20)
- 999 03c4 35E0      		ldi r19,lo8(5)
- 1000 03c6 B901      		movw r22,r18
- 1001 03c8 641B      		sub r22,r20
- 1002 03ca 750B      		sbc r23,r21
- 1003 03cc 7093 0000 		sts left_motor_pwm+1,r23
- 1004 03d0 6093 0000 		sts left_motor_pwm,r22
-  67:motor_control.h **** 
-  68:motor_control.h **** 	FORWARD_MODE();
- 1005               		.loc 7 68 0
- 1006 03d4 48B1      		in r20,0x8
- 1007 03d6 4560      		ori r20,lo8(5)
- 1008 03d8 48B9      		out 0x8,r20
- 1009 03da 48B1      		in r20,0x8
- 1010 03dc 457F      		andi r20,lo8(-11)
- 1011 03de 48B9      		out 0x8,r20
-  69:motor_control.h **** 
-  70:motor_control.h **** 	if(ir_val == 0x00){
- 1012               		.loc 7 70 0
- 1013 03e0 C111      		cpse r28,__zero_reg__
- 1014 03e2 00C0      		rjmp .L52
-  71:motor_control.h **** 		if(error > 1000 && count2 <= 5){
- 1015               		.loc 7 71 0
- 1016 03e4 893E      		cpi r24,-23
- 1017 03e6 73E0      		ldi r23,3
- 1018 03e8 9707      		cpc r25,r23
- 1019 03ea 04F4      		brge .+2
- 1020 03ec 00C0      		rjmp .L53
- 1021               		.loc 7 71 0 is_stmt 0 discriminator 1
- 1022 03ee 8091 0000 		lds r24,count2
- 1023               	.LVL55:
- 1024 03f2 8630      		cpi r24,lo8(6)
- 1025 03f4 00F0      		brlo .+2
- 1026 03f6 00C0      		rjmp .L54
-  72:motor_control.h **** 			REVERSE_MODE();
- 1027               		.loc 7 72 0 is_stmt 1
- 1028 03f8 88B1      		in r24,0x8
- 1029 03fa 8A60      		ori r24,lo8(10)
- 1030 03fc 88B9      		out 0x8,r24
- 1031 03fe 88B1      		in r24,0x8
- 1032 0400 8A7F      		andi r24,lo8(-6)
- 1033 0402 88B9      		out 0x8,r24
- 1034               	.LVL56:
- 1035               	.LBB101:
- 1036               	.LBB102:
+ 944 0340 8091 0000 		lds r24,distance+1
+ 945 0344 0E94 0000 		call putCh
+ 946               	.LVL54:
+  55:motor_control.h **** 		count = 0;
+ 947               		.loc 7 55 0
+ 948 0348 1092 0000 		sts count,__zero_reg__
+ 949 034c 1092 0000 		sts count+1,__zero_reg__
+ 950 0350 1092 0000 		sts count+2,__zero_reg__
+ 951 0354 1092 0000 		sts count+3,__zero_reg__
+ 952               	.L51:
+  56:motor_control.h **** 	}
+  57:motor_control.h **** 
+  58:motor_control.h **** 	int error = getError();
+ 953               		.loc 7 58 0
+ 954 0358 0E94 0000 		call getError
+ 955               	.LVL55:
+  59:motor_control.h **** 	P = error;
+ 956               		.loc 7 59 0
+ 957 035c 9093 0000 		sts P+1,r25
+ 958 0360 8093 0000 		sts P,r24
+  60:motor_control.h **** 	I +=  error;
+ 959               		.loc 7 60 0
+ 960 0364 2091 0000 		lds r18,I
+ 961 0368 3091 0000 		lds r19,I+1
+ 962 036c 280F      		add r18,r24
+ 963 036e 391F      		adc r19,r25
+ 964 0370 3093 0000 		sts I+1,r19
+ 965 0374 2093 0000 		sts I,r18
+  61:motor_control.h **** 	D = error - previous_error;
+ 966               		.loc 7 61 0
+ 967 0378 2091 0000 		lds r18,previous_error
+ 968 037c 3091 0000 		lds r19,previous_error+1
+ 969 0380 AC01      		movw r20,r24
+ 970 0382 421B      		sub r20,r18
+ 971 0384 530B      		sbc r21,r19
+ 972 0386 9A01      		movw r18,r20
+ 973 0388 5093 0000 		sts D+1,r21
+ 974 038c 4093 0000 		sts D,r20
+  62:motor_control.h **** 	previous_error = error;
+ 975               		.loc 7 62 0
+ 976 0390 9093 0000 		sts previous_error+1,r25
+ 977 0394 8093 0000 		sts previous_error,r24
+  63:motor_control.h **** 
+  64:motor_control.h **** 	PID = Kp * P + Ki * I + Kd * D;
+ 978               		.loc 7 64 0
+ 979 0398 6BE1      		ldi r22,lo8(27)
+ 980 039a 689F      		mul r22,r24
+ 981 039c A001      		movw r20,r0
+ 982 039e 699F      		mul r22,r25
+ 983 03a0 500D      		add r21,r0
+ 984 03a2 1124      		clr __zero_reg__
+ 985 03a4 E4E1      		ldi r30,lo8(20)
+ 986 03a6 E29F      		mul r30,r18
+ 987 03a8 B001      		movw r22,r0
+ 988 03aa E39F      		mul r30,r19
+ 989 03ac 700D      		add r23,r0
+ 990 03ae 1124      		clr __zero_reg__
+ 991 03b0 460F      		add r20,r22
+ 992 03b2 571F      		adc r21,r23
+ 993 03b4 5093 0000 		sts PID+1,r21
+ 994 03b8 4093 0000 		sts PID,r20
+  65:motor_control.h **** 
+  66:motor_control.h **** 	right_motor_pwm = RIGHT_NORMAL_SPEED + PID;
+ 995               		.loc 7 66 0
+ 996 03bc 9A01      		movw r18,r20
+ 997 03be 2C5E      		subi r18,-20
+ 998 03c0 3A4F      		sbci r19,-6
+ 999 03c2 3093 0000 		sts right_motor_pwm+1,r19
+ 1000 03c6 2093 0000 		sts right_motor_pwm,r18
+  67:motor_control.h **** 	left_motor_pwm = LEFT_NORMAL_SPEED - PID;
+ 1001               		.loc 7 67 0
+ 1002 03ca 24E1      		ldi r18,lo8(20)
+ 1003 03cc 35E0      		ldi r19,lo8(5)
+ 1004 03ce B901      		movw r22,r18
+ 1005 03d0 641B      		sub r22,r20
+ 1006 03d2 750B      		sbc r23,r21
+ 1007 03d4 7093 0000 		sts left_motor_pwm+1,r23
+ 1008 03d8 6093 0000 		sts left_motor_pwm,r22
+  68:motor_control.h **** 
+  69:motor_control.h **** 	FORWARD_MODE();
+ 1009               		.loc 7 69 0
+ 1010 03dc 48B1      		in r20,0x8
+ 1011 03de 4560      		ori r20,lo8(5)
+ 1012 03e0 48B9      		out 0x8,r20
+ 1013 03e2 48B1      		in r20,0x8
+ 1014 03e4 457F      		andi r20,lo8(-11)
+ 1015 03e6 48B9      		out 0x8,r20
+  70:motor_control.h **** 
+  71:motor_control.h **** 	if(ir_val == 0x00){
+ 1016               		.loc 7 71 0
+ 1017 03e8 C111      		cpse r28,__zero_reg__
+ 1018 03ea 00C0      		rjmp .L52
+  72:motor_control.h **** 		if(error > 1000 && count2 <= 5){
+ 1019               		.loc 7 72 0
+ 1020 03ec 893E      		cpi r24,-23
+ 1021 03ee 73E0      		ldi r23,3
+ 1022 03f0 9707      		cpc r25,r23
+ 1023 03f2 04F4      		brge .+2
+ 1024 03f4 00C0      		rjmp .L53
+ 1025               		.loc 7 72 0 is_stmt 0 discriminator 1
+ 1026 03f6 8091 0000 		lds r24,count2
+ 1027               	.LVL56:
+ 1028 03fa 8630      		cpi r24,lo8(6)
+ 1029 03fc 00F0      		brlo .+2
+ 1030 03fe 00C0      		rjmp .L54
+  73:motor_control.h **** 			REVERSE_MODE();
+ 1031               		.loc 7 73 0 is_stmt 1
+ 1032 0400 88B1      		in r24,0x8
+ 1033 0402 8A60      		ori r24,lo8(10)
+ 1034 0404 88B9      		out 0x8,r24
+ 1035 0406 88B1      		in r24,0x8
+ 1036 0408 8A7F      		andi r24,lo8(-6)
+ 1037 040a 88B9      		out 0x8,r24
+ 1038               	.LVL57:
+ 1039               	.LBB101:
+ 1040               	.LBB102:
   20:pwm.h         **** 	ICR1 = period;
- 1037               		.loc 2 20 0
- 1038 0404 80ED      		ldi r24,lo8(-48)
- 1039 0406 97E0      		ldi r25,lo8(7)
- 1040 0408 9093 8700 		sts 134+1,r25
- 1041 040c 8093 8600 		sts 134,r24
+ 1041               		.loc 2 20 0
+ 1042 040c 80ED      		ldi r24,lo8(-48)
+ 1043 040e 97E0      		ldi r25,lo8(7)
+ 1044 0410 9093 8700 		sts 134+1,r25
+ 1045 0414 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1042               		.loc 2 21 0
- 1043 0410 3093 8900 		sts 136+1,r19
- 1044 0414 2093 8800 		sts 136,r18
- 1045               	.LVL57:
- 1046               	.LBE102:
- 1047               	.LBE101:
- 1048               	.LBB103:
- 1049               	.LBB104:
+ 1046               		.loc 2 21 0
+ 1047 0418 3093 8900 		sts 136+1,r19
+ 1048 041c 2093 8800 		sts 136,r18
+ 1049               	.LVL58:
+ 1050               	.LBE102:
+ 1051               	.LBE101:
+ 1052               	.LBB103:
+ 1053               	.LBB104:
   20:pwm.h         **** 	ICR1 = period;
- 1050               		.loc 2 20 0
- 1051 0418 9093 8700 		sts 134+1,r25
- 1052 041c 8093 8600 		sts 134,r24
+ 1054               		.loc 2 20 0
+ 1055 0420 9093 8700 		sts 134+1,r25
+ 1056 0424 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1053               		.loc 2 21 0
- 1054 0420 3093 8B00 		sts 138+1,r19
- 1055 0424 2093 8A00 		sts 138,r18
- 1056               	.LVL58:
- 1057               	.LBE104:
- 1058               	.LBE103:
- 1059               	.LBB105:
- 1060               	.LBB106:
+ 1057               		.loc 2 21 0
+ 1058 0428 3093 8B00 		sts 138+1,r19
+ 1059 042c 2093 8A00 		sts 138,r18
+ 1060               	.LVL59:
+ 1061               	.LBE104:
+ 1062               	.LBE103:
+ 1063               	.LBB105:
+ 1064               	.LBB106:
  187:/usr/avr/include/util/delay.h **** 
- 1061               		.loc 6 187 0
- 1062 0428 4FEF      		ldi r20,lo8(319999)
- 1063 042a 51EE      		ldi r21,hi8(319999)
- 1064 042c 64E0      		ldi r22,hlo8(319999)
- 1065 042e 4150      	1:	subi r20,1
- 1066 0430 5040      		sbci r21,0
- 1067 0432 6040      		sbci r22,0
- 1068 0434 01F4      		brne 1b
- 1069 0436 00C0      		rjmp .
- 1070 0438 0000      		nop
- 1071               	.LVL59:
- 1072               	.LBE106:
- 1073               	.LBE105:
-  73:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
-  74:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
-  75:motor_control.h **** 			_delay_ms(100);
-  76:motor_control.h **** 			FORWARD_MODE();
- 1074               		.loc 7 76 0
- 1075 043a 48B1      		in r20,0x8
- 1076 043c 4560      		ori r20,lo8(5)
- 1077 043e 48B9      		out 0x8,r20
- 1078 0440 48B1      		in r20,0x8
- 1079 0442 457F      		andi r20,lo8(-11)
- 1080 0444 48B9      		out 0x8,r20
- 1081               	.LVL60:
- 1082               	.LBB107:
- 1083               	.LBB108:
+ 1065               		.loc 6 187 0
+ 1066 0430 4FEF      		ldi r20,lo8(319999)
+ 1067 0432 51EE      		ldi r21,hi8(319999)
+ 1068 0434 64E0      		ldi r22,hlo8(319999)
+ 1069 0436 4150      	1:	subi r20,1
+ 1070 0438 5040      		sbci r21,0
+ 1071 043a 6040      		sbci r22,0
+ 1072 043c 01F4      		brne 1b
+ 1073 043e 00C0      		rjmp .
+ 1074 0440 0000      		nop
+ 1075               	.LVL60:
+ 1076               	.LBE106:
+ 1077               	.LBE105:
+  74:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
+  75:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+  76:motor_control.h **** 			_delay_ms(100);
+  77:motor_control.h **** 			FORWARD_MODE();
+ 1078               		.loc 7 77 0
+ 1079 0442 48B1      		in r20,0x8
+ 1080 0444 4560      		ori r20,lo8(5)
+ 1081 0446 48B9      		out 0x8,r20
+ 1082 0448 48B1      		in r20,0x8
+ 1083 044a 457F      		andi r20,lo8(-11)
+ 1084 044c 48B9      		out 0x8,r20
+ 1085               	.LVL61:
+ 1086               	.LBB107:
+ 1087               	.LBB108:
   20:pwm.h         **** 	ICR1 = period;
- 1084               		.loc 2 20 0
- 1085 0446 9093 8700 		sts 134+1,r25
- 1086 044a 8093 8600 		sts 134,r24
+ 1088               		.loc 2 20 0
+ 1089 044e 9093 8700 		sts 134+1,r25
+ 1090 0452 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1087               		.loc 2 21 0
- 1088 044e 4AE8      		ldi r20,lo8(-118)
- 1089 0450 52E0      		ldi r21,lo8(2)
- 1090 0452 5093 8900 		sts 136+1,r21
- 1091 0456 4093 8800 		sts 136,r20
- 1092               	.LVL61:
- 1093               	.LBE108:
- 1094               	.LBE107:
- 1095               	.LBB109:
- 1096               	.LBB110:
+ 1091               		.loc 2 21 0
+ 1092 0456 4AE8      		ldi r20,lo8(-118)
+ 1093 0458 52E0      		ldi r21,lo8(2)
+ 1094 045a 5093 8900 		sts 136+1,r21
+ 1095 045e 4093 8800 		sts 136,r20
+ 1096               	.LVL62:
+ 1097               	.LBE108:
+ 1098               	.LBE107:
+ 1099               	.LBB109:
+ 1100               	.LBB110:
   20:pwm.h         **** 	ICR1 = period;
- 1097               		.loc 2 20 0
- 1098 045a 9093 8700 		sts 134+1,r25
- 1099 045e 8093 8600 		sts 134,r24
+ 1101               		.loc 2 20 0
+ 1102 0462 9093 8700 		sts 134+1,r25
+ 1103 0466 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1100               		.loc 2 21 0
- 1101 0462 3093 8B00 		sts 138+1,r19
- 1102 0466 2093 8A00 		sts 138,r18
- 1103               	.LVL62:
- 1104               	.LBE110:
- 1105               	.LBE109:
- 1106               	.LBB111:
- 1107               	.LBB112:
+ 1104               		.loc 2 21 0
+ 1105 046a 3093 8B00 		sts 138+1,r19
+ 1106 046e 2093 8A00 		sts 138,r18
+ 1107               	.LVL63:
+ 1108               	.LBE110:
+ 1109               	.LBE109:
+ 1110               	.LBB111:
+ 1111               	.LBB112:
  187:/usr/avr/include/util/delay.h **** 
- 1108               		.loc 6 187 0
- 1109 046a 8FE3      		ldi r24,lo8(-25537)
- 1110 046c 9CE9      		ldi r25,hi8(-25537)
- 1111 046e 0197      	1:	sbiw r24,1
- 1112 0470 01F4      		brne 1b
- 1113               	.LVL63:
- 1114               	.L67:
- 1115               	.LBE112:
- 1116               	.LBE111:
- 1117               	.LBB113:
- 1118               	.LBB114:
- 1119 0472 00C0      		rjmp .
- 1120 0474 0000      		nop
- 1121               	.LBE114:
- 1122               	.LBE113:
-  77:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED/2, MAX_SPEED);
-  78:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
-  79:motor_control.h **** 			_delay_ms(10);
-  80:motor_control.h **** 			count2++;
-  81:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
-  82:motor_control.h **** 			REVERSE_MODE();
-  83:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
-  84:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
-  85:motor_control.h **** 			_delay_ms(1000);
-  86:motor_control.h **** 			FORWARD_MODE();
-  87:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
-  88:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED/2, MAX_SPEED);
-  89:motor_control.h **** 			_delay_ms(100);
-  90:motor_control.h **** 			count2++;
- 1123               		.loc 7 90 0
- 1124 0476 8091 0000 		lds r24,count2
- 1125 047a 8F5F      		subi r24,lo8(-(1))
- 1126 047c 8093 0000 		sts count2,r24
- 1127               	.L43:
- 1128               	/* epilogue start */
-  91:motor_control.h **** 		}else{
-  92:motor_control.h **** 			pwm(CH_A, 0, MAX_SPEED);
-  93:motor_control.h **** 			pwm(CH_B, 0, MAX_SPEED);
-  94:motor_control.h **** 		}
-  95:motor_control.h **** 
-  96:motor_control.h **** 		return;
-  97:motor_control.h **** 	}
-  98:motor_control.h **** 
-  99:motor_control.h **** 	if(right_motor_pwm > RIGHT_MAX)
- 100:motor_control.h **** 		right_motor_pwm = RIGHT_MAX;
- 101:motor_control.h **** 
- 102:motor_control.h **** 	if(left_motor_pwm > LEFT_MAX)
- 103:motor_control.h **** 		left_motor_pwm = LEFT_MAX;
- 104:motor_control.h **** 
- 105:motor_control.h **** 	if(right_motor_pwm < 0)
- 106:motor_control.h **** 		right_motor_pwm = 0;
- 107:motor_control.h **** 
- 108:motor_control.h **** 	if(left_motor_pwm < 0)
- 109:motor_control.h **** 		left_motor_pwm = 0;
- 110:motor_control.h **** 
- 111:motor_control.h **** 	count2 = 0;
- 112:motor_control.h **** 
- 113:motor_control.h **** 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
- 114:motor_control.h **** 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
- 115:motor_control.h **** 	/*switch(status){
- 116:motor_control.h **** 		case FORWARD:
- 117:motor_control.h **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
- 118:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
- 119:motor_control.h **** 				channelB = channelA;
- 120:motor_control.h **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
- 121:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
- 122:motor_control.h **** 					channelA -= BREAK_RATE;
- 123:motor_control.h **** 					channelB = channelA;
- 124:motor_control.h **** 				}else{
- 125:motor_control.h **** 					FORWARD_MODE();
- 126:motor_control.h **** 					channelA_status = FORWARD;
- 127:motor_control.h **** 					channelB_status = FORWARD;
- 128:motor_control.h **** 				}
- 129:motor_control.h **** 			}
- 130:motor_control.h **** 			break;
- 131:motor_control.h **** 		
- 132:motor_control.h **** 		case REVERSE:
- 133:motor_control.h **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
- 134:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
- 135:motor_control.h **** 				channelB = channelA;
- 136:motor_control.h **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
- 137:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
- 138:motor_control.h **** 					channelA -= BREAK_RATE;
- 139:motor_control.h **** 					channelB = channelA;
- 140:motor_control.h **** 				}else{
- 141:motor_control.h **** 					REVERSE_MODE();
- 142:motor_control.h **** 					channelA_status = REVERSE;
- 143:motor_control.h **** 					channelB_status = REVERSE;
- 144:motor_control.h **** 				}
- 145:motor_control.h **** 			}
- 146:motor_control.h **** 			break;
- 147:motor_control.h **** 		
- 148:motor_control.h **** 		case STOP:
- 149:motor_control.h **** 			MOTOR_PORT = 0x00;
- 150:motor_control.h **** 			channelA = 0x00;
- 151:motor_control.h **** 			channelB = 0x00;
- 152:motor_control.h **** 			break;
- 153:motor_control.h **** 
- 154:motor_control.h **** 		case NEUTRAL:
- 155:motor_control.h **** 			if(channelA > MIN_PWM_SPEED){
- 156:motor_control.h **** 				channelA -= SPEED_DECREASE_RATE;
- 157:motor_control.h **** 				channelB = channelA;
- 158:motor_control.h **** 			}
- 159:motor_control.h **** 
- 160:motor_control.h **** 			if(channelB_status == FORWARD && channelB_status == FORWARD){
- 161:motor_control.h **** 				FORWARD_MODE();
- 162:motor_control.h **** 			}
- 163:motor_control.h **** 			else{
- 164:motor_control.h **** 				REVERSE_MODE();
- 165:motor_control.h **** 			}
- 166:motor_control.h **** 
- 167:motor_control.h **** 			if(left_status || right_status){
- 168:motor_control.h **** 				channelA = 0x00;
- 169:motor_control.h **** 				channelB = 0x00;
- 170:motor_control.h **** 				left_status = FALSE;
- 171:motor_control.h **** 				right_status = FALSE;
- 172:motor_control.h **** 			}
- 173:motor_control.h **** 			break;
- 174:motor_control.h **** 
- 175:motor_control.h **** 		case RIGHT:
- 176:motor_control.h **** 			//RIGHT_MODE();
- 177:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
- 178:motor_control.h **** 				left_status = FALSE;
- 179:motor_control.h **** 				right_status = TRUE;
- 180:motor_control.h **** 				channelA = 15000;
- 181:motor_control.h **** 				channelB -= 30;
- 182:motor_control.h **** 			}
- 183:motor_control.h **** 			break;
- 184:motor_control.h **** 
- 185:motor_control.h **** 		case LEFT:
- 186:motor_control.h **** 			//LEFT_MODE();
- 187:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
- 188:motor_control.h **** 				left_status = TRUE;
- 189:motor_control.h **** 				right_status = FALSE;
- 190:motor_control.h **** 				channelA -= 30;
- 191:motor_control.h **** 				channelB = MAX_PWM_SPEED / 2;
- 192:motor_control.h **** 			}
- 193:motor_control.h **** 			break;
- 194:motor_control.h **** 	}
- 195:motor_control.h **** 
- 196:motor_control.h **** 	pwm(CH_A, channelA, MAX_PWM_SPEED);
- 197:motor_control.h **** 	pwm(CH_B, channelB, MAX_PWM_SPEED);
- 198:motor_control.h **** 	*/
- 199:motor_control.h **** }...
- 1129               		.loc 7 199 0
- 1130 0480 CF91      		pop r28
- 1131               	.LVL64:
- 1132 0482 0895      		ret
- 1133               	.LVL65:
- 1134               	.L60:
- 1135               	.LBB116:
+ 1112               		.loc 6 187 0
+ 1113 0472 8FE3      		ldi r24,lo8(-25537)
+ 1114 0474 9CE9      		ldi r25,hi8(-25537)
+ 1115 0476 0197      	1:	sbiw r24,1
+ 1116 0478 01F4      		brne 1b
+ 1117               	.LVL64:
+ 1118               	.L67:
+ 1119               	.LBE112:
+ 1120               	.LBE111:
+ 1121               	.LBB113:
+ 1122               	.LBB114:
+ 1123 047a 00C0      		rjmp .
+ 1124 047c 0000      		nop
+ 1125               	.LBE114:
+ 1126               	.LBE113:
+  78:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED/2, MAX_SPEED);
+  79:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+  80:motor_control.h **** 			_delay_ms(10);
+  81:motor_control.h **** 			count2++;
+  82:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
+  83:motor_control.h **** 			REVERSE_MODE();
+  84:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
+  85:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+  86:motor_control.h **** 			_delay_ms(1000);
+  87:motor_control.h **** 			FORWARD_MODE();
+  88:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
+  89:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED/2, MAX_SPEED);
+  90:motor_control.h **** 			_delay_ms(100);
+  91:motor_control.h **** 			count2++;
+ 1127               		.loc 7 91 0
+ 1128 047e 8091 0000 		lds r24,count2
+ 1129 0482 8F5F      		subi r24,lo8(-(1))
+ 1130 0484 8093 0000 		sts count2,r24
+ 1131               	.L43:
+ 1132               	/* epilogue start */
+  92:motor_control.h **** 		}else{
+  93:motor_control.h **** 			pwm(CH_A, 0, MAX_SPEED);
+  94:motor_control.h **** 			pwm(CH_B, 0, MAX_SPEED);
+  95:motor_control.h **** 		}
+  96:motor_control.h **** 
+  97:motor_control.h **** 		return;
+  98:motor_control.h **** 	}
+  99:motor_control.h **** 
+ 100:motor_control.h **** 	if(right_motor_pwm > RIGHT_MAX)
+ 101:motor_control.h **** 		right_motor_pwm = RIGHT_MAX;
+ 102:motor_control.h **** 
+ 103:motor_control.h **** 	if(left_motor_pwm > LEFT_MAX)
+ 104:motor_control.h **** 		left_motor_pwm = LEFT_MAX;
+ 105:motor_control.h **** 
+ 106:motor_control.h **** 	if(right_motor_pwm < 0)
+ 107:motor_control.h **** 		right_motor_pwm = 0;
+ 108:motor_control.h **** 
+ 109:motor_control.h **** 	if(left_motor_pwm < 0)
+ 110:motor_control.h **** 		left_motor_pwm = 0;
+ 111:motor_control.h **** 
+ 112:motor_control.h **** 	count2 = 0;
+ 113:motor_control.h **** 
+ 114:motor_control.h **** 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
+ 115:motor_control.h **** 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
+ 116:motor_control.h **** 	/*switch(status){
+ 117:motor_control.h **** 		case FORWARD:
+ 118:motor_control.h **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
+ 119:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
+ 120:motor_control.h **** 				channelB = channelA;
+ 121:motor_control.h **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
+ 122:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
+ 123:motor_control.h **** 					channelA -= BREAK_RATE;
+ 124:motor_control.h **** 					channelB = channelA;
+ 125:motor_control.h **** 				}else{
+ 126:motor_control.h **** 					FORWARD_MODE();
+ 127:motor_control.h **** 					channelA_status = FORWARD;
+ 128:motor_control.h **** 					channelB_status = FORWARD;
+ 129:motor_control.h **** 				}
+ 130:motor_control.h **** 			}
+ 131:motor_control.h **** 			break;
+ 132:motor_control.h **** 		
+ 133:motor_control.h **** 		case REVERSE:
+ 134:motor_control.h **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
+ 135:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
+ 136:motor_control.h **** 				channelB = channelA;
+ 137:motor_control.h **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
+ 138:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
+ 139:motor_control.h **** 					channelA -= BREAK_RATE;
+ 140:motor_control.h **** 					channelB = channelA;
+ 141:motor_control.h **** 				}else{
+ 142:motor_control.h **** 					REVERSE_MODE();
+ 143:motor_control.h **** 					channelA_status = REVERSE;
+ 144:motor_control.h **** 					channelB_status = REVERSE;
+ 145:motor_control.h **** 				}
+ 146:motor_control.h **** 			}
+ 147:motor_control.h **** 			break;
+ 148:motor_control.h **** 		
+ 149:motor_control.h **** 		case STOP:
+ 150:motor_control.h **** 			MOTOR_PORT = 0x00;
+ 151:motor_control.h **** 			channelA = 0x00;
+ 152:motor_control.h **** 			channelB = 0x00;
+ 153:motor_control.h **** 			break;
+ 154:motor_control.h **** 
+ 155:motor_control.h **** 		case NEUTRAL:
+ 156:motor_control.h **** 			if(channelA > MIN_PWM_SPEED){
+ 157:motor_control.h **** 				channelA -= SPEED_DECREASE_RATE;
+ 158:motor_control.h **** 				channelB = channelA;
+ 159:motor_control.h **** 			}
+ 160:motor_control.h **** 
+ 161:motor_control.h **** 			if(channelB_status == FORWARD && channelB_status == FORWARD){
+ 162:motor_control.h **** 				FORWARD_MODE();
+ 163:motor_control.h **** 			}
+ 164:motor_control.h **** 			else{
+ 165:motor_control.h **** 				REVERSE_MODE();
+ 166:motor_control.h **** 			}
+ 167:motor_control.h **** 
+ 168:motor_control.h **** 			if(left_status || right_status){
+ 169:motor_control.h **** 				channelA = 0x00;
+ 170:motor_control.h **** 				channelB = 0x00;
+ 171:motor_control.h **** 				left_status = FALSE;
+ 172:motor_control.h **** 				right_status = FALSE;
+ 173:motor_control.h **** 			}
+ 174:motor_control.h **** 			break;
+ 175:motor_control.h **** 
+ 176:motor_control.h **** 		case RIGHT:
+ 177:motor_control.h **** 			//RIGHT_MODE();
+ 178:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
+ 179:motor_control.h **** 				left_status = FALSE;
+ 180:motor_control.h **** 				right_status = TRUE;
+ 181:motor_control.h **** 				channelA = 15000;
+ 182:motor_control.h **** 				channelB -= 30;
+ 183:motor_control.h **** 			}
+ 184:motor_control.h **** 			break;
+ 185:motor_control.h **** 
+ 186:motor_control.h **** 		case LEFT:
+ 187:motor_control.h **** 			//LEFT_MODE();
+ 188:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
+ 189:motor_control.h **** 				left_status = TRUE;
+ 190:motor_control.h **** 				right_status = FALSE;
+ 191:motor_control.h **** 				channelA -= 30;
+ 192:motor_control.h **** 				channelB = MAX_PWM_SPEED / 2;
+ 193:motor_control.h **** 			}
+ 194:motor_control.h **** 			break;
+ 195:motor_control.h **** 	}
+ 196:motor_control.h **** 
+ 197:motor_control.h **** 	pwm(CH_A, channelA, MAX_PWM_SPEED);
+ 198:motor_control.h **** 	pwm(CH_B, channelB, MAX_PWM_SPEED);
+ 199:motor_control.h **** 	*/
+ 200:motor_control.h **** }...
+ 1133               		.loc 7 200 0
+ 1134 0488 CF91      		pop r28
+ 1135               	.LVL65:
+ 1136 048a 0895      		ret
+ 1137               	.LVL66:
+ 1138               	.L60:
+ 1139               	.LBB116:
   50:motor_control.h **** 	uint8_t ir_val = IR_ARR_VAL;
- 1136               		.loc 7 50 0
- 1137 0484 82E0      		ldi r24,lo8(2)
- 1138 0486 00C0      		rjmp .L44
- 1139               	.LVL66:
- 1140               	.L61:
- 1141               	.LBE116:
- 1142               	.LBB117:
- 1143 0488 84E0      		ldi r24,lo8(4)
- 1144               	.LVL67:
- 1145 048a 00C0      		rjmp .L45
- 1146               	.LVL68:
- 1147               	.L62:
- 1148               	.LBE117:
- 1149               	.LBB118:
- 1150 048c 88E0      		ldi r24,lo8(8)
- 1151               	.LVL69:
- 1152 048e 00C0      		rjmp .L46
- 1153               	.LVL70:
- 1154               	.L63:
- 1155               	.LBE118:
- 1156               	.LBB119:
- 1157 0490 80E1      		ldi r24,lo8(16)
- 1158               	.LVL71:
- 1159 0492 00C0      		rjmp .L47
- 1160               	.LVL72:
- 1161               	.L64:
- 1162               	.LBE119:
- 1163               	.LBB120:
- 1164 0494 80E2      		ldi r24,lo8(32)
- 1165               	.LVL73:
- 1166 0496 00C0      		rjmp .L48
- 1167               	.LVL74:
- 1168               	.L65:
- 1169               	.LBE120:
- 1170               	.LBB121:
- 1171 0498 80E4      		ldi r24,lo8(64)
- 1172               	.LVL75:
- 1173 049a 00C0      		rjmp .L49
- 1174               	.LVL76:
- 1175               	.L66:
- 1176               	.LBE121:
- 1177               	.LBB122:
- 1178 049c 80E8      		ldi r24,lo8(-128)
- 1179               	.LVL77:
- 1180 049e 00C0      		rjmp .L50
- 1181               	.LVL78:
- 1182               	.L53:
- 1183               	.LBE122:
-  81:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
- 1184               		.loc 7 81 0
- 1185 04a0 8831      		cpi r24,24
- 1186 04a2 9C4F      		sbci r25,-4
- 1187 04a4 04F0      		brlt .+2
- 1188 04a6 00C0      		rjmp .L54
-  81:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
- 1189               		.loc 7 81 0 is_stmt 0 discriminator 1
- 1190 04a8 8091 0000 		lds r24,count2
- 1191               	.LVL79:
- 1192 04ac 8630      		cpi r24,lo8(6)
- 1193 04ae 00F0      		brlo .+2
- 1194 04b0 00C0      		rjmp .L54
-  82:motor_control.h **** 			REVERSE_MODE();
- 1195               		.loc 7 82 0 is_stmt 1
- 1196 04b2 88B1      		in r24,0x8
- 1197 04b4 8A60      		ori r24,lo8(10)
- 1198 04b6 88B9      		out 0x8,r24
- 1199 04b8 88B1      		in r24,0x8
- 1200 04ba 8A7F      		andi r24,lo8(-6)
- 1201 04bc 88B9      		out 0x8,r24
- 1202               	.LVL80:
- 1203               	.LBB123:
- 1204               	.LBB124:
+ 1140               		.loc 7 50 0
+ 1141 048c 82E0      		ldi r24,lo8(2)
+ 1142 048e 00C0      		rjmp .L44
+ 1143               	.LVL67:
+ 1144               	.L61:
+ 1145               	.LBE116:
+ 1146               	.LBB117:
+ 1147 0490 84E0      		ldi r24,lo8(4)
+ 1148               	.LVL68:
+ 1149 0492 00C0      		rjmp .L45
+ 1150               	.LVL69:
+ 1151               	.L62:
+ 1152               	.LBE117:
+ 1153               	.LBB118:
+ 1154 0494 88E0      		ldi r24,lo8(8)
+ 1155               	.LVL70:
+ 1156 0496 00C0      		rjmp .L46
+ 1157               	.LVL71:
+ 1158               	.L63:
+ 1159               	.LBE118:
+ 1160               	.LBB119:
+ 1161 0498 80E1      		ldi r24,lo8(16)
+ 1162               	.LVL72:
+ 1163 049a 00C0      		rjmp .L47
+ 1164               	.LVL73:
+ 1165               	.L64:
+ 1166               	.LBE119:
+ 1167               	.LBB120:
+ 1168 049c 80E2      		ldi r24,lo8(32)
+ 1169               	.LVL74:
+ 1170 049e 00C0      		rjmp .L48
+ 1171               	.LVL75:
+ 1172               	.L65:
+ 1173               	.LBE120:
+ 1174               	.LBB121:
+ 1175 04a0 80E4      		ldi r24,lo8(64)
+ 1176               	.LVL76:
+ 1177 04a2 00C0      		rjmp .L49
+ 1178               	.LVL77:
+ 1179               	.L66:
+ 1180               	.LBE121:
+ 1181               	.LBB122:
+ 1182 04a4 80E8      		ldi r24,lo8(-128)
+ 1183               	.LVL78:
+ 1184 04a6 00C0      		rjmp .L50
+ 1185               	.LVL79:
+ 1186               	.L53:
+ 1187               	.LBE122:
+  82:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
+ 1188               		.loc 7 82 0
+ 1189 04a8 8831      		cpi r24,24
+ 1190 04aa 9C4F      		sbci r25,-4
+ 1191 04ac 04F0      		brlt .+2
+ 1192 04ae 00C0      		rjmp .L54
+  82:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
+ 1193               		.loc 7 82 0 is_stmt 0 discriminator 1
+ 1194 04b0 8091 0000 		lds r24,count2
+ 1195               	.LVL80:
+ 1196 04b4 8630      		cpi r24,lo8(6)
+ 1197 04b6 00F0      		brlo .+2
+ 1198 04b8 00C0      		rjmp .L54
+  83:motor_control.h **** 			REVERSE_MODE();
+ 1199               		.loc 7 83 0 is_stmt 1
+ 1200 04ba 88B1      		in r24,0x8
+ 1201 04bc 8A60      		ori r24,lo8(10)
+ 1202 04be 88B9      		out 0x8,r24
+ 1203 04c0 88B1      		in r24,0x8
+ 1204 04c2 8A7F      		andi r24,lo8(-6)
+ 1205 04c4 88B9      		out 0x8,r24
+ 1206               	.LVL81:
+ 1207               	.LBB123:
+ 1208               	.LBB124:
   20:pwm.h         **** 	ICR1 = period;
- 1205               		.loc 2 20 0
- 1206 04be 80ED      		ldi r24,lo8(-48)
- 1207 04c0 97E0      		ldi r25,lo8(7)
- 1208 04c2 9093 8700 		sts 134+1,r25
- 1209 04c6 8093 8600 		sts 134,r24
+ 1209               		.loc 2 20 0
+ 1210 04c6 80ED      		ldi r24,lo8(-48)
+ 1211 04c8 97E0      		ldi r25,lo8(7)
+ 1212 04ca 9093 8700 		sts 134+1,r25
+ 1213 04ce 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1210               		.loc 2 21 0
- 1211 04ca 3093 8900 		sts 136+1,r19
- 1212 04ce 2093 8800 		sts 136,r18
- 1213               	.LVL81:
- 1214               	.LBE124:
- 1215               	.LBE123:
- 1216               	.LBB125:
- 1217               	.LBB126:
+ 1214               		.loc 2 21 0
+ 1215 04d2 3093 8900 		sts 136+1,r19
+ 1216 04d6 2093 8800 		sts 136,r18
+ 1217               	.LVL82:
+ 1218               	.LBE124:
+ 1219               	.LBE123:
+ 1220               	.LBB125:
+ 1221               	.LBB126:
   20:pwm.h         **** 	ICR1 = period;
- 1218               		.loc 2 20 0
- 1219 04d2 9093 8700 		sts 134+1,r25
- 1220 04d6 8093 8600 		sts 134,r24
+ 1222               		.loc 2 20 0
+ 1223 04da 9093 8700 		sts 134+1,r25
+ 1224 04de 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1221               		.loc 2 21 0
- 1222 04da 3093 8B00 		sts 138+1,r19
- 1223 04de 2093 8A00 		sts 138,r18
- 1224               	.LVL82:
- 1225               	.LBE126:
- 1226               	.LBE125:
- 1227               	.LBB127:
- 1228               	.LBB128:
+ 1225               		.loc 2 21 0
+ 1226 04e2 3093 8B00 		sts 138+1,r19
+ 1227 04e6 2093 8A00 		sts 138,r18
+ 1228               	.LVL83:
+ 1229               	.LBE126:
+ 1230               	.LBE125:
+ 1231               	.LBB127:
+ 1232               	.LBB128:
  187:/usr/avr/include/util/delay.h **** 
- 1229               		.loc 6 187 0
- 1230 04e2 5FEF      		ldi r21,lo8(3199999)
- 1231 04e4 63ED      		ldi r22,hi8(3199999)
- 1232 04e6 70E3      		ldi r23,hlo8(3199999)
- 1233 04e8 5150      	1:	subi r21,1
- 1234 04ea 6040      		sbci r22,0
- 1235 04ec 7040      		sbci r23,0
- 1236 04ee 01F4      		brne 1b
- 1237 04f0 00C0      		rjmp .
- 1238 04f2 0000      		nop
- 1239               	.LVL83:
- 1240               	.LBE128:
- 1241               	.LBE127:
-  86:motor_control.h **** 			FORWARD_MODE();
- 1242               		.loc 7 86 0
- 1243 04f4 48B1      		in r20,0x8
- 1244 04f6 4560      		ori r20,lo8(5)
- 1245 04f8 48B9      		out 0x8,r20
- 1246 04fa 48B1      		in r20,0x8
- 1247 04fc 457F      		andi r20,lo8(-11)
- 1248 04fe 48B9      		out 0x8,r20
- 1249               	.LVL84:
- 1250               	.LBB129:
- 1251               	.LBB130:
+ 1233               		.loc 6 187 0
+ 1234 04ea 5FEF      		ldi r21,lo8(3199999)
+ 1235 04ec 63ED      		ldi r22,hi8(3199999)
+ 1236 04ee 70E3      		ldi r23,hlo8(3199999)
+ 1237 04f0 5150      	1:	subi r21,1
+ 1238 04f2 6040      		sbci r22,0
+ 1239 04f4 7040      		sbci r23,0
+ 1240 04f6 01F4      		brne 1b
+ 1241 04f8 00C0      		rjmp .
+ 1242 04fa 0000      		nop
+ 1243               	.LVL84:
+ 1244               	.LBE128:
+ 1245               	.LBE127:
+  87:motor_control.h **** 			FORWARD_MODE();
+ 1246               		.loc 7 87 0
+ 1247 04fc 48B1      		in r20,0x8
+ 1248 04fe 4560      		ori r20,lo8(5)
+ 1249 0500 48B9      		out 0x8,r20
+ 1250 0502 48B1      		in r20,0x8
+ 1251 0504 457F      		andi r20,lo8(-11)
+ 1252 0506 48B9      		out 0x8,r20
+ 1253               	.LVL85:
+ 1254               	.LBB129:
+ 1255               	.LBB130:
   20:pwm.h         **** 	ICR1 = period;
- 1252               		.loc 2 20 0
- 1253 0500 9093 8700 		sts 134+1,r25
- 1254 0504 8093 8600 		sts 134,r24
+ 1256               		.loc 2 20 0
+ 1257 0508 9093 8700 		sts 134+1,r25
+ 1258 050c 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1255               		.loc 2 21 0
- 1256 0508 3093 8900 		sts 136+1,r19
- 1257 050c 2093 8800 		sts 136,r18
- 1258               	.LVL85:
- 1259               	.LBE130:
- 1260               	.LBE129:
- 1261               	.LBB131:
- 1262               	.LBB132:
+ 1259               		.loc 2 21 0
+ 1260 0510 3093 8900 		sts 136+1,r19
+ 1261 0514 2093 8800 		sts 136,r18
+ 1262               	.LVL86:
+ 1263               	.LBE130:
+ 1264               	.LBE129:
+ 1265               	.LBB131:
+ 1266               	.LBB132:
   20:pwm.h         **** 	ICR1 = period;
- 1263               		.loc 2 20 0
- 1264 0510 9093 8700 		sts 134+1,r25
- 1265 0514 8093 8600 		sts 134,r24
+ 1267               		.loc 2 20 0
+ 1268 0518 9093 8700 		sts 134+1,r25
+ 1269 051c 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1266               		.loc 2 21 0
- 1267 0518 8AE8      		ldi r24,lo8(-118)
- 1268 051a 92E0      		ldi r25,lo8(2)
- 1269 051c 9093 8B00 		sts 138+1,r25
- 1270 0520 8093 8A00 		sts 138,r24
- 1271               	.LVL86:
- 1272               	.LBE132:
- 1273               	.LBE131:
- 1274               	.LBB133:
- 1275               	.LBB115:
+ 1270               		.loc 2 21 0
+ 1271 0520 8AE8      		ldi r24,lo8(-118)
+ 1272 0522 92E0      		ldi r25,lo8(2)
+ 1273 0524 9093 8B00 		sts 138+1,r25
+ 1274 0528 8093 8A00 		sts 138,r24
+ 1275               	.LVL87:
+ 1276               	.LBE132:
+ 1277               	.LBE131:
+ 1278               	.LBB133:
+ 1279               	.LBB115:
  187:/usr/avr/include/util/delay.h **** 
- 1276               		.loc 6 187 0
- 1277 0524 8FEF      		ldi r24,lo8(319999)
- 1278 0526 91EE      		ldi r25,hi8(319999)
- 1279 0528 24E0      		ldi r18,hlo8(319999)
- 1280 052a 8150      	1:	subi r24,1
- 1281 052c 9040      		sbci r25,0
- 1282 052e 2040      		sbci r18,0
- 1283 0530 01F4      		brne 1b
- 1284 0532 00C0      		rjmp .L67
- 1285               	.LVL87:
- 1286               	.L54:
- 1287               	.LBE115:
- 1288               	.LBE133:
- 1289               	.LBB134:
- 1290               	.LBB135:
+ 1280               		.loc 6 187 0
+ 1281 052c 8FEF      		ldi r24,lo8(319999)
+ 1282 052e 91EE      		ldi r25,hi8(319999)
+ 1283 0530 24E0      		ldi r18,hlo8(319999)
+ 1284 0532 8150      	1:	subi r24,1
+ 1285 0534 9040      		sbci r25,0
+ 1286 0536 2040      		sbci r18,0
+ 1287 0538 01F4      		brne 1b
+ 1288 053a 00C0      		rjmp .L67
+ 1289               	.LVL88:
+ 1290               	.L54:
+ 1291               	.LBE115:
+ 1292               	.LBE133:
+ 1293               	.LBB134:
+ 1294               	.LBB135:
   20:pwm.h         **** 	ICR1 = period;
- 1291               		.loc 2 20 0
- 1292 0534 80ED      		ldi r24,lo8(-48)
- 1293 0536 97E0      		ldi r25,lo8(7)
- 1294 0538 9093 8700 		sts 134+1,r25
- 1295 053c 8093 8600 		sts 134,r24
+ 1295               		.loc 2 20 0
+ 1296 053c 80ED      		ldi r24,lo8(-48)
+ 1297 053e 97E0      		ldi r25,lo8(7)
+ 1298 0540 9093 8700 		sts 134+1,r25
+ 1299 0544 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1296               		.loc 2 21 0
- 1297 0540 1092 8900 		sts 136+1,__zero_reg__
- 1298 0544 1092 8800 		sts 136,__zero_reg__
- 1299               	.LVL88:
- 1300               	.LBE135:
- 1301               	.LBE134:
- 1302               	.LBB136:
- 1303               	.LBB137:
+ 1300               		.loc 2 21 0
+ 1301 0548 1092 8900 		sts 136+1,__zero_reg__
+ 1302 054c 1092 8800 		sts 136,__zero_reg__
+ 1303               	.LVL89:
+ 1304               	.LBE135:
+ 1305               	.LBE134:
+ 1306               	.LBB136:
+ 1307               	.LBB137:
   20:pwm.h         **** 	ICR1 = period;
- 1304               		.loc 2 20 0
- 1305 0548 9093 8700 		sts 134+1,r25
- 1306 054c 8093 8600 		sts 134,r24
+ 1308               		.loc 2 20 0
+ 1309 0550 9093 8700 		sts 134+1,r25
+ 1310 0554 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1307               		.loc 2 21 0
- 1308 0550 1092 8B00 		sts 138+1,__zero_reg__
- 1309 0554 1092 8A00 		sts 138,__zero_reg__
- 1310 0558 00C0      		rjmp .L43
- 1311               	.LVL89:
- 1312               	.L52:
- 1313               	.LBE137:
- 1314               	.LBE136:
-  99:motor_control.h **** 	if(right_motor_pwm > RIGHT_MAX)
- 1315               		.loc 7 99 0
- 1316 055a 8091 0000 		lds r24,right_motor_pwm
- 1317 055e 9091 0000 		lds r25,right_motor_pwm+1
- 1318               	.LVL90:
- 1319 0562 8D3D      		cpi r24,-35
- 1320 0564 9540      		sbci r25,5
- 1321 0566 04F0      		brlt .L56
- 100:motor_control.h **** 		right_motor_pwm = RIGHT_MAX;
- 1322               		.loc 7 100 0
- 1323 0568 8CED      		ldi r24,lo8(-36)
- 1324 056a 95E0      		ldi r25,lo8(5)
- 1325 056c 9093 0000 		sts right_motor_pwm+1,r25
- 1326 0570 8093 0000 		sts right_motor_pwm,r24
- 1327               	.L56:
- 102:motor_control.h **** 	if(left_motor_pwm > LEFT_MAX)
- 1328               		.loc 7 102 0
- 1329 0574 8091 0000 		lds r24,left_motor_pwm
- 1330 0578 9091 0000 		lds r25,left_motor_pwm+1
- 1331 057c 8D3D      		cpi r24,-35
- 1332 057e 9540      		sbci r25,5
- 1333 0580 04F0      		brlt .L57
- 103:motor_control.h **** 		left_motor_pwm = LEFT_MAX;
- 1334               		.loc 7 103 0
- 1335 0582 8CED      		ldi r24,lo8(-36)
- 1336 0584 95E0      		ldi r25,lo8(5)
- 1337 0586 9093 0000 		sts left_motor_pwm+1,r25
- 1338 058a 8093 0000 		sts left_motor_pwm,r24
- 1339               	.L57:
- 105:motor_control.h **** 	if(right_motor_pwm < 0)
- 1340               		.loc 7 105 0
- 1341 058e 8091 0000 		lds r24,right_motor_pwm
- 1342 0592 9091 0000 		lds r25,right_motor_pwm+1
- 1343 0596 97FF      		sbrs r25,7
- 1344 0598 00C0      		rjmp .L58
- 106:motor_control.h **** 		right_motor_pwm = 0;
- 1345               		.loc 7 106 0
- 1346 059a 1092 0000 		sts right_motor_pwm+1,__zero_reg__
- 1347 059e 1092 0000 		sts right_motor_pwm,__zero_reg__
- 1348               	.L58:
- 108:motor_control.h **** 	if(left_motor_pwm < 0)
- 1349               		.loc 7 108 0
- 1350 05a2 8091 0000 		lds r24,left_motor_pwm
- 1351 05a6 9091 0000 		lds r25,left_motor_pwm+1
- 1352 05aa 97FF      		sbrs r25,7
- 1353 05ac 00C0      		rjmp .L59
- 109:motor_control.h **** 		left_motor_pwm = 0;
- 1354               		.loc 7 109 0
- 1355 05ae 1092 0000 		sts left_motor_pwm+1,__zero_reg__
- 1356 05b2 1092 0000 		sts left_motor_pwm,__zero_reg__
- 1357               	.L59:
- 111:motor_control.h **** 	count2 = 0;
- 1358               		.loc 7 111 0
- 1359 05b6 1092 0000 		sts count2,__zero_reg__
- 113:motor_control.h **** 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
- 1360               		.loc 7 113 0
- 1361 05ba 2091 0000 		lds r18,right_motor_pwm
- 1362 05be 3091 0000 		lds r19,right_motor_pwm+1
- 1363               	.LVL91:
- 1364               	.LBB138:
- 1365               	.LBB139:
+ 1311               		.loc 2 21 0
+ 1312 0558 1092 8B00 		sts 138+1,__zero_reg__
+ 1313 055c 1092 8A00 		sts 138,__zero_reg__
+ 1314 0560 00C0      		rjmp .L43
+ 1315               	.LVL90:
+ 1316               	.L52:
+ 1317               	.LBE137:
+ 1318               	.LBE136:
+ 100:motor_control.h **** 	if(right_motor_pwm > RIGHT_MAX)
+ 1319               		.loc 7 100 0
+ 1320 0562 8091 0000 		lds r24,right_motor_pwm
+ 1321 0566 9091 0000 		lds r25,right_motor_pwm+1
+ 1322               	.LVL91:
+ 1323 056a 8D3D      		cpi r24,-35
+ 1324 056c 9540      		sbci r25,5
+ 1325 056e 04F0      		brlt .L56
+ 101:motor_control.h **** 		right_motor_pwm = RIGHT_MAX;
+ 1326               		.loc 7 101 0
+ 1327 0570 8CED      		ldi r24,lo8(-36)
+ 1328 0572 95E0      		ldi r25,lo8(5)
+ 1329 0574 9093 0000 		sts right_motor_pwm+1,r25
+ 1330 0578 8093 0000 		sts right_motor_pwm,r24
+ 1331               	.L56:
+ 103:motor_control.h **** 	if(left_motor_pwm > LEFT_MAX)
+ 1332               		.loc 7 103 0
+ 1333 057c 8091 0000 		lds r24,left_motor_pwm
+ 1334 0580 9091 0000 		lds r25,left_motor_pwm+1
+ 1335 0584 8D3D      		cpi r24,-35
+ 1336 0586 9540      		sbci r25,5
+ 1337 0588 04F0      		brlt .L57
+ 104:motor_control.h **** 		left_motor_pwm = LEFT_MAX;
+ 1338               		.loc 7 104 0
+ 1339 058a 8CED      		ldi r24,lo8(-36)
+ 1340 058c 95E0      		ldi r25,lo8(5)
+ 1341 058e 9093 0000 		sts left_motor_pwm+1,r25
+ 1342 0592 8093 0000 		sts left_motor_pwm,r24
+ 1343               	.L57:
+ 106:motor_control.h **** 	if(right_motor_pwm < 0)
+ 1344               		.loc 7 106 0
+ 1345 0596 8091 0000 		lds r24,right_motor_pwm
+ 1346 059a 9091 0000 		lds r25,right_motor_pwm+1
+ 1347 059e 97FF      		sbrs r25,7
+ 1348 05a0 00C0      		rjmp .L58
+ 107:motor_control.h **** 		right_motor_pwm = 0;
+ 1349               		.loc 7 107 0
+ 1350 05a2 1092 0000 		sts right_motor_pwm+1,__zero_reg__
+ 1351 05a6 1092 0000 		sts right_motor_pwm,__zero_reg__
+ 1352               	.L58:
+ 109:motor_control.h **** 	if(left_motor_pwm < 0)
+ 1353               		.loc 7 109 0
+ 1354 05aa 8091 0000 		lds r24,left_motor_pwm
+ 1355 05ae 9091 0000 		lds r25,left_motor_pwm+1
+ 1356 05b2 97FF      		sbrs r25,7
+ 1357 05b4 00C0      		rjmp .L59
+ 110:motor_control.h **** 		left_motor_pwm = 0;
+ 1358               		.loc 7 110 0
+ 1359 05b6 1092 0000 		sts left_motor_pwm+1,__zero_reg__
+ 1360 05ba 1092 0000 		sts left_motor_pwm,__zero_reg__
+ 1361               	.L59:
+ 112:motor_control.h **** 	count2 = 0;
+ 1362               		.loc 7 112 0
+ 1363 05be 1092 0000 		sts count2,__zero_reg__
+ 114:motor_control.h **** 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
+ 1364               		.loc 7 114 0
+ 1365 05c2 2091 0000 		lds r18,right_motor_pwm
+ 1366 05c6 3091 0000 		lds r19,right_motor_pwm+1
+ 1367               	.LVL92:
+ 1368               	.LBB138:
+ 1369               	.LBB139:
   20:pwm.h         **** 	ICR1 = period;
- 1366               		.loc 2 20 0
- 1367 05c2 80ED      		ldi r24,lo8(-48)
- 1368 05c4 97E0      		ldi r25,lo8(7)
- 1369 05c6 9093 8700 		sts 134+1,r25
- 1370 05ca 8093 8600 		sts 134,r24
+ 1370               		.loc 2 20 0
+ 1371 05ca 80ED      		ldi r24,lo8(-48)
+ 1372 05cc 97E0      		ldi r25,lo8(7)
+ 1373 05ce 9093 8700 		sts 134+1,r25
+ 1374 05d2 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1371               		.loc 2 21 0
- 1372 05ce 3093 8900 		sts 136+1,r19
- 1373 05d2 2093 8800 		sts 136,r18
- 1374               	.LVL92:
- 1375               	.LBE139:
- 1376               	.LBE138:
- 114:motor_control.h **** 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
- 1377               		.loc 7 114 0
- 1378 05d6 2091 0000 		lds r18,left_motor_pwm
- 1379 05da 3091 0000 		lds r19,left_motor_pwm+1
- 1380               	.LVL93:
- 1381               	.LBB140:
- 1382               	.LBB141:
+ 1375               		.loc 2 21 0
+ 1376 05d6 3093 8900 		sts 136+1,r19
+ 1377 05da 2093 8800 		sts 136,r18
+ 1378               	.LVL93:
+ 1379               	.LBE139:
+ 1380               	.LBE138:
+ 115:motor_control.h **** 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
+ 1381               		.loc 7 115 0
+ 1382 05de 2091 0000 		lds r18,left_motor_pwm
+ 1383 05e2 3091 0000 		lds r19,left_motor_pwm+1
+ 1384               	.LVL94:
+ 1385               	.LBB140:
+ 1386               	.LBB141:
   20:pwm.h         **** 	ICR1 = period;
- 1383               		.loc 2 20 0
- 1384 05de 9093 8700 		sts 134+1,r25
- 1385 05e2 8093 8600 		sts 134,r24
+ 1387               		.loc 2 20 0
+ 1388 05e6 9093 8700 		sts 134+1,r25
+ 1389 05ea 8093 8600 		sts 134,r24
   21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1386               		.loc 2 21 0
- 1387 05e6 3093 8B00 		sts 138+1,r19
- 1388 05ea 2093 8A00 		sts 138,r18
- 1389 05ee 00C0      		rjmp .L43
- 1390               	.LBE141:
- 1391               	.LBE140:
- 1392               		.cfi_endproc
- 1393               	.LFE22:
- 1395               		.section	.text.startup,"ax",@progbits
- 1396               	.global	main
- 1398               	main:
- 1399               	.LFB23:
- 1400               		.file 8 "main.c"
+ 1390               		.loc 2 21 0
+ 1391 05ee 3093 8B00 		sts 138+1,r19
+ 1392 05f2 2093 8A00 		sts 138,r18
+ 1393 05f6 00C0      		rjmp .L43
+ 1394               	.LBE141:
+ 1395               	.LBE140:
+ 1396               		.cfi_endproc
+ 1397               	.LFE22:
+ 1399               		.section	.text.startup,"ax",@progbits
+ 1400               	.global	main
+ 1402               	main:
+ 1403               	.LFB23:
+ 1404               		.file 8 "main.c"
    1:main.c        **** #define F_CPU 16000000UL
    2:main.c        **** 
    3:main.c        **** //Comment the MCU which you're not using.
@@ -2237,127 +2242,173 @@
   10:main.c        **** #include "color_sensor.h"
   11:main.c        **** #include "motor_control.h"
   12:main.c        **** 
-  13:main.c        **** int main(void){
- 1401               		.loc 8 13 0
- 1402               		.cfi_startproc
- 1403               	/* prologue: function */
- 1404               	/* frame size = 0 */
- 1405               	/* stack size = 0 */
- 1406               	.L__stack_usage = 0
+  13:main.c        **** uint32_t count3 = 0;
   14:main.c        **** 
-  15:main.c        **** 	setupPWM();
- 1407               		.loc 8 15 0
- 1408 0000 0E94 0000 		call setupPWM
- 1409               	.LVL94:
-  16:main.c        **** 	setupMotor();
- 1410               		.loc 8 16 0
- 1411 0004 0E94 0000 		call setupMotor
- 1412               	.LVL95:
-  17:main.c        **** 	initIR();
- 1413               		.loc 8 17 0
- 1414 0008 0E94 0000 		call initIR
- 1415               	.LVL96:
-  18:main.c        **** 	init_SRF05();
- 1416               		.loc 8 18 0
- 1417 000c 0E94 0000 		call init_SRF05
- 1418               	.LVL97:
-  19:main.c        **** 	SRF05_Start();
- 1419               		.loc 8 19 0
- 1420 0010 0E94 0000 		call SRF05_Start
- 1421               	.LVL98:
-  20:main.c        **** 	init_ADC();
- 1422               		.loc 8 20 0
- 1423 0014 0E94 0000 		call init_ADC
- 1424               	.LVL99:
- 1425               	.L69:
-  21:main.c        **** 
-  22:main.c        **** 	while(1){
-  23:main.c        **** 		controlMotor();
- 1426               		.loc 8 23 0 discriminator 1
- 1427 0018 0E94 0000 		call controlMotor
+  15:main.c        **** int main(void){
+ 1405               		.loc 8 15 0
+ 1406               		.cfi_startproc
+ 1407               	/* prologue: function */
+ 1408               	/* frame size = 0 */
+ 1409               	/* stack size = 0 */
+ 1410               	.L__stack_usage = 0
+  16:main.c        **** 
+  17:main.c        **** 	setupPWM();
+ 1411               		.loc 8 17 0
+ 1412 0000 0E94 0000 		call setupPWM
+ 1413               	.LVL95:
+  18:main.c        **** 	setupMotor();
+ 1414               		.loc 8 18 0
+ 1415 0004 0E94 0000 		call setupMotor
+ 1416               	.LVL96:
+  19:main.c        **** 	initIR();
+ 1417               		.loc 8 19 0
+ 1418 0008 0E94 0000 		call initIR
+ 1419               	.LVL97:
+  20:main.c        **** 	init_SRF05();
+ 1420               		.loc 8 20 0
+ 1421 000c 0E94 0000 		call init_SRF05
+ 1422               	.LVL98:
+  21:main.c        **** 	SRF05_Start();
+ 1423               		.loc 8 21 0
+ 1424 0010 0E94 0000 		call SRF05_Start
+ 1425               	.LVL99:
+  22:main.c        **** 	init_ADC();
+ 1426               		.loc 8 22 0
+ 1427 0014 0E94 0000 		call init_ADC
  1428               	.LVL100:
- 1429 001c 00C0      		rjmp .L69
- 1430               		.cfi_endproc
- 1431               	.LFE23:
- 1433               	.global	previous_error
- 1434               		.section .bss
- 1437               	previous_error:
- 1438 0000 0000      		.zero	2
- 1439               	.global	left_motor_pwm
- 1442               	left_motor_pwm:
- 1443 0002 0000      		.zero	2
- 1444               	.global	right_motor_pwm
- 1447               	right_motor_pwm:
- 1448 0004 0000      		.zero	2
- 1449               	.global	PID
- 1452               	PID:
- 1453 0006 0000      		.zero	2
- 1454               	.global	D
- 1457               	D:
- 1458 0008 0000      		.zero	2
- 1459               	.global	I
- 1462               	I:
- 1463 000a 0000      		.zero	2
- 1464               	.global	P
- 1467               	P:
- 1468 000c 0000      		.zero	2
- 1469               	.global	count2
- 1472               	count2:
- 1473 000e 00        		.zero	1
- 1474               	.global	count
- 1477               	count:
- 1478 000f 0000 0000 		.zero	4
- 1479               	.global	interrupt
- 1482               	interrupt:
- 1483 0013 00        		.zero	1
- 1484               	.global	mseconds
- 1487               	mseconds:
- 1488 0014 0000      		.zero	2
- 1489               		.comm	distance,2,1
- 1490               	.global	width
- 1493               	width:
- 1494 0016 00        		.zero	1
- 1495               		.text
- 1496               	.Letext0:
- 1497               		.file 9 "/usr/avr/include/stdint.h"
+ 1429               	.L69:
+  23:main.c        **** 
+  24:main.c        **** 	while(1){
+  25:main.c        **** 		count3++;
+ 1430               		.loc 8 25 0
+ 1431 0018 8091 0000 		lds r24,count3
+ 1432 001c 9091 0000 		lds r25,count3+1
+ 1433 0020 A091 0000 		lds r26,count3+2
+ 1434 0024 B091 0000 		lds r27,count3+3
+ 1435 0028 0196      		adiw r24,1
+ 1436 002a A11D      		adc r26,__zero_reg__
+ 1437 002c B11D      		adc r27,__zero_reg__
+ 1438 002e 8093 0000 		sts count3,r24
+ 1439 0032 9093 0000 		sts count3+1,r25
+ 1440 0036 A093 0000 		sts count3+2,r26
+ 1441 003a B093 0000 		sts count3+3,r27
+  26:main.c        **** 		controlMotor();
+ 1442               		.loc 8 26 0
+ 1443 003e 0E94 0000 		call controlMotor
+ 1444               	.LVL101:
+  27:main.c        **** 		if(count3 == 50000){
+ 1445               		.loc 8 27 0
+ 1446 0042 8091 0000 		lds r24,count3
+ 1447 0046 9091 0000 		lds r25,count3+1
+ 1448 004a A091 0000 		lds r26,count3+2
+ 1449 004e B091 0000 		lds r27,count3+3
+ 1450 0052 8035      		cpi r24,80
+ 1451 0054 934C      		sbci r25,-61
+ 1452 0056 A105      		cpc r26,__zero_reg__
+ 1453 0058 B105      		cpc r27,__zero_reg__
+ 1454 005a 01F4      		brne .L69
+  28:main.c        **** 			putCh(6666);
+ 1455               		.loc 8 28 0
+ 1456 005c 8AE0      		ldi r24,lo8(10)
+ 1457 005e 0E94 0000 		call putCh
+ 1458               	.LVL102:
+  29:main.c        **** 			putCh(6666 >> 8);
+ 1459               		.loc 8 29 0
+ 1460 0062 8AE1      		ldi r24,lo8(26)
+ 1461 0064 0E94 0000 		call putCh
+ 1462               	.LVL103:
+  30:main.c        **** 			count3 = 0;
+ 1463               		.loc 8 30 0
+ 1464 0068 1092 0000 		sts count3,__zero_reg__
+ 1465 006c 1092 0000 		sts count3+1,__zero_reg__
+ 1466 0070 1092 0000 		sts count3+2,__zero_reg__
+ 1467 0074 1092 0000 		sts count3+3,__zero_reg__
+ 1468 0078 00C0      		rjmp .L69
+ 1469               		.cfi_endproc
+ 1470               	.LFE23:
+ 1472               	.global	count3
+ 1473               		.section .bss
+ 1476               	count3:
+ 1477 0000 0000 0000 		.zero	4
+ 1478               	.global	previous_error
+ 1481               	previous_error:
+ 1482 0004 0000      		.zero	2
+ 1483               	.global	left_motor_pwm
+ 1486               	left_motor_pwm:
+ 1487 0006 0000      		.zero	2
+ 1488               	.global	right_motor_pwm
+ 1491               	right_motor_pwm:
+ 1492 0008 0000      		.zero	2
+ 1493               	.global	PID
+ 1496               	PID:
+ 1497 000a 0000      		.zero	2
+ 1498               	.global	D
+ 1501               	D:
+ 1502 000c 0000      		.zero	2
+ 1503               	.global	I
+ 1506               	I:
+ 1507 000e 0000      		.zero	2
+ 1508               	.global	P
+ 1511               	P:
+ 1512 0010 0000      		.zero	2
+ 1513               	.global	count2
+ 1516               	count2:
+ 1517 0012 00        		.zero	1
+ 1518               	.global	count
+ 1521               	count:
+ 1522 0013 0000 0000 		.zero	4
+ 1523               	.global	interrupt
+ 1526               	interrupt:
+ 1527 0017 00        		.zero	1
+ 1528               	.global	mseconds
+ 1531               	mseconds:
+ 1532 0018 0000      		.zero	2
+ 1533               		.comm	distance,2,1
+ 1534               	.global	width
+ 1537               	width:
+ 1538 001a 00        		.zero	1
+ 1539               		.text
+ 1540               	.Letext0:
+ 1541               		.file 9 "/usr/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/cc7HUQhY.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/cc7HUQhY.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/cc7HUQhY.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/cc7HUQhY.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/cc7HUQhY.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/cc7HUQhY.s:12     .text:0000000000000000 init_ADC
-     /tmp/cc7HUQhY.s:45     .text:000000000000001c read_ADC
-     /tmp/cc7HUQhY.s:74     .text:0000000000000036 setupPWM
-     /tmp/cc7HUQhY.s:101    .text:000000000000004a pwm
-     /tmp/cc7HUQhY.s:132    .text:000000000000006a initUSART
-     /tmp/cc7HUQhY.s:164    .text:0000000000000086 getCh
-     /tmp/cc7HUQhY.s:187    .text:0000000000000094 putCh
-     /tmp/cc7HUQhY.s:211    .text:00000000000000a2 initIR
-     /tmp/cc7HUQhY.s:235    .text:00000000000000b2 getPosition
-     /tmp/cc7HUQhY.s:445    .text:000000000000018c getError
-     /tmp/cc7HUQhY.s:470    .text:000000000000019e lineSize
-     /tmp/cc7HUQhY.s:528    .text:00000000000001b2 init_SRF05
-     /tmp/cc7HUQhY.s:564    .text:00000000000001ce SRF05_Start
-     /tmp/cc7HUQhY.s:1487   .bss:0000000000000014 mseconds
-     /tmp/cc7HUQhY.s:609    .text:00000000000001ec __vector_1
-     /tmp/cc7HUQhY.s:1482   .bss:0000000000000013 interrupt
+     /tmp/ccojqGtL.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccojqGtL.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccojqGtL.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccojqGtL.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccojqGtL.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccojqGtL.s:12     .text:0000000000000000 init_ADC
+     /tmp/ccojqGtL.s:45     .text:000000000000001c read_ADC
+     /tmp/ccojqGtL.s:74     .text:0000000000000036 setupPWM
+     /tmp/ccojqGtL.s:101    .text:000000000000004a pwm
+     /tmp/ccojqGtL.s:132    .text:000000000000006a initUSART
+     /tmp/ccojqGtL.s:164    .text:0000000000000086 getCh
+     /tmp/ccojqGtL.s:187    .text:0000000000000094 putCh
+     /tmp/ccojqGtL.s:211    .text:00000000000000a2 initIR
+     /tmp/ccojqGtL.s:235    .text:00000000000000b2 getPosition
+     /tmp/ccojqGtL.s:445    .text:000000000000018c getError
+     /tmp/ccojqGtL.s:470    .text:000000000000019e lineSize
+     /tmp/ccojqGtL.s:528    .text:00000000000001b2 init_SRF05
+     /tmp/ccojqGtL.s:564    .text:00000000000001ce SRF05_Start
+     /tmp/ccojqGtL.s:1531   .bss:0000000000000018 mseconds
+     /tmp/ccojqGtL.s:609    .text:00000000000001ec __vector_1
+     /tmp/ccojqGtL.s:1526   .bss:0000000000000017 interrupt
                             *COM*:0000000000000002 distance
-     /tmp/cc7HUQhY.s:735    .text:0000000000000272 __vector_14
-     /tmp/cc7HUQhY.s:782    .text:00000000000002a0 setupMotor
-     /tmp/cc7HUQhY.s:829    .text:00000000000002c6 controlMotor
-     /tmp/cc7HUQhY.s:1477   .bss:000000000000000f count
-     /tmp/cc7HUQhY.s:1467   .bss:000000000000000c P
-     /tmp/cc7HUQhY.s:1462   .bss:000000000000000a I
-     /tmp/cc7HUQhY.s:1437   .bss:0000000000000000 previous_error
-     /tmp/cc7HUQhY.s:1457   .bss:0000000000000008 D
-     /tmp/cc7HUQhY.s:1452   .bss:0000000000000006 PID
-     /tmp/cc7HUQhY.s:1447   .bss:0000000000000004 right_motor_pwm
-     /tmp/cc7HUQhY.s:1442   .bss:0000000000000002 left_motor_pwm
-     /tmp/cc7HUQhY.s:1472   .bss:000000000000000e count2
-     /tmp/cc7HUQhY.s:1398   .text.startup:0000000000000000 main
-     /tmp/cc7HUQhY.s:1493   .bss:0000000000000016 width
+     /tmp/ccojqGtL.s:735    .text:0000000000000272 __vector_14
+     /tmp/ccojqGtL.s:782    .text:00000000000002a0 setupMotor
+     /tmp/ccojqGtL.s:829    .text:00000000000002c6 controlMotor
+     /tmp/ccojqGtL.s:1521   .bss:0000000000000013 count
+     /tmp/ccojqGtL.s:1511   .bss:0000000000000010 P
+     /tmp/ccojqGtL.s:1506   .bss:000000000000000e I
+     /tmp/ccojqGtL.s:1481   .bss:0000000000000004 previous_error
+     /tmp/ccojqGtL.s:1501   .bss:000000000000000c D
+     /tmp/ccojqGtL.s:1496   .bss:000000000000000a PID
+     /tmp/ccojqGtL.s:1491   .bss:0000000000000008 right_motor_pwm
+     /tmp/ccojqGtL.s:1486   .bss:0000000000000006 left_motor_pwm
+     /tmp/ccojqGtL.s:1516   .bss:0000000000000012 count2
+     /tmp/ccojqGtL.s:1402   .text.startup:0000000000000000 main
+     /tmp/ccojqGtL.s:1476   .bss:0000000000000000 count3
+     /tmp/ccojqGtL.s:1537   .bss:000000000000001a width
 
 UNDEFINED SYMBOLS
 __udivmodhi4

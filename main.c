@@ -10,6 +10,8 @@
 #include "color_sensor.h"
 #include "motor_control.h"
 
+uint32_t count3 = 0;
+
 int main(void){
 
 	setupPWM();
@@ -20,7 +22,13 @@ int main(void){
 	init_ADC();
 
 	while(1){
+		count3++;
 		controlMotor();
+		if(count3 == 50000){
+			putCh(6666);
+			putCh(6666 >> 8);
+			count3 = 0;
+		}
 	}
 	
 	return 0;
