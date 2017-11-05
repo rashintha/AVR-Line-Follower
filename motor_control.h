@@ -1,3 +1,7 @@
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
 #define MOTOR_DDR	DDRC
 #define MOTOR_PORT	PORTC
 
@@ -113,88 +117,4 @@ void controlMotor(){
 
 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
-	/*switch(status){
-		case FORWARD:
-			if(channelA_status == FORWARD && channelB_status == FORWARD){
-				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
-				channelB = channelA;
-			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
-				if(channelA > MIN_PWM_SPEED){
-					channelA -= BREAK_RATE;
-					channelB = channelA;
-				}else{
-					FORWARD_MODE();
-					channelA_status = FORWARD;
-					channelB_status = FORWARD;
-				}
-			}
-			break;
-		
-		case REVERSE:
-			if(channelA_status == REVERSE && channelB_status == REVERSE){
-				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
-				channelB = channelA;
-			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
-				if(channelA > MIN_PWM_SPEED){
-					channelA -= BREAK_RATE;
-					channelB = channelA;
-				}else{
-					REVERSE_MODE();
-					channelA_status = REVERSE;
-					channelB_status = REVERSE;
-				}
-			}
-			break;
-		
-		case STOP:
-			MOTOR_PORT = 0x00;
-			channelA = 0x00;
-			channelB = 0x00;
-			break;
-
-		case NEUTRAL:
-			if(channelA > MIN_PWM_SPEED){
-				channelA -= SPEED_DECREASE_RATE;
-				channelB = channelA;
-			}
-
-			if(channelB_status == FORWARD && channelB_status == FORWARD){
-				FORWARD_MODE();
-			}
-			else{
-				REVERSE_MODE();
-			}
-
-			if(left_status || right_status){
-				channelA = 0x00;
-				channelB = 0x00;
-				left_status = FALSE;
-				right_status = FALSE;
-			}
-			break;
-
-		case RIGHT:
-			//RIGHT_MODE();
-			if(channelA < MIN_PWM_SPEED){
-				left_status = FALSE;
-				right_status = TRUE;
-				channelA = 15000;
-				channelB -= 30;
-			}
-			break;
-
-		case LEFT:
-			//LEFT_MODE();
-			if(channelA < MIN_PWM_SPEED){
-				left_status = TRUE;
-				right_status = FALSE;
-				channelA -= 30;
-				channelB = MAX_PWM_SPEED / 2;
-			}
-			break;
-	}
-
-	pwm(CH_A, channelA, MAX_PWM_SPEED);
-	pwm(CH_B, channelB, MAX_PWM_SPEED);
-	*/
 }

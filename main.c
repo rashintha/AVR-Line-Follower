@@ -1,4 +1,6 @@
+#ifndef F_CPU
 #define F_CPU 16000000UL
+#endif
 
 //Comment the MCU which you're not using.
 #define ATMEGA_328P

@@ -1,3 +1,7 @@
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
+
 #define BAUD_RATE 9600
 
 #include <avr/io.h>

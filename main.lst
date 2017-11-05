@@ -103,75 +103,79 @@
   74               	setupPWM:
   75               	.LFB8:
   76               		.file 2 "pwm.h"
-   1:pwm.h         **** #include <avr/io.h>
-   2:pwm.h         **** #include "cpu_def.h"
-   3:pwm.h         **** 
-   4:pwm.h         **** //Define PWM Channels
-   5:pwm.h         **** #define CH_A 0
-   6:pwm.h         **** #define CH_B 1
+   1:pwm.h         **** #ifndef F_CPU
+   2:pwm.h         **** #define F_CPU 16000000UL
+   3:pwm.h         **** #endif
+   4:pwm.h         **** 
+   5:pwm.h         **** #include <avr/io.h>
+   6:pwm.h         **** #include "cpu_def.h"
    7:pwm.h         **** 
-   8:pwm.h         **** void setupPWM(void);
-   9:pwm.h         **** void pwm(uint8_t channel, uint16_t onTime, uint16_t period);
-  10:pwm.h         **** 
-  11:pwm.h         **** //Initializing PWM
-  12:pwm.h         **** void setupPWM(void){
-  77               		.loc 2 12 0
+   8:pwm.h         **** //Define PWM Channels
+   9:pwm.h         **** #define CH_A 0
+  10:pwm.h         **** #define CH_B 1
+  11:pwm.h         **** 
+  12:pwm.h         **** void setupPWM(void);
+  13:pwm.h         **** void pwm(uint8_t channel, uint16_t onTime, uint16_t period);
+  14:pwm.h         **** 
+  15:pwm.h         **** //Initializing PWM
+  16:pwm.h         **** void setupPWM(void){
+  77               		.loc 2 16 0
   78               		.cfi_startproc
   79               	/* prologue: function */
   80               	/* frame size = 0 */
   81               	/* stack size = 0 */
   82               	.L__stack_usage = 0
-  13:pwm.h         **** 	OC1x_DDR |= (1 << OC1A_PIN) | (1 << OC1B_PIN);
-  83               		.loc 2 13 0
+  17:pwm.h         **** 	OC1x_DDR |= (1 << OC1A_PIN) | (1 << OC1B_PIN);
+  83               		.loc 2 17 0
   84 0036 84B1      		in r24,0x4
   85 0038 8660      		ori r24,lo8(6)
   86 003a 84B9      		out 0x4,r24
-  14:pwm.h         **** 	TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11);	
-  87               		.loc 2 14 0
+  18:pwm.h         **** 	TCCR1A = (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11);	
+  87               		.loc 2 18 0
   88 003c 82EA      		ldi r24,lo8(-94)
   89 003e 8093 8000 		sts 128,r24
-  15:pwm.h         **** 	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS11);
-  90               		.loc 2 15 0
+  19:pwm.h         **** 	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS11);
+  90               		.loc 2 19 0
   91 0042 8AE1      		ldi r24,lo8(26)
   92 0044 8093 8100 		sts 129,r24
   93               	/* epilogue start */
-  16:pwm.h         **** }
-  94               		.loc 2 16 0
+  20:pwm.h         **** }
+  94               		.loc 2 20 0
   95 0048 0895      		ret
   96               		.cfi_endproc
   97               	.LFE8:
   99               	.global	pwm
  101               	pwm:
  102               	.LFB9:
-  17:pwm.h         **** 
-  18:pwm.h         **** //Set PWM of the selected channel
-  19:pwm.h         **** void pwm(uint8_t channel, uint16_t onTime, uint16_t period){
- 103               		.loc 2 19 0
+  21:pwm.h         **** 
+  22:pwm.h         **** //Set PWM of the selected channel
+  23:pwm.h         **** void pwm(uint8_t channel, uint16_t onTime, uint16_t period){
+ 103               		.loc 2 23 0
  104               		.cfi_startproc
  105               	.LVL0:
  106               	/* prologue: function */
  107               	/* frame size = 0 */
  108               	/* stack size = 0 */
  109               	.L__stack_usage = 0
-  20:pwm.h         **** 	ICR1 = period;
- 110               		.loc 2 20 0
+  24:pwm.h         **** 	ICR1 = period;
+ 110               		.loc 2 24 0
  111 004a 5093 8700 		sts 134+1,r21
  112 004e 4093 8600 		sts 134,r20
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 113               		.loc 2 21 0
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 113               		.loc 2 25 0
  114 0052 8130      		cpi r24,lo8(1)
  115 0054 01F4      		brne .L5
- 116               		.loc 2 21 0 is_stmt 0 discriminator 1
+ 116               		.loc 2 25 0 is_stmt 0 discriminator 1
  117 0056 7093 8B00 		sts 138+1,r23
  118 005a 6093 8A00 		sts 138,r22
  119 005e 0895      		ret
  120               	.L5:
- 121               		.loc 2 21 0 discriminator 2
+ 121               		.loc 2 25 0 discriminator 2
  122 0060 7093 8900 		sts 136+1,r23
  123 0064 6093 8800 		sts 136,r22
  124               	/* epilogue start */
-  22:pwm.h         **** }...
- 125               		.loc 2 22 0 is_stmt 1 discriminator 2
+  26:pwm.h         **** }...
+ 125               		.loc 2 26 0 is_stmt 1 discriminator 2
  126 0068 0895      		ret
  127               		.cfi_endproc
  128               	.LFE9:
@@ -179,88 +183,92 @@
  132               	initUSART:
  133               	.LFB10:
  134               		.file 3 "serial.h"
-   1:serial.h      **** #define BAUD_RATE 9600
-   2:serial.h      **** 
-   3:serial.h      **** #include <avr/io.h>
-   4:serial.h      **** #include "cpu_def.h"
-   5:serial.h      **** 
-   6:serial.h      **** void initUSART(void);
-   7:serial.h      **** uint8_t getCh(void);
-   8:serial.h      **** void putCh(uint8_t data);
+   1:serial.h      **** #ifndef F_CPU
+   2:serial.h      **** #define F_CPU 16000000UL
+   3:serial.h      **** #endif
+   4:serial.h      **** 
+   5:serial.h      **** #define BAUD_RATE 9600
+   6:serial.h      **** 
+   7:serial.h      **** #include <avr/io.h>
+   8:serial.h      **** #include "cpu_def.h"
    9:serial.h      **** 
-  10:serial.h      **** void initUSART(void){
- 135               		.loc 3 10 0
+  10:serial.h      **** void initUSART(void);
+  11:serial.h      **** uint8_t getCh(void);
+  12:serial.h      **** void putCh(uint8_t data);
+  13:serial.h      **** 
+  14:serial.h      **** void initUSART(void){
+ 135               		.loc 3 14 0
  136               		.cfi_startproc
  137               	/* prologue: function */
  138               	/* frame size = 0 */
  139               	/* stack size = 0 */
  140               	.L__stack_usage = 0
  141               	.LVL1:
-  11:serial.h      ****    //Set Baud rate; ubrr_value = F_OSC/(16 x Baud_rate) - 1; e.g. 16e6/(9600*16) -1 = 103
-  12:serial.h      **** 	uint32_t ubrr_value;
-  13:serial.h      **** 	ubrr_value = F_CPU/16/BAUD_RATE -1; 
-  14:serial.h      **** 	UBRRL_REG = ubrr_value;
- 142               		.loc 3 14 0
+  15:serial.h      ****    //Set Baud rate; ubrr_value = F_OSC/(16 x Baud_rate) - 1; e.g. 16e6/(9600*16) -1 = 103
+  16:serial.h      **** 	uint32_t ubrr_value;
+  17:serial.h      **** 	ubrr_value = F_CPU/16/BAUD_RATE -1; 
+  18:serial.h      **** 	UBRRL_REG = ubrr_value;
+ 142               		.loc 3 18 0
  143 006a 87E6      		ldi r24,lo8(103)
  144 006c 8093 C400 		sts 196,r24
-  15:serial.h      **** 	UBRRH_REG = (ubrr_value >> 8);
- 145               		.loc 3 15 0
+  19:serial.h      **** 	UBRRH_REG = (ubrr_value >> 8);
+ 145               		.loc 3 19 0
  146 0070 1092 C500 		sts 197,__zero_reg__
-  16:serial.h      **** 	UCSRC_REG |= (1 << UCSZ1_BIT) | (1 << UCSZ0_BIT);
- 147               		.loc 3 16 0
+  20:serial.h      **** 	UCSRC_REG |= (1 << UCSZ1_BIT) | (1 << UCSZ0_BIT);
+ 147               		.loc 3 20 0
  148 0074 E2EC      		ldi r30,lo8(-62)
  149 0076 F0E0      		ldi r31,0
  150 0078 8081      		ld r24,Z
  151 007a 8660      		ori r24,lo8(6)
  152 007c 8083      		st Z,r24
-  17:serial.h      **** 
-  18:serial.h      **** 	#ifdef ATMEGA_32A
-  19:serial.h      **** 	UCSRC_REG |= (1 << URSEL_BIT);
-  20:serial.h      **** 	#endif
   21:serial.h      **** 
-  22:serial.h      **** 	//Enable The receiver and transmitter
-  23:serial.h      **** 	UCSRB_REG = (1 << RXEN_BIT) | (1 << TXEN_BIT);
- 153               		.loc 3 23 0
+  22:serial.h      **** 	#ifdef ATMEGA_32A
+  23:serial.h      **** 	UCSRC_REG |= (1 << URSEL_BIT);
+  24:serial.h      **** 	#endif
+  25:serial.h      **** 
+  26:serial.h      **** 	//Enable The receiver and transmitter
+  27:serial.h      **** 	UCSRB_REG = (1 << RXEN_BIT) | (1 << TXEN_BIT);
+ 153               		.loc 3 27 0
  154 007e 88E1      		ldi r24,lo8(24)
  155 0080 8093 C100 		sts 193,r24
  156               	/* epilogue start */
-  24:serial.h      **** }
- 157               		.loc 3 24 0
+  28:serial.h      **** }
+ 157               		.loc 3 28 0
  158 0084 0895      		ret
  159               		.cfi_endproc
  160               	.LFE10:
  162               	.global	getCh
  164               	getCh:
  165               	.LFB11:
-  25:serial.h      **** 
-  26:serial.h      **** uint8_t getCh(void){
- 166               		.loc 3 26 0
+  29:serial.h      **** 
+  30:serial.h      **** uint8_t getCh(void){
+ 166               		.loc 3 30 0
  167               		.cfi_startproc
  168               	/* prologue: function */
  169               	/* frame size = 0 */
  170               	/* stack size = 0 */
  171               	.L__stack_usage = 0
  172               	.L9:
-  27:serial.h      **** 	while(!(UCSRA_REG & (1 << RXC_BIT)));
- 173               		.loc 3 27 0 discriminator 1
+  31:serial.h      **** 	while(!(UCSRA_REG & (1 << RXC_BIT)));
+ 173               		.loc 3 31 0 discriminator 1
  174 0086 8091 C000 		lds r24,192
  175 008a 87FF      		sbrs r24,7
  176 008c 00C0      		rjmp .L9
-  28:serial.h      **** 	return UDR_REG;
- 177               		.loc 3 28 0
+  32:serial.h      **** 	return UDR_REG;
+ 177               		.loc 3 32 0
  178 008e 8091 C600 		lds r24,198
  179               	/* epilogue start */
-  29:serial.h      **** }
- 180               		.loc 3 29 0
+  33:serial.h      **** }
+ 180               		.loc 3 33 0
  181 0092 0895      		ret
  182               		.cfi_endproc
  183               	.LFE11:
  185               	.global	putCh
  187               	putCh:
  188               	.LFB12:
-  30:serial.h      **** 
-  31:serial.h      **** void putCh(uint8_t data){
- 189               		.loc 3 31 0
+  34:serial.h      **** 
+  35:serial.h      **** void putCh(uint8_t data){
+ 189               		.loc 3 35 0
  190               		.cfi_startproc
  191               	/* prologue: function */
  192               	/* frame size = 0 */
@@ -268,17 +276,17 @@
  194               	.L__stack_usage = 0
  195               	.LVL2:
  196               	.L12:
-  32:serial.h      **** 	while(!(UCSRA_REG & (1 << UDRE_BIT)));
- 197               		.loc 3 32 0 discriminator 1
+  36:serial.h      **** 	while(!(UCSRA_REG & (1 << UDRE_BIT)));
+ 197               		.loc 3 36 0 discriminator 1
  198 0094 9091 C000 		lds r25,192
  199 0098 95FF      		sbrs r25,5
  200 009a 00C0      		rjmp .L12
-  33:serial.h      **** 	UDR_REG = data;
- 201               		.loc 3 33 0
+  37:serial.h      **** 	UDR_REG = data;
+ 201               		.loc 3 37 0
  202 009c 8093 C600 		sts 198,r24
  203               	/* epilogue start */
-  34:serial.h      **** }...
- 204               		.loc 3 34 0
+  38:serial.h      **** }...
+ 204               		.loc 3 38 0
  205 00a0 0895      		ret
  206               		.cfi_endproc
  207               	.LFE12:
@@ -286,63 +294,66 @@
  211               	initIR:
  212               	.LFB13:
  213               		.file 4 "ir_array.h"
-   1:ir_array.h    **** #define IR_LEFT_DDR DDRD
-   2:ir_array.h    **** #define IR_LEFT_PIN PIND
-   3:ir_array.h    **** 
-   4:ir_array.h    **** #define IR_L_01 PD4
-   5:ir_array.h    **** #define IR_L_02 PD5
-   6:ir_array.h    **** #define IR_L_03 PD6
-   7:ir_array.h    **** #define IR_L_04 PD7
-   8:ir_array.h    **** 
-   9:ir_array.h    **** #define IR_RIGHT_DDR DDRB
-  10:ir_array.h    **** #define IR_RIGHT_PIN PINB
-  11:ir_array.h    **** 
-  12:ir_array.h    **** #define IR_R_05 PB5
-  13:ir_array.h    **** #define IR_R_06 PB3
-  14:ir_array.h    **** #define IR_R_07 PB4
-  15:ir_array.h    **** #define IR_R_08 PB0
-  16:ir_array.h    **** 
-  17:ir_array.h    **** #define IR01_VAL() ({ uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_01)) ? (1 << 0) : 0; retVal;})
-  18:ir_array.h    **** #define IR02_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_02)) ? (1 << 1) : 0; retVal;})
-  19:ir_array.h    **** #define IR03_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_03)) ? (1 << 2) : 0; retVal;})
-  20:ir_array.h    **** #define IR04_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_04)) ? (1 << 3) : 0; retVal;})
-  21:ir_array.h    **** #define IR05_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_05)) ? (1 << 4) : 0; retVal;})
-  22:ir_array.h    **** #define IR06_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_06)) ? (1 << 5) : 0; retVal;})
-  23:ir_array.h    **** #define IR07_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_07)) ? (1 << 6) : 0; retVal;})
-  24:ir_array.h    **** #define IR08_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_08)) ? (1 << 7) : 0; retVal;})
-  25:ir_array.h    **** 
-  26:ir_array.h    **** #define IR_ARR_VAL IR01_VAL() | IR02_VAL() | IR03_VAL() | IR04_VAL() | IR05_VAL() | IR06_VAL() | IR
-  27:ir_array.h    **** 
-  28:ir_array.h    **** #define IR_POSITION IR01_VAL() * 0 | IR02_VAL() * 1000 | IR03_VAL() * 2000 | IR04_VAL() * 3000 | IR
+   1:ir_array.h    **** #ifndef F_CPU
+   2:ir_array.h    **** #define F_CPU 16000000UL
+   3:ir_array.h    **** #endif
+   4:ir_array.h    **** 
+   5:ir_array.h    **** #define IR_LEFT_DDR DDRD
+   6:ir_array.h    **** #define IR_LEFT_PIN PIND
+   7:ir_array.h    **** 
+   8:ir_array.h    **** #define IR_L_01 PD4
+   9:ir_array.h    **** #define IR_L_02 PD5
+  10:ir_array.h    **** #define IR_L_03 PD6
+  11:ir_array.h    **** #define IR_L_04 PD7
+  12:ir_array.h    **** 
+  13:ir_array.h    **** #define IR_RIGHT_DDR DDRB
+  14:ir_array.h    **** #define IR_RIGHT_PIN PINB
+  15:ir_array.h    **** 
+  16:ir_array.h    **** #define IR_R_05 PB5
+  17:ir_array.h    **** #define IR_R_06 PB3
+  18:ir_array.h    **** #define IR_R_07 PB4
+  19:ir_array.h    **** #define IR_R_08 PB0
+  20:ir_array.h    **** 
+  21:ir_array.h    **** #define IR01_VAL() ({ uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_01)) ? (1 << 0) : 0; retVal;})
+  22:ir_array.h    **** #define IR02_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_02)) ? (1 << 1) : 0; retVal;})
+  23:ir_array.h    **** #define IR03_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_03)) ? (1 << 2) : 0; retVal;})
+  24:ir_array.h    **** #define IR04_VAL() ({uint8_t retVal = (IR_LEFT_PIN & (1 << IR_L_04)) ? (1 << 3) : 0; retVal;})
+  25:ir_array.h    **** #define IR05_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_05)) ? (1 << 4) : 0; retVal;})
+  26:ir_array.h    **** #define IR06_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_06)) ? (1 << 5) : 0; retVal;})
+  27:ir_array.h    **** #define IR07_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_07)) ? (1 << 6) : 0; retVal;})
+  28:ir_array.h    **** #define IR08_VAL() ({uint8_t retVal = (IR_RIGHT_PIN & (1 << IR_R_08)) ? (1 << 7) : 0; retVal;})
   29:ir_array.h    **** 
-  30:ir_array.h    **** #define SETUP_IR() {IR_LEFT_DDR &= ~((1 << IR_L_01) | (1 << IR_L_02) | (1 << IR_L_03) | (1 << IR_L_
+  30:ir_array.h    **** #define IR_ARR_VAL IR01_VAL() | IR02_VAL() | IR03_VAL() | IR04_VAL() | IR05_VAL() | IR06_VAL() | IR
   31:ir_array.h    **** 
-  32:ir_array.h    **** #include "serial.h"
+  32:ir_array.h    **** #define IR_POSITION IR01_VAL() * 0 | IR02_VAL() * 1000 | IR03_VAL() * 2000 | IR04_VAL() * 3000 | IR
   33:ir_array.h    **** 
-  34:ir_array.h    **** uint8_t width = 0;
+  34:ir_array.h    **** #define SETUP_IR() {IR_LEFT_DDR &= ~((1 << IR_L_01) | (1 << IR_L_02) | (1 << IR_L_03) | (1 << IR_L_
   35:ir_array.h    **** 
-  36:ir_array.h    **** void initIR(void);
-  37:ir_array.h    **** void stableCar(void);
-  38:ir_array.h    **** uint8_t lineSize(void);
-  39:ir_array.h    **** int getPosition(void);
-  40:ir_array.h    ****  
-  41:ir_array.h    **** void initIR(void){
- 214               		.loc 4 41 0
+  36:ir_array.h    **** #include "serial.h"
+  37:ir_array.h    **** 
+  38:ir_array.h    **** uint8_t width = 0;
+  39:ir_array.h    **** 
+  40:ir_array.h    **** void initIR(void);
+  41:ir_array.h    **** int getPosition(void);
+  42:ir_array.h    **** int getError(void);
+  43:ir_array.h    ****  
+  44:ir_array.h    **** void initIR(void){
+ 214               		.loc 4 44 0
  215               		.cfi_startproc
  216               	/* prologue: function */
  217               	/* frame size = 0 */
  218               	/* stack size = 0 */
  219               	.L__stack_usage = 0
-  42:ir_array.h    **** 	SETUP_IR();
- 220               		.loc 4 42 0
+  45:ir_array.h    **** 	SETUP_IR();
+ 220               		.loc 4 45 0
  221 00a2 8AB1      		in r24,0xa
  222 00a4 8F70      		andi r24,lo8(15)
  223 00a6 8AB9      		out 0xa,r24
  224 00a8 84B1      		in r24,0x4
  225 00aa 867C      		andi r24,lo8(-58)
  226 00ac 84B9      		out 0x4,r24
-  43:ir_array.h    **** 	initUSART();
- 227               		.loc 4 43 0
+  46:ir_array.h    **** 	initUSART();
+ 227               		.loc 4 46 0
  228 00ae 0C94 0000 		jmp initUSART
  229               	.LVL3:
  230               		.cfi_endproc
@@ -350,18 +361,18 @@
  233               	.global	getPosition
  235               	getPosition:
  236               	.LFB14:
-  44:ir_array.h    **** }
-  45:ir_array.h    **** 
-  46:ir_array.h    **** int getPosition(void){
- 237               		.loc 4 46 0
+  47:ir_array.h    **** }
+  48:ir_array.h    **** 
+  49:ir_array.h    **** int getPosition(void){
+ 237               		.loc 4 49 0
  238               		.cfi_startproc
  239               	/* prologue: function */
  240               	/* frame size = 0 */
  241               	/* stack size = 0 */
  242               	.L__stack_usage = 0
  243               	.LBB64:
-  47:ir_array.h    **** 	int position = IR_POSITION / 2;
- 244               		.loc 4 47 0
+  50:ir_array.h    **** 	int position = IR_POSITION / 2;
+ 244               		.loc 4 50 0
  245 00b2 89B1      		in r24,0x9
  246               	.LVL4:
  247               	.LBE64:
@@ -372,7 +383,7 @@
  252               	.L17:
  253               	.LVL5:
  254               	.LBE65:
- 255               		.loc 4 47 0 is_stmt 0 discriminator 4
+ 255               		.loc 4 50 0 is_stmt 0 discriminator 4
  256 00ba 28EE      		ldi r18,lo8(-24)
  257 00bc 33E0      		ldi r19,lo8(3)
  258 00be 929F      		mul r25,r18
@@ -383,12 +394,12 @@
  263               	.LBB66:
  264 00c8 4E99      		sbic 0x9,6
  265 00ca 00C0      		rjmp .L27
- 266               		.loc 4 47 0
+ 266               		.loc 4 50 0
  267 00cc 30E0      		ldi r19,0
  268               	.L18:
  269               	.LVL6:
  270               	.LBE66:
- 271               		.loc 4 47 0 discriminator 8
+ 271               		.loc 4 50 0 discriminator 8
  272 00ce 60ED      		ldi r22,lo8(-48)
  273 00d0 77E0      		ldi r23,lo8(7)
  274 00d2 369F      		mul r19,r22
@@ -403,12 +414,12 @@
  283               	.LBB67:
  284 00e2 4F99      		sbic 0x9,7
  285 00e4 00C0      		rjmp .L28
- 286               		.loc 4 47 0
+ 286               		.loc 4 50 0
  287 00e6 40E0      		ldi r20,0
  288               	.L19:
  289               	.LVL8:
  290               	.LBE67:
- 291               		.loc 4 47 0 discriminator 12
+ 291               		.loc 4 50 0 discriminator 12
  292 00e8 68EB      		ldi r22,lo8(-72)
  293 00ea 7BE0      		ldi r23,lo8(11)
  294 00ec 469F      		mul r20,r22
@@ -422,12 +433,12 @@
  302               	.LBB68:
  303 00fa 1D99      		sbic 0x3,5
  304 00fc 00C0      		rjmp .L29
- 305               		.loc 4 47 0
+ 305               		.loc 4 50 0
  306 00fe 40E0      		ldi r20,0
  307               	.LVL10:
  308               	.L20:
  309               	.LBE68:
- 310               		.loc 4 47 0 discriminator 16
+ 310               		.loc 4 50 0 discriminator 16
  311 0100 60EA      		ldi r22,lo8(-96)
  312 0102 7FE0      		ldi r23,lo8(15)
  313 0104 469F      		mul r20,r22
@@ -440,12 +451,12 @@
  320               	.LBB69:
  321 0112 1B99      		sbic 0x3,3
  322 0114 00C0      		rjmp .L30
- 323               		.loc 4 47 0
+ 323               		.loc 4 50 0
  324 0116 40E0      		ldi r20,0
  325               	.LVL11:
  326               	.L21:
  327               	.LBE69:
- 328               		.loc 4 47 0 discriminator 20
+ 328               		.loc 4 50 0 discriminator 20
  329 0118 68E8      		ldi r22,lo8(-120)
  330 011a 73E1      		ldi r23,lo8(19)
  331 011c 469F      		mul r20,r22
@@ -458,12 +469,12 @@
  338               	.LBB70:
  339 012a 1C99      		sbic 0x3,4
  340 012c 00C0      		rjmp .L31
- 341               		.loc 4 47 0
+ 341               		.loc 4 50 0
  342 012e 40E0      		ldi r20,0
  343               	.LVL12:
  344               	.L22:
  345               	.LBE70:
- 346               		.loc 4 47 0 discriminator 24
+ 346               		.loc 4 50 0 discriminator 24
  347 0130 60E7      		ldi r22,lo8(112)
  348 0132 77E1      		ldi r23,lo8(23)
  349 0134 469F      		mul r20,r22
@@ -476,12 +487,12 @@
  356               	.LBB71:
  357 0142 1899      		sbic 0x3,0
  358 0144 00C0      		rjmp .L32
- 359               		.loc 4 47 0
+ 359               		.loc 4 50 0
  360 0146 40E0      		ldi r20,0
  361               	.LVL13:
  362               	.L23:
  363               	.LBE71:
- 364               		.loc 4 47 0 discriminator 28
+ 364               		.loc 4 50 0 discriminator 28
  365 0148 6CEA      		ldi r22,lo8(-84)
  366 014a 7DE0      		ldi r23,lo8(13)
  367 014c 469F      		mul r20,r22
@@ -492,41 +503,41 @@
  372 0156 822B      		or r24,r18
  373 0158 932B      		or r25,r19
  374               	.LVL14:
-  48:ir_array.h    **** 
-  49:ir_array.h    **** 	if(position > 7000){
- 375               		.loc 4 49 0 is_stmt 1 discriminator 28
+  51:ir_array.h    **** 
+  52:ir_array.h    **** 	if(position > 7000){
+ 375               		.loc 4 52 0 is_stmt 1 discriminator 28
  376 015a 8935      		cpi r24,89
  377 015c 2BE1      		ldi r18,27
  378 015e 9207      		cpc r25,r18
  379 0160 04F0      		brlt .L16
  380               	.L25:
-  50:ir_array.h    **** 		while(position >= 7000){
-  51:ir_array.h    **** 			position /= 2;
- 381               		.loc 4 51 0
+  53:ir_array.h    **** 		while(position >= 7000){
+  54:ir_array.h    **** 			position /= 2;
+ 381               		.loc 4 54 0
  382 0162 9595      		asr r25
  383 0164 8795      		ror r24
  384               	.LVL15:
-  50:ir_array.h    **** 		while(position >= 7000){
- 385               		.loc 4 50 0
+  53:ir_array.h    **** 		while(position >= 7000){
+ 385               		.loc 4 53 0
  386 0166 8835      		cpi r24,88
  387 0168 2BE1      		ldi r18,27
  388 016a 9207      		cpc r25,r18
  389 016c 04F4      		brge .L25
  390               	.L16:
  391               	/* epilogue start */
-  52:ir_array.h    **** 		}
-  53:ir_array.h    **** 	}
-  54:ir_array.h    **** 
-  55:ir_array.h    **** 	return position;
-  56:ir_array.h    **** 
-  57:ir_array.h    **** }
- 392               		.loc 4 57 0
+  55:ir_array.h    **** 		}
+  56:ir_array.h    **** 	}
+  57:ir_array.h    **** 
+  58:ir_array.h    **** 	return position;
+  59:ir_array.h    **** 
+  60:ir_array.h    **** }
+ 392               		.loc 4 60 0
  393 016e 0895      		ret
  394               	.LVL16:
  395               	.L26:
  396               	.LBB72:
-  47:ir_array.h    **** 
- 397               		.loc 4 47 0
+  50:ir_array.h    **** 
+ 397               		.loc 4 50 0
  398 0170 92E0      		ldi r25,lo8(2)
  399 0172 00C0      		rjmp .L17
  400               	.LVL17:
@@ -574,51 +585,20 @@
  443               	.global	getError
  445               	getError:
  446               	.LFB15:
-  58:ir_array.h    **** 
-  59:ir_array.h    **** int getError(){
- 447               		.loc 4 59 0
+  61:ir_array.h    **** 
+  62:ir_array.h    **** int getError(void){
+ 447               		.loc 4 62 0
  448               		.cfi_startproc
  449               	/* prologue: function */
  450               	/* frame size = 0 */
  451               	/* stack size = 0 */
  452               	.L__stack_usage = 0
-  60:ir_array.h    **** 
-  61:ir_array.h    **** 	return 3500 - getPosition();
- 453               		.loc 4 61 0
+  63:ir_array.h    **** 	return 3500 - getPosition();
+ 453               		.loc 4 63 0
  454 018c 0E94 0000 		call getPosition
  455               	.LVL26:
-  62:ir_array.h    **** 	/*if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR
-  63:ir_array.h    **** 
-  64:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && IR07_
-  65:ir_array.h    **** 
-  66:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && IR07_
-  67:ir_array.h    **** 
-  68:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && IR06_VAL() && IR07_V
-  69:ir_array.h    **** 
-  70:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && IR06_VAL() && ~IR07_
-  71:ir_array.h    **** 
-  72:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && IR05_VAL() && IR06_VAL() && ~IR07_V
-  73:ir_array.h    **** 
-  74:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && IR05_VAL() && ~IR06_VAL() && ~IR07_
-  75:ir_array.h    **** 
-  76:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && IR04_VAL() && IR05_VAL() && ~IR06_VAL() && ~IR07_V
-  77:ir_array.h    **** 
-  78:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_
-  79:ir_array.h    **** 
-  80:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && IR03_VAL() && IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_V
-  81:ir_array.h    **** 
-  82:ir_array.h    **** 	if(~IR01_VAL() && ~IR02_VAL() && IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_
-  83:ir_array.h    **** 
-  84:ir_array.h    **** 	if(~IR01_VAL() && IR02_VAL() && IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_V
-  85:ir_array.h    **** 
-  86:ir_array.h    **** 	if(~IR01_VAL() && IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_
-  87:ir_array.h    **** 
-  88:ir_array.h    **** 	if(IR01_VAL() && IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_V
-  89:ir_array.h    **** 
-  90:ir_array.h    **** 	if(IR01_VAL() && ~IR02_VAL() && ~IR03_VAL() && ~IR04_VAL() && ~IR05_VAL() && ~IR06_VAL() && ~IR07_
-  91:ir_array.h    **** 	*/
-  92:ir_array.h    **** }
- 456               		.loc 4 92 0
+  64:ir_array.h    **** }...
+ 456               		.loc 4 64 0
  457 0190 2CEA      		ldi r18,lo8(-84)
  458 0192 3DE0      		ldi r19,lo8(13)
  459 0194 A901      		movw r20,r18
@@ -629,141 +609,10 @@
  464 019c 0895      		ret
  465               		.cfi_endproc
  466               	.LFE15:
- 468               	.global	lineSize
- 470               	lineSize:
+ 468               	.global	init_SRF05
+ 470               	init_SRF05:
  471               	.LFB16:
-  93:ir_array.h    **** 
-  94:ir_array.h    **** /*void stableCar(void){
-  95:ir_array.h    **** 
-  96:ir_array.h    **** 	count++;
-  97:ir_array.h    **** 	uint8_t ir_val = IR_ARR_VAL;
-  98:ir_array.h    **** 
-  99:ir_array.h    **** 	if(count == 200000){
- 100:ir_array.h    **** 		putCh(ir_val);
- 101:ir_array.h    **** 		count = 0;
- 102:ir_array.h    **** 	}
- 103:ir_array.h    **** 
- 104:ir_array.h    **** 	controlMotor(NEUTRAL);
- 105:ir_array.h    **** 	controlMotor(FORWARD);
- 106:ir_array.h    **** 
- 107:ir_array.h    **** 	if(ir_val == 0x00){
- 108:ir_array.h    **** 		controlMotor(STOP);
- 109:ir_array.h    **** 	}
- 110:ir_array.h    **** 
- 111:ir_array.h    **** 	//LEFT
- 112:ir_array.h    **** 	if(ir_val == 0x01){
- 113:ir_array.h    **** 		controlMotor(LEFT);
- 114:ir_array.h    **** 		_delay_ms(100);
- 115:ir_array.h    **** 	}
- 116:ir_array.h    **** 	
- 117:ir_array.h    **** 	if(ir_val == 0x02){
- 118:ir_array.h    **** 		controlMotor(LEFT);
- 119:ir_array.h    **** 		_delay_ms(10);
- 120:ir_array.h    **** 	}
- 121:ir_array.h    **** 
- 122:ir_array.h    **** 	if(ir_val == 0x04){
- 123:ir_array.h    **** 		controlMotor(LEFT);
- 124:ir_array.h    **** 		_delay_ms(1);
- 125:ir_array.h    **** 	}
- 126:ir_array.h    **** 
- 127:ir_array.h    **** 	if(ir_val == 0x0F){
- 128:ir_array.h    **** 		controlMotor(LEFT);
- 129:ir_array.h    **** 		_delay_ms(200);
- 130:ir_array.h    **** 	}
- 131:ir_array.h    **** 
- 132:ir_array.h    **** 	//RIGHT
- 133:ir_array.h    **** 	if(ir_val == 0x80){
- 134:ir_array.h    **** 		controlMotor(RIGHT);
- 135:ir_array.h    **** 		_delay_ms(100);
- 136:ir_array.h    **** 	}
- 137:ir_array.h    **** 
- 138:ir_array.h    **** 	if(ir_val == 0x40){
- 139:ir_array.h    **** 		controlMotor(RIGHT);
- 140:ir_array.h    **** 		_delay_ms(10);
- 141:ir_array.h    **** 	}
- 142:ir_array.h    **** 
- 143:ir_array.h    **** 	if(ir_val == 0x20){
- 144:ir_array.h    **** 		controlMotor(RIGHT);
- 145:ir_array.h    **** 		_delay_ms(1);
- 146:ir_array.h    **** 	}
- 147:ir_array.h    **** 
- 148:ir_array.h    **** 	if(ir_val == 0xF0){
- 149:ir_array.h    **** 		controlMotor(RIGHT);
- 150:ir_array.h    **** 		_delay_ms(200);
- 151:ir_array.h    **** 	}
- 152:ir_array.h    **** }*/
- 153:ir_array.h    **** 
- 154:ir_array.h    **** uint8_t lineSize(void){
- 472               		.loc 4 154 0
- 473               		.cfi_startproc
- 474               	/* prologue: function */
- 475               	/* frame size = 0 */
- 476               	/* stack size = 0 */
- 477               	.L__stack_usage = 0
- 478               	.LVL27:
- 479               	.LBB79:
- 155:ir_array.h    **** 	uint8_t size = 0;
- 156:ir_array.h    **** 
- 157:ir_array.h    **** 	if(~IR01_VAL()) size++;
- 480               		.loc 4 157 0
- 481 019e 89B1      		in r24,0x9
- 482               	.LVL28:
- 483               	.LBE79:
- 484               	.LBB80:
- 158:ir_array.h    **** 	if(~IR02_VAL()) size++;
- 485               		.loc 4 158 0
- 486 01a0 89B1      		in r24,0x9
- 487               	.LVL29:
- 488               	.LBE80:
- 489               	.LBB81:
- 159:ir_array.h    **** 	if(~IR03_VAL()) size++;
- 490               		.loc 4 159 0
- 491 01a2 89B1      		in r24,0x9
- 492               	.LVL30:
- 493               	.LBE81:
- 494               	.LBB82:
- 160:ir_array.h    **** 	if(~IR04_VAL()) size++;
- 495               		.loc 4 160 0
- 496 01a4 89B1      		in r24,0x9
- 497               	.LVL31:
- 498               	.LBE82:
- 499               	.LBB83:
- 161:ir_array.h    **** 	if(~IR05_VAL()) size++;
- 500               		.loc 4 161 0
- 501 01a6 83B1      		in r24,0x3
- 502               	.LVL32:
- 503               	.LBE83:
- 504               	.LBB84:
- 162:ir_array.h    **** 	if(~IR06_VAL()) size++;
- 505               		.loc 4 162 0
- 506 01a8 83B1      		in r24,0x3
- 507               	.LVL33:
- 508               	.LBE84:
- 509               	.LBB85:
- 163:ir_array.h    **** 	if(~IR07_VAL()) size++;
- 510               		.loc 4 163 0
- 511 01aa 83B1      		in r24,0x3
- 512               	.LVL34:
- 513               	.LBE85:
- 514               	.LBB86:
- 164:ir_array.h    **** 	if(~IR08_VAL()) size++;
- 515               		.loc 4 164 0
- 516 01ac 83B1      		in r24,0x3
- 517               	.LVL35:
- 518               	.LBE86:
- 165:ir_array.h    **** 
- 166:ir_array.h    **** 	return size;
- 167:ir_array.h    **** }...
- 519               		.loc 4 167 0
- 520 01ae 88E0      		ldi r24,lo8(8)
- 521               	/* epilogue start */
- 522 01b0 0895      		ret
- 523               		.cfi_endproc
- 524               	.LFE16:
- 526               	.global	init_SRF05
- 528               	init_SRF05:
- 529               	.LFB17:
- 530               		.file 5 "srf05.h"
+ 472               		.file 5 "srf05.h"
    1:srf05.h       **** #ifndef F_CPU
    2:srf05.h       **** #define F_CPU 16000000UL
    3:srf05.h       **** #endif
@@ -787,77 +636,77 @@
   21:srf05.h       **** void SRF05_CalcDistance(void);
   22:srf05.h       **** 
   23:srf05.h       **** void init_SRF05(void){
- 531               		.loc 5 23 0
- 532               		.cfi_startproc
- 533               	/* prologue: function */
- 534               	/* frame size = 0 */
- 535               	/* stack size = 0 */
- 536               	.L__stack_usage = 0
+ 473               		.loc 5 23 0
+ 474               		.cfi_startproc
+ 475               	/* prologue: function */
+ 476               	/* frame size = 0 */
+ 477               	/* stack size = 0 */
+ 478               	.L__stack_usage = 0
   24:srf05.h       **** 	//CTC mode
   25:srf05.h       **** 	TCCR0A |= (1 << WGM01);
- 537               		.loc 5 25 0
- 538 01b2 84B5      		in r24,0x24
- 539 01b4 8260      		ori r24,lo8(2)
- 540 01b6 84BD      		out 0x24,r24
+ 479               		.loc 5 25 0
+ 480 019e 84B5      		in r24,0x24
+ 481 01a0 8260      		ori r24,lo8(2)
+ 482 01a2 84BD      		out 0x24,r24
   26:srf05.h       **** 	OCR0A = 19;
- 541               		.loc 5 26 0
- 542 01b8 83E1      		ldi r24,lo8(19)
- 543 01ba 87BD      		out 0x27,r24
+ 483               		.loc 5 26 0
+ 484 01a4 83E1      		ldi r24,lo8(19)
+ 485 01a6 87BD      		out 0x27,r24
   27:srf05.h       **** 
   28:srf05.h       **** 	//COmpare match interrupt enable
   29:srf05.h       **** 	TIMSK0 |= (1 << OCIE0A);
- 544               		.loc 5 29 0
- 545 01bc EEE6      		ldi r30,lo8(110)
- 546 01be F0E0      		ldi r31,0
- 547 01c0 8081      		ld r24,Z
- 548 01c2 8260      		ori r24,lo8(2)
- 549 01c4 8083      		st Z,r24
+ 486               		.loc 5 29 0
+ 487 01a8 EEE6      		ldi r30,lo8(110)
+ 488 01aa F0E0      		ldi r31,0
+ 489 01ac 8081      		ld r24,Z
+ 490 01ae 8260      		ori r24,lo8(2)
+ 491 01b0 8083      		st Z,r24
   30:srf05.h       **** 
   31:srf05.h       **** 	//External interrupt enable
   32:srf05.h       **** 	EIMSK |= (1 << INT0);
- 550               		.loc 5 32 0
- 551 01c6 E89A      		sbi 0x1d,0
+ 492               		.loc 5 32 0
+ 493 01b2 E89A      		sbi 0x1d,0
   33:srf05.h       **** 
   34:srf05.h       **** 	SRF05_DDR |= (1 << TRIG);
- 552               		.loc 5 34 0
- 553 01c8 539A      		sbi 0xa,3
+ 494               		.loc 5 34 0
+ 495 01b4 539A      		sbi 0xa,3
   35:srf05.h       **** 	SRF05_DDR &= ~(1 << ECHO);
- 554               		.loc 5 35 0
- 555 01ca 5298      		cbi 0xa,2
- 556               	/* epilogue start */
+ 496               		.loc 5 35 0
+ 497 01b6 5298      		cbi 0xa,2
+ 498               	/* epilogue start */
   36:srf05.h       **** }
- 557               		.loc 5 36 0
- 558 01cc 0895      		ret
- 559               		.cfi_endproc
- 560               	.LFE17:
- 562               	.global	SRF05_Start
- 564               	SRF05_Start:
- 565               	.LFB18:
+ 499               		.loc 5 36 0
+ 500 01b8 0895      		ret
+ 501               		.cfi_endproc
+ 502               	.LFE16:
+ 504               	.global	SRF05_Start
+ 506               	SRF05_Start:
+ 507               	.LFB17:
   37:srf05.h       **** 
   38:srf05.h       **** void SRF05_Start(void){
- 566               		.loc 5 38 0
- 567               		.cfi_startproc
- 568               	/* prologue: function */
- 569               	/* frame size = 0 */
- 570               	/* stack size = 0 */
- 571               	.L__stack_usage = 0
+ 508               		.loc 5 38 0
+ 509               		.cfi_startproc
+ 510               	/* prologue: function */
+ 511               	/* frame size = 0 */
+ 512               	/* stack size = 0 */
+ 513               	.L__stack_usage = 0
   39:srf05.h       **** 	
   40:srf05.h       **** 	mseconds = 0;
- 572               		.loc 5 40 0
- 573 01ce 1092 0000 		sts mseconds+1,__zero_reg__
- 574 01d2 1092 0000 		sts mseconds,__zero_reg__
+ 514               		.loc 5 40 0
+ 515 01ba 1092 0000 		sts mseconds+1,__zero_reg__
+ 516 01be 1092 0000 		sts mseconds,__zero_reg__
   41:srf05.h       **** 	TCNT0 = 0; //Reset timer0
- 575               		.loc 5 41 0
- 576 01d6 16BC      		out 0x26,__zero_reg__
+ 517               		.loc 5 41 0
+ 518 01c2 16BC      		out 0x26,__zero_reg__
   42:srf05.h       **** 
   43:srf05.h       **** 	//Trigger for 12us
   44:srf05.h       **** 	SRF05_PORT |= (1 << TRIG);
- 577               		.loc 5 44 0
- 578 01d8 5B9A      		sbi 0xb,3
- 579               	.LVL36:
- 580               	.LBB87:
- 581               	.LBB88:
- 582               		.file 6 "/usr/avr/include/util/delay.h"
+ 519               		.loc 5 44 0
+ 520 01c4 5B9A      		sbi 0xb,3
+ 521               	.LVL27:
+ 522               	.LBB79:
+ 523               	.LBB80:
+ 524               		.file 6 "/usr/avr/include/util/delay.h"
    1:/usr/avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
    2:/usr/avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
    3:/usr/avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
@@ -1134,132 +983,132 @@
  274:/usr/avr/include/util/delay.h **** 	#endif
  275:/usr/avr/include/util/delay.h **** 
  276:/usr/avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
- 583               		.loc 6 276 0
- 584 01da 80E4      		ldi r24,lo8(64)
- 585 01dc 8A95      	1:	dec r24
- 586 01de 01F4      		brne 1b
- 587               	.LVL37:
- 588               	.LBE88:
- 589               	.LBE87:
+ 525               		.loc 6 276 0
+ 526 01c6 80E4      		ldi r24,lo8(64)
+ 527 01c8 8A95      	1:	dec r24
+ 528 01ca 01F4      		brne 1b
+ 529               	.LVL28:
+ 530               	.LBE80:
+ 531               	.LBE79:
   45:srf05.h       **** 	_delay_us(12);
   46:srf05.h       **** 	SRF05_PORT &= ~(1 << TRIG);
- 590               		.loc 5 46 0
- 591 01e0 5B98      		cbi 0xb,3
+ 532               		.loc 5 46 0
+ 533 01cc 5B98      		cbi 0xb,3
   47:srf05.h       **** 
   48:srf05.h       **** 	//Interrupt on rising edge
   49:srf05.h       **** 	EICRA = (1 << ISC01) | (1 << ISC00);
- 592               		.loc 5 49 0
- 593 01e2 83E0      		ldi r24,lo8(3)
- 594 01e4 8093 6900 		sts 105,r24
+ 534               		.loc 5 49 0
+ 535 01ce 83E0      		ldi r24,lo8(3)
+ 536 01d0 8093 6900 		sts 105,r24
   50:srf05.h       **** 
   51:srf05.h       **** 	sei();
- 595               		.loc 5 51 0
- 596               	/* #APP */
- 597               	 ;  51 "srf05.h" 1
- 598 01e8 7894      		sei
- 599               	 ;  0 "" 2
- 600               	/* epilogue start */
+ 537               		.loc 5 51 0
+ 538               	/* #APP */
+ 539               	 ;  51 "srf05.h" 1
+ 540 01d4 7894      		sei
+ 541               	 ;  0 "" 2
+ 542               	/* epilogue start */
   52:srf05.h       **** }
- 601               		.loc 5 52 0
- 602               	/* #NOAPP */
- 603 01ea 0895      		ret
- 604               		.cfi_endproc
- 605               	.LFE18:
- 607               	.global	__vector_1
- 609               	__vector_1:
- 610               	.LFB19:
+ 543               		.loc 5 52 0
+ 544               	/* #NOAPP */
+ 545 01d6 0895      		ret
+ 546               		.cfi_endproc
+ 547               	.LFE17:
+ 549               	.global	__vector_1
+ 551               	__vector_1:
+ 552               	.LFB18:
   53:srf05.h       **** 
   54:srf05.h       **** ISR(INT0_vect){
- 611               		.loc 5 54 0
- 612               		.cfi_startproc
- 613 01ec 1F92      		push r1
- 614               	.LCFI0:
- 615               		.cfi_def_cfa_offset 3
- 616               		.cfi_offset 1, -2
- 617 01ee 0F92      		push r0
- 618               	.LCFI1:
- 619               		.cfi_def_cfa_offset 4
- 620               		.cfi_offset 0, -3
- 621 01f0 0FB6      		in r0,__SREG__
- 622 01f2 0F92      		push r0
- 623 01f4 1124      		clr __zero_reg__
- 624 01f6 2F93      		push r18
- 625               	.LCFI2:
- 626               		.cfi_def_cfa_offset 5
- 627               		.cfi_offset 18, -4
- 628 01f8 3F93      		push r19
- 629               	.LCFI3:
- 630               		.cfi_def_cfa_offset 6
- 631               		.cfi_offset 19, -5
- 632 01fa 4F93      		push r20
- 633               	.LCFI4:
- 634               		.cfi_def_cfa_offset 7
- 635               		.cfi_offset 20, -6
- 636 01fc 5F93      		push r21
- 637               	.LCFI5:
- 638               		.cfi_def_cfa_offset 8
- 639               		.cfi_offset 21, -7
- 640 01fe 6F93      		push r22
- 641               	.LCFI6:
- 642               		.cfi_def_cfa_offset 9
- 643               		.cfi_offset 22, -8
- 644 0200 7F93      		push r23
- 645               	.LCFI7:
- 646               		.cfi_def_cfa_offset 10
- 647               		.cfi_offset 23, -9
- 648 0202 8F93      		push r24
- 649               	.LCFI8:
- 650               		.cfi_def_cfa_offset 11
- 651               		.cfi_offset 24, -10
- 652 0204 9F93      		push r25
- 653               	.LCFI9:
- 654               		.cfi_def_cfa_offset 12
- 655               		.cfi_offset 25, -11
- 656 0206 AF93      		push r26
- 657               	.LCFI10:
- 658               		.cfi_def_cfa_offset 13
- 659               		.cfi_offset 26, -12
- 660 0208 BF93      		push r27
- 661               	.LCFI11:
- 662               		.cfi_def_cfa_offset 14
- 663               		.cfi_offset 27, -13
- 664 020a EF93      		push r30
- 665               	.LCFI12:
- 666               		.cfi_def_cfa_offset 15
- 667               		.cfi_offset 30, -14
- 668 020c FF93      		push r31
- 669               	.LCFI13:
- 670               		.cfi_def_cfa_offset 16
- 671               		.cfi_offset 31, -15
- 672               	/* prologue: Signal */
- 673               	/* frame size = 0 */
- 674               	/* stack size = 15 */
- 675               	.L__stack_usage = 15
+ 553               		.loc 5 54 0
+ 554               		.cfi_startproc
+ 555 01d8 1F92      		push r1
+ 556               	.LCFI0:
+ 557               		.cfi_def_cfa_offset 3
+ 558               		.cfi_offset 1, -2
+ 559 01da 0F92      		push r0
+ 560               	.LCFI1:
+ 561               		.cfi_def_cfa_offset 4
+ 562               		.cfi_offset 0, -3
+ 563 01dc 0FB6      		in r0,__SREG__
+ 564 01de 0F92      		push r0
+ 565 01e0 1124      		clr __zero_reg__
+ 566 01e2 2F93      		push r18
+ 567               	.LCFI2:
+ 568               		.cfi_def_cfa_offset 5
+ 569               		.cfi_offset 18, -4
+ 570 01e4 3F93      		push r19
+ 571               	.LCFI3:
+ 572               		.cfi_def_cfa_offset 6
+ 573               		.cfi_offset 19, -5
+ 574 01e6 4F93      		push r20
+ 575               	.LCFI4:
+ 576               		.cfi_def_cfa_offset 7
+ 577               		.cfi_offset 20, -6
+ 578 01e8 5F93      		push r21
+ 579               	.LCFI5:
+ 580               		.cfi_def_cfa_offset 8
+ 581               		.cfi_offset 21, -7
+ 582 01ea 6F93      		push r22
+ 583               	.LCFI6:
+ 584               		.cfi_def_cfa_offset 9
+ 585               		.cfi_offset 22, -8
+ 586 01ec 7F93      		push r23
+ 587               	.LCFI7:
+ 588               		.cfi_def_cfa_offset 10
+ 589               		.cfi_offset 23, -9
+ 590 01ee 8F93      		push r24
+ 591               	.LCFI8:
+ 592               		.cfi_def_cfa_offset 11
+ 593               		.cfi_offset 24, -10
+ 594 01f0 9F93      		push r25
+ 595               	.LCFI9:
+ 596               		.cfi_def_cfa_offset 12
+ 597               		.cfi_offset 25, -11
+ 598 01f2 AF93      		push r26
+ 599               	.LCFI10:
+ 600               		.cfi_def_cfa_offset 13
+ 601               		.cfi_offset 26, -12
+ 602 01f4 BF93      		push r27
+ 603               	.LCFI11:
+ 604               		.cfi_def_cfa_offset 14
+ 605               		.cfi_offset 27, -13
+ 606 01f6 EF93      		push r30
+ 607               	.LCFI12:
+ 608               		.cfi_def_cfa_offset 15
+ 609               		.cfi_offset 30, -14
+ 610 01f8 FF93      		push r31
+ 611               	.LCFI13:
+ 612               		.cfi_def_cfa_offset 16
+ 613               		.cfi_offset 31, -15
+ 614               	/* prologue: Signal */
+ 615               	/* frame size = 0 */
+ 616               	/* stack size = 15 */
+ 617               	.L__stack_usage = 15
   55:srf05.h       **** 
   56:srf05.h       **** 	if(interrupt == 0){
- 676               		.loc 5 56 0
- 677 020e 8091 0000 		lds r24,interrupt
- 678 0212 8111      		cpse r24,__zero_reg__
- 679 0214 00C0      		rjmp .L39
+ 618               		.loc 5 56 0
+ 619 01fa 8091 0000 		lds r24,interrupt
+ 620 01fe 8111      		cpse r24,__zero_reg__
+ 621 0200 00C0      		rjmp .L38
   57:srf05.h       **** 		//Start Timer
   58:srf05.h       **** 		TCCR0B |= (1 << CS01);
- 680               		.loc 5 58 0
- 681 0216 85B5      		in r24,0x25
- 682 0218 8260      		ori r24,lo8(2)
- 683 021a 85BD      		out 0x25,r24
+ 622               		.loc 5 58 0
+ 623 0202 85B5      		in r24,0x25
+ 624 0204 8260      		ori r24,lo8(2)
+ 625 0206 85BD      		out 0x25,r24
   59:srf05.h       **** 
   60:srf05.h       **** 		//Interrupt on falling edge
   61:srf05.h       **** 		EICRA = (1 << ISC01);
- 684               		.loc 5 61 0
- 685 021c 82E0      		ldi r24,lo8(2)
- 686 021e 8093 6900 		sts 105,r24
+ 626               		.loc 5 61 0
+ 627 0208 82E0      		ldi r24,lo8(2)
+ 628 020a 8093 6900 		sts 105,r24
   62:srf05.h       **** 
   63:srf05.h       **** 		interrupt = 1;
- 687               		.loc 5 63 0
- 688 0222 81E0      		ldi r24,lo8(1)
- 689 0224 8093 0000 		sts interrupt,r24
- 690               	.L38:
- 691               	/* epilogue start */
+ 629               		.loc 5 63 0
+ 630 020e 81E0      		ldi r24,lo8(1)
+ 631 0210 8093 0000 		sts interrupt,r24
+ 632               	.L37:
+ 633               	/* epilogue start */
   64:srf05.h       **** 	}else{
   65:srf05.h       **** 		//Stop Timer
   66:srf05.h       **** 		TCCR0B &= ~(1 << CS01);
@@ -1269,1156 +1118,1077 @@
   70:srf05.h       **** 		SRF05_Start();
   71:srf05.h       **** 	}
   72:srf05.h       **** }
- 692               		.loc 5 72 0
- 693 0228 FF91      		pop r31
- 694 022a EF91      		pop r30
- 695 022c BF91      		pop r27
- 696 022e AF91      		pop r26
- 697 0230 9F91      		pop r25
- 698 0232 8F91      		pop r24
- 699 0234 7F91      		pop r23
- 700 0236 6F91      		pop r22
- 701 0238 5F91      		pop r21
- 702 023a 4F91      		pop r20
- 703 023c 3F91      		pop r19
- 704 023e 2F91      		pop r18
- 705 0240 0F90      		pop r0
- 706 0242 0FBE      		out __SREG__,r0
- 707 0244 0F90      		pop r0
- 708 0246 1F90      		pop r1
- 709 0248 1895      		reti
- 710               	.L39:
+ 634               		.loc 5 72 0
+ 635 0214 FF91      		pop r31
+ 636 0216 EF91      		pop r30
+ 637 0218 BF91      		pop r27
+ 638 021a AF91      		pop r26
+ 639 021c 9F91      		pop r25
+ 640 021e 8F91      		pop r24
+ 641 0220 7F91      		pop r23
+ 642 0222 6F91      		pop r22
+ 643 0224 5F91      		pop r21
+ 644 0226 4F91      		pop r20
+ 645 0228 3F91      		pop r19
+ 646 022a 2F91      		pop r18
+ 647 022c 0F90      		pop r0
+ 648 022e 0FBE      		out __SREG__,r0
+ 649 0230 0F90      		pop r0
+ 650 0232 1F90      		pop r1
+ 651 0234 1895      		reti
+ 652               	.L38:
   66:srf05.h       **** 
- 711               		.loc 5 66 0
- 712 024a 85B5      		in r24,0x25
- 713 024c 8D7F      		andi r24,lo8(-3)
- 714 024e 85BD      		out 0x25,r24
+ 653               		.loc 5 66 0
+ 654 0236 85B5      		in r24,0x25
+ 655 0238 8D7F      		andi r24,lo8(-3)
+ 656 023a 85BD      		out 0x25,r24
   68:srf05.h       **** 		distance = mseconds / 58;
- 715               		.loc 5 68 0
- 716 0250 1092 0000 		sts interrupt,__zero_reg__
+ 657               		.loc 5 68 0
+ 658 023c 1092 0000 		sts interrupt,__zero_reg__
   69:srf05.h       **** 		SRF05_Start();
- 717               		.loc 5 69 0
- 718 0254 8091 0000 		lds r24,mseconds
- 719 0258 9091 0000 		lds r25,mseconds+1
- 720 025c 6AE3      		ldi r22,lo8(58)
- 721 025e 70E0      		ldi r23,0
- 722 0260 0E94 0000 		call __udivmodhi4
- 723 0264 7093 0000 		sts distance+1,r23
- 724 0268 6093 0000 		sts distance,r22
+ 659               		.loc 5 69 0
+ 660 0240 8091 0000 		lds r24,mseconds
+ 661 0244 9091 0000 		lds r25,mseconds+1
+ 662 0248 6AE3      		ldi r22,lo8(58)
+ 663 024a 70E0      		ldi r23,0
+ 664 024c 0E94 0000 		call __udivmodhi4
+ 665 0250 7093 0000 		sts distance+1,r23
+ 666 0254 6093 0000 		sts distance,r22
   70:srf05.h       **** 	}
- 725               		.loc 5 70 0
- 726 026c 0E94 0000 		call SRF05_Start
- 727               	.LVL38:
- 728               		.loc 5 72 0
- 729 0270 00C0      		rjmp .L38
- 730               		.cfi_endproc
- 731               	.LFE19:
- 733               	.global	__vector_14
- 735               	__vector_14:
- 736               	.LFB20:
+ 667               		.loc 5 70 0
+ 668 0258 0E94 0000 		call SRF05_Start
+ 669               	.LVL29:
+ 670               		.loc 5 72 0
+ 671 025c 00C0      		rjmp .L37
+ 672               		.cfi_endproc
+ 673               	.LFE18:
+ 675               	.global	__vector_14
+ 677               	__vector_14:
+ 678               	.LFB19:
   73:srf05.h       **** 
   74:srf05.h       **** ISR(TIMER0_COMPA_vect){
- 737               		.loc 5 74 0
- 738               		.cfi_startproc
- 739 0272 1F92      		push r1
- 740               	.LCFI14:
- 741               		.cfi_def_cfa_offset 3
- 742               		.cfi_offset 1, -2
- 743 0274 0F92      		push r0
- 744               	.LCFI15:
- 745               		.cfi_def_cfa_offset 4
- 746               		.cfi_offset 0, -3
- 747 0276 0FB6      		in r0,__SREG__
- 748 0278 0F92      		push r0
- 749 027a 1124      		clr __zero_reg__
- 750 027c 8F93      		push r24
- 751               	.LCFI16:
- 752               		.cfi_def_cfa_offset 5
- 753               		.cfi_offset 24, -4
- 754 027e 9F93      		push r25
- 755               	.LCFI17:
- 756               		.cfi_def_cfa_offset 6
- 757               		.cfi_offset 25, -5
- 758               	/* prologue: Signal */
- 759               	/* frame size = 0 */
- 760               	/* stack size = 5 */
- 761               	.L__stack_usage = 5
+ 679               		.loc 5 74 0
+ 680               		.cfi_startproc
+ 681 025e 1F92      		push r1
+ 682               	.LCFI14:
+ 683               		.cfi_def_cfa_offset 3
+ 684               		.cfi_offset 1, -2
+ 685 0260 0F92      		push r0
+ 686               	.LCFI15:
+ 687               		.cfi_def_cfa_offset 4
+ 688               		.cfi_offset 0, -3
+ 689 0262 0FB6      		in r0,__SREG__
+ 690 0264 0F92      		push r0
+ 691 0266 1124      		clr __zero_reg__
+ 692 0268 8F93      		push r24
+ 693               	.LCFI16:
+ 694               		.cfi_def_cfa_offset 5
+ 695               		.cfi_offset 24, -4
+ 696 026a 9F93      		push r25
+ 697               	.LCFI17:
+ 698               		.cfi_def_cfa_offset 6
+ 699               		.cfi_offset 25, -5
+ 700               	/* prologue: Signal */
+ 701               	/* frame size = 0 */
+ 702               	/* stack size = 5 */
+ 703               	.L__stack_usage = 5
   75:srf05.h       **** 	mseconds += 10;
- 762               		.loc 5 75 0
- 763 0280 8091 0000 		lds r24,mseconds
- 764 0284 9091 0000 		lds r25,mseconds+1
- 765 0288 0A96      		adiw r24,10
- 766 028a 9093 0000 		sts mseconds+1,r25
- 767 028e 8093 0000 		sts mseconds,r24
- 768               	/* epilogue start */
+ 704               		.loc 5 75 0
+ 705 026c 8091 0000 		lds r24,mseconds
+ 706 0270 9091 0000 		lds r25,mseconds+1
+ 707 0274 0A96      		adiw r24,10
+ 708 0276 9093 0000 		sts mseconds+1,r25
+ 709 027a 8093 0000 		sts mseconds,r24
+ 710               	/* epilogue start */
   76:srf05.h       **** }...
- 769               		.loc 5 76 0
- 770 0292 9F91      		pop r25
- 771 0294 8F91      		pop r24
- 772 0296 0F90      		pop r0
- 773 0298 0FBE      		out __SREG__,r0
- 774 029a 0F90      		pop r0
- 775 029c 1F90      		pop r1
- 776 029e 1895      		reti
- 777               		.cfi_endproc
- 778               	.LFE20:
- 780               	.global	setupMotor
- 782               	setupMotor:
- 783               	.LFB21:
- 784               		.file 7 "motor_control.h"
-   1:motor_control.h **** #define MOTOR_DDR	DDRC
-   2:motor_control.h **** #define MOTOR_PORT	PORTC
-   3:motor_control.h **** 
-   4:motor_control.h **** #define MOTOR_RIGHT_FWD_PIN		PC0
-   5:motor_control.h **** #define MOTOR_RIGHT_REV_PIN		PC1
-   6:motor_control.h **** #define MOTOR_LEFT_FWD_PIN		PC2
-   7:motor_control.h **** #define MOTOR_LEFT_REV_PIN		PC3
-   8:motor_control.h **** 
-   9:motor_control.h **** #define FORWARD_MODE() { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTO
-  10:motor_control.h **** #define REVERSE_MODE() { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTO
-  11:motor_control.h **** #define RIGHT_MODE()   { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTO
-  12:motor_control.h **** #define LEFT_MODE()    { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTO
-  13:motor_control.h **** 
-  14:motor_control.h **** #define Kp 27
-  15:motor_control.h **** #define Ki 0
-  16:motor_control.h **** #define Kd 20
+ 711               		.loc 5 76 0
+ 712 027e 9F91      		pop r25
+ 713 0280 8F91      		pop r24
+ 714 0282 0F90      		pop r0
+ 715 0284 0FBE      		out __SREG__,r0
+ 716 0286 0F90      		pop r0
+ 717 0288 1F90      		pop r1
+ 718 028a 1895      		reti
+ 719               		.cfi_endproc
+ 720               	.LFE19:
+ 722               	.global	setupMotor
+ 724               	setupMotor:
+ 725               	.LFB20:
+ 726               		.file 7 "motor_control.h"
+   1:motor_control.h **** #ifndef F_CPU
+   2:motor_control.h **** #define F_CPU 16000000UL
+   3:motor_control.h **** #endif
+   4:motor_control.h **** 
+   5:motor_control.h **** #define MOTOR_DDR	DDRC
+   6:motor_control.h **** #define MOTOR_PORT	PORTC
+   7:motor_control.h **** 
+   8:motor_control.h **** #define MOTOR_RIGHT_FWD_PIN		PC0
+   9:motor_control.h **** #define MOTOR_RIGHT_REV_PIN		PC1
+  10:motor_control.h **** #define MOTOR_LEFT_FWD_PIN		PC2
+  11:motor_control.h **** #define MOTOR_LEFT_REV_PIN		PC3
+  12:motor_control.h **** 
+  13:motor_control.h **** #define FORWARD_MODE() { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTO
+  14:motor_control.h **** #define REVERSE_MODE() { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTO
+  15:motor_control.h **** #define RIGHT_MODE()   { MOTOR_PORT |= (1 << MOTOR_RIGHT_REV_PIN) | (1 << MOTOR_LEFT_FWD_PIN); MOTO
+  16:motor_control.h **** #define LEFT_MODE()    { MOTOR_PORT |= (1 << MOTOR_RIGHT_FWD_PIN) | (1 << MOTOR_LEFT_REV_PIN); MOTO
   17:motor_control.h **** 
-  18:motor_control.h **** #define MAX_SPEED 2000
-  19:motor_control.h **** #define RIGHT_MAX 1500 //Maximum Speed
-  20:motor_control.h **** #define LEFT_MAX 1500 //Maximum Speed
-  21:motor_control.h **** #define RIGHT_NORMAL_SPEED 1300 //Normal Speed
-  22:motor_control.h **** #define LEFT_NORMAL_SPEED 1300 //Normal Speed
-  23:motor_control.h **** 
-  24:motor_control.h **** #include "pwm.h"
-  25:motor_control.h **** #include "ir_array.h"
-  26:motor_control.h **** #include "srf05.h"
+  18:motor_control.h **** #define Kp 27
+  19:motor_control.h **** #define Ki 0
+  20:motor_control.h **** #define Kd 20
+  21:motor_control.h **** 
+  22:motor_control.h **** #define MAX_SPEED 2000
+  23:motor_control.h **** #define RIGHT_MAX 1500 //Maximum Speed
+  24:motor_control.h **** #define LEFT_MAX 1500 //Maximum Speed
+  25:motor_control.h **** #define RIGHT_NORMAL_SPEED 1300 //Normal Speed
+  26:motor_control.h **** #define LEFT_NORMAL_SPEED 1300 //Normal Speed
   27:motor_control.h **** 
-  28:motor_control.h **** uint32_t count = 0;
-  29:motor_control.h **** uint8_t count2 = 0;
-  30:motor_control.h **** int P = 0, I = 0, D = 0, PID = 0;
-  31:motor_control.h **** int right_motor_pwm = 0, left_motor_pwm = 0;
-  32:motor_control.h **** //uint8_t channelA_status = FORWARD, channelB_status = FORWARD, left_status = FALSE, right_status=F
-  33:motor_control.h **** int previous_error = 0;
-  34:motor_control.h **** 
-  35:motor_control.h **** void controlMotor(void);
-  36:motor_control.h **** void setupMotor(void);
-  37:motor_control.h **** 
-  38:motor_control.h **** void setupMotor(void){
- 785               		.loc 7 38 0
- 786               		.cfi_startproc
- 787               	/* prologue: function */
- 788               	/* frame size = 0 */
- 789               	/* stack size = 0 */
- 790               	.L__stack_usage = 0
-  39:motor_control.h **** 	MOTOR_DDR = 0x0F;
- 791               		.loc 7 39 0
- 792 02a0 8FE0      		ldi r24,lo8(15)
- 793 02a2 87B9      		out 0x7,r24
- 794               	.LVL39:
- 795               	.LBB89:
- 796               	.LBB90:
-  20:pwm.h         **** 	ICR1 = period;
- 797               		.loc 2 20 0
- 798 02a4 E6E8      		ldi r30,lo8(-122)
- 799 02a6 F0E0      		ldi r31,0
- 800 02a8 80ED      		ldi r24,lo8(-48)
- 801 02aa 97E0      		ldi r25,lo8(7)
- 802 02ac 9183      		std Z+1,r25
- 803 02ae 8083      		st Z,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 804               		.loc 2 21 0
- 805 02b0 1092 8900 		sts 136+1,__zero_reg__
- 806 02b4 1092 8800 		sts 136,__zero_reg__
- 807               	.LVL40:
- 808               	.LBE90:
- 809               	.LBE89:
- 810               	.LBB91:
- 811               	.LBB92:
-  20:pwm.h         **** 	ICR1 = period;
- 812               		.loc 2 20 0
- 813 02b8 9183      		std Z+1,r25
- 814 02ba 8083      		st Z,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 815               		.loc 2 21 0
- 816 02bc 1092 8B00 		sts 138+1,__zero_reg__
- 817 02c0 1092 8A00 		sts 138,__zero_reg__
- 818               	.LVL41:
- 819               	/* epilogue start */
- 820               	.LBE92:
- 821               	.LBE91:
-  40:motor_control.h **** 
-  41:motor_control.h **** 	pwm(CH_A, 0, MAX_SPEED);
-  42:motor_control.h **** 	pwm(CH_B, 0, MAX_SPEED);
-  43:motor_control.h **** 
-  44:motor_control.h **** 	//controlMotor(NEUTRAL);
-  45:motor_control.h **** }
- 822               		.loc 7 45 0
- 823 02c4 0895      		ret
- 824               		.cfi_endproc
- 825               	.LFE21:
- 827               	.global	controlMotor
- 829               	controlMotor:
- 830               	.LFB22:
-  46:motor_control.h **** 
-  47:motor_control.h **** void controlMotor(){
- 831               		.loc 7 47 0
- 832               		.cfi_startproc
- 833 02c6 CF93      		push r28
- 834               	.LCFI18:
- 835               		.cfi_def_cfa_offset 3
- 836               		.cfi_offset 28, -2
- 837               	/* prologue: function */
- 838               	/* frame size = 0 */
- 839               	/* stack size = 1 */
- 840               	.L__stack_usage = 1
-  48:motor_control.h **** 
-  49:motor_control.h **** 	count++;
- 841               		.loc 7 49 0
- 842 02c8 4091 0000 		lds r20,count
- 843 02cc 5091 0000 		lds r21,count+1
- 844 02d0 6091 0000 		lds r22,count+2
- 845 02d4 7091 0000 		lds r23,count+3
- 846 02d8 4F5F      		subi r20,-1
- 847 02da 5F4F      		sbci r21,-1
- 848 02dc 6F4F      		sbci r22,-1
- 849 02de 7F4F      		sbci r23,-1
- 850 02e0 4093 0000 		sts count,r20
- 851 02e4 5093 0000 		sts count+1,r21
- 852 02e8 6093 0000 		sts count+2,r22
- 853 02ec 7093 0000 		sts count+3,r23
- 854               	.LBB93:
-  50:motor_control.h **** 	uint8_t ir_val = IR_ARR_VAL;
- 855               		.loc 7 50 0
- 856 02f0 C9B1      		in r28,0x9
- 857 02f2 C295      		swap r28
- 858 02f4 C170      		andi r28,1
- 859               	.LVL42:
- 860               	.LBE93:
- 861               	.LBB94:
- 862 02f6 4D99      		sbic 0x9,5
- 863 02f8 00C0      		rjmp .L60
- 864 02fa 80E0      		ldi r24,0
- 865               	.L44:
- 866               	.LVL43:
- 867               	.LBE94:
- 868               		.loc 7 50 0 is_stmt 0 discriminator 4
- 869 02fc C82B      		or r28,r24
- 870               	.LVL44:
- 871               	.LBB95:
- 872 02fe 4E99      		sbic 0x9,6
- 873 0300 00C0      		rjmp .L61
- 874               		.loc 7 50 0
- 875 0302 80E0      		ldi r24,0
- 876               	.LVL45:
- 877               	.L45:
- 878               	.LBE95:
- 879               		.loc 7 50 0 discriminator 8
- 880 0304 C82B      		or r28,r24
- 881               	.LBB96:
- 882 0306 4F99      		sbic 0x9,7
- 883 0308 00C0      		rjmp .L62
- 884               		.loc 7 50 0
- 885 030a 80E0      		ldi r24,0
- 886               	.LVL46:
- 887               	.L46:
- 888               	.LBE96:
- 889               		.loc 7 50 0 discriminator 12
- 890 030c C82B      		or r28,r24
- 891               	.LBB97:
- 892 030e 1D99      		sbic 0x3,5
- 893 0310 00C0      		rjmp .L63
- 894               		.loc 7 50 0
- 895 0312 80E0      		ldi r24,0
- 896               	.LVL47:
- 897               	.L47:
- 898               	.LBE97:
- 899               		.loc 7 50 0 discriminator 16
- 900 0314 C82B      		or r28,r24
- 901               	.LBB98:
- 902 0316 1B99      		sbic 0x3,3
- 903 0318 00C0      		rjmp .L64
- 904               		.loc 7 50 0
- 905 031a 80E0      		ldi r24,0
- 906               	.LVL48:
- 907               	.L48:
- 908               	.LBE98:
- 909               		.loc 7 50 0 discriminator 20
- 910 031c C82B      		or r28,r24
- 911               	.LBB99:
- 912 031e 1C99      		sbic 0x3,4
- 913 0320 00C0      		rjmp .L65
- 914               		.loc 7 50 0
- 915 0322 80E0      		ldi r24,0
- 916               	.LVL49:
- 917               	.L49:
- 918               	.LBE99:
- 919               		.loc 7 50 0 discriminator 24
- 920 0324 C82B      		or r28,r24
- 921               	.LBB100:
- 922 0326 1899      		sbic 0x3,0
- 923 0328 00C0      		rjmp .L66
- 924               		.loc 7 50 0
- 925 032a 80E0      		ldi r24,0
- 926               	.LVL50:
- 927               	.L50:
- 928               	.LBE100:
- 929               		.loc 7 50 0 discriminator 28
- 930 032c C82B      		or r28,r24
- 931               	.LVL51:
-  51:motor_control.h **** 
-  52:motor_control.h **** 	if(count == 7000){
- 932               		.loc 7 52 0 is_stmt 1 discriminator 28
- 933 032e 4835      		cpi r20,88
- 934 0330 5B41      		sbci r21,27
- 935 0332 6105      		cpc r22,__zero_reg__
- 936 0334 7105      		cpc r23,__zero_reg__
- 937 0336 01F4      		brne .L51
-  53:motor_control.h **** 		putCh(distance);
- 938               		.loc 7 53 0
- 939 0338 8091 0000 		lds r24,distance
- 940               	.LVL52:
- 941 033c 0E94 0000 		call putCh
- 942               	.LVL53:
-  54:motor_control.h **** 		putCh(distance >> 8);
- 943               		.loc 7 54 0
- 944 0340 8091 0000 		lds r24,distance+1
- 945 0344 0E94 0000 		call putCh
- 946               	.LVL54:
-  55:motor_control.h **** 		count = 0;
- 947               		.loc 7 55 0
- 948 0348 1092 0000 		sts count,__zero_reg__
- 949 034c 1092 0000 		sts count+1,__zero_reg__
- 950 0350 1092 0000 		sts count+2,__zero_reg__
- 951 0354 1092 0000 		sts count+3,__zero_reg__
- 952               	.L51:
-  56:motor_control.h **** 	}
-  57:motor_control.h **** 
-  58:motor_control.h **** 	int error = getError();
- 953               		.loc 7 58 0
- 954 0358 0E94 0000 		call getError
- 955               	.LVL55:
-  59:motor_control.h **** 	P = error;
- 956               		.loc 7 59 0
- 957 035c 9093 0000 		sts P+1,r25
- 958 0360 8093 0000 		sts P,r24
-  60:motor_control.h **** 	I +=  error;
- 959               		.loc 7 60 0
- 960 0364 2091 0000 		lds r18,I
- 961 0368 3091 0000 		lds r19,I+1
- 962 036c 280F      		add r18,r24
- 963 036e 391F      		adc r19,r25
- 964 0370 3093 0000 		sts I+1,r19
- 965 0374 2093 0000 		sts I,r18
-  61:motor_control.h **** 	D = error - previous_error;
- 966               		.loc 7 61 0
- 967 0378 2091 0000 		lds r18,previous_error
- 968 037c 3091 0000 		lds r19,previous_error+1
- 969 0380 AC01      		movw r20,r24
- 970 0382 421B      		sub r20,r18
- 971 0384 530B      		sbc r21,r19
- 972 0386 9A01      		movw r18,r20
- 973 0388 5093 0000 		sts D+1,r21
- 974 038c 4093 0000 		sts D,r20
-  62:motor_control.h **** 	previous_error = error;
- 975               		.loc 7 62 0
- 976 0390 9093 0000 		sts previous_error+1,r25
- 977 0394 8093 0000 		sts previous_error,r24
-  63:motor_control.h **** 
-  64:motor_control.h **** 	PID = Kp * P + Ki * I + Kd * D;
- 978               		.loc 7 64 0
- 979 0398 6BE1      		ldi r22,lo8(27)
- 980 039a 689F      		mul r22,r24
- 981 039c A001      		movw r20,r0
- 982 039e 699F      		mul r22,r25
- 983 03a0 500D      		add r21,r0
- 984 03a2 1124      		clr __zero_reg__
- 985 03a4 E4E1      		ldi r30,lo8(20)
- 986 03a6 E29F      		mul r30,r18
- 987 03a8 B001      		movw r22,r0
- 988 03aa E39F      		mul r30,r19
- 989 03ac 700D      		add r23,r0
- 990 03ae 1124      		clr __zero_reg__
- 991 03b0 460F      		add r20,r22
- 992 03b2 571F      		adc r21,r23
- 993 03b4 5093 0000 		sts PID+1,r21
- 994 03b8 4093 0000 		sts PID,r20
-  65:motor_control.h **** 
-  66:motor_control.h **** 	right_motor_pwm = RIGHT_NORMAL_SPEED + PID;
- 995               		.loc 7 66 0
- 996 03bc 9A01      		movw r18,r20
- 997 03be 2C5E      		subi r18,-20
- 998 03c0 3A4F      		sbci r19,-6
- 999 03c2 3093 0000 		sts right_motor_pwm+1,r19
- 1000 03c6 2093 0000 		sts right_motor_pwm,r18
-  67:motor_control.h **** 	left_motor_pwm = LEFT_NORMAL_SPEED - PID;
- 1001               		.loc 7 67 0
- 1002 03ca 24E1      		ldi r18,lo8(20)
- 1003 03cc 35E0      		ldi r19,lo8(5)
- 1004 03ce B901      		movw r22,r18
- 1005 03d0 641B      		sub r22,r20
- 1006 03d2 750B      		sbc r23,r21
- 1007 03d4 7093 0000 		sts left_motor_pwm+1,r23
- 1008 03d8 6093 0000 		sts left_motor_pwm,r22
-  68:motor_control.h **** 
-  69:motor_control.h **** 	FORWARD_MODE();
- 1009               		.loc 7 69 0
- 1010 03dc 48B1      		in r20,0x8
- 1011 03de 4560      		ori r20,lo8(5)
- 1012 03e0 48B9      		out 0x8,r20
- 1013 03e2 48B1      		in r20,0x8
- 1014 03e4 457F      		andi r20,lo8(-11)
- 1015 03e6 48B9      		out 0x8,r20
-  70:motor_control.h **** 
-  71:motor_control.h **** 	if(ir_val == 0x00){
- 1016               		.loc 7 71 0
- 1017 03e8 C111      		cpse r28,__zero_reg__
- 1018 03ea 00C0      		rjmp .L52
-  72:motor_control.h **** 		if(error > 1000 && count2 <= 5){
- 1019               		.loc 7 72 0
- 1020 03ec 893E      		cpi r24,-23
- 1021 03ee 73E0      		ldi r23,3
- 1022 03f0 9707      		cpc r25,r23
- 1023 03f2 04F4      		brge .+2
- 1024 03f4 00C0      		rjmp .L53
- 1025               		.loc 7 72 0 is_stmt 0 discriminator 1
- 1026 03f6 8091 0000 		lds r24,count2
- 1027               	.LVL56:
- 1028 03fa 8630      		cpi r24,lo8(6)
- 1029 03fc 00F0      		brlo .+2
- 1030 03fe 00C0      		rjmp .L54
-  73:motor_control.h **** 			REVERSE_MODE();
- 1031               		.loc 7 73 0 is_stmt 1
- 1032 0400 88B1      		in r24,0x8
- 1033 0402 8A60      		ori r24,lo8(10)
- 1034 0404 88B9      		out 0x8,r24
- 1035 0406 88B1      		in r24,0x8
- 1036 0408 8A7F      		andi r24,lo8(-6)
- 1037 040a 88B9      		out 0x8,r24
- 1038               	.LVL57:
- 1039               	.LBB101:
- 1040               	.LBB102:
-  20:pwm.h         **** 	ICR1 = period;
- 1041               		.loc 2 20 0
- 1042 040c 80ED      		ldi r24,lo8(-48)
- 1043 040e 97E0      		ldi r25,lo8(7)
- 1044 0410 9093 8700 		sts 134+1,r25
- 1045 0414 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1046               		.loc 2 21 0
- 1047 0418 3093 8900 		sts 136+1,r19
- 1048 041c 2093 8800 		sts 136,r18
- 1049               	.LVL58:
+  28:motor_control.h **** #include "pwm.h"
+  29:motor_control.h **** #include "ir_array.h"
+  30:motor_control.h **** #include "srf05.h"
+  31:motor_control.h **** 
+  32:motor_control.h **** uint32_t count = 0;
+  33:motor_control.h **** uint8_t count2 = 0;
+  34:motor_control.h **** int P = 0, I = 0, D = 0, PID = 0;
+  35:motor_control.h **** int right_motor_pwm = 0, left_motor_pwm = 0;
+  36:motor_control.h **** //uint8_t channelA_status = FORWARD, channelB_status = FORWARD, left_status = FALSE, right_status=F
+  37:motor_control.h **** int previous_error = 0;
+  38:motor_control.h **** 
+  39:motor_control.h **** void controlMotor(void);
+  40:motor_control.h **** void setupMotor(void);
+  41:motor_control.h **** 
+  42:motor_control.h **** void setupMotor(void){
+ 727               		.loc 7 42 0
+ 728               		.cfi_startproc
+ 729               	/* prologue: function */
+ 730               	/* frame size = 0 */
+ 731               	/* stack size = 0 */
+ 732               	.L__stack_usage = 0
+  43:motor_control.h **** 	MOTOR_DDR = 0x0F;
+ 733               		.loc 7 43 0
+ 734 028c 8FE0      		ldi r24,lo8(15)
+ 735 028e 87B9      		out 0x7,r24
+ 736               	.LVL30:
+ 737               	.LBB81:
+ 738               	.LBB82:
+  24:pwm.h         **** 	ICR1 = period;
+ 739               		.loc 2 24 0
+ 740 0290 E6E8      		ldi r30,lo8(-122)
+ 741 0292 F0E0      		ldi r31,0
+ 742 0294 80ED      		ldi r24,lo8(-48)
+ 743 0296 97E0      		ldi r25,lo8(7)
+ 744 0298 9183      		std Z+1,r25
+ 745 029a 8083      		st Z,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 746               		.loc 2 25 0
+ 747 029c 1092 8900 		sts 136+1,__zero_reg__
+ 748 02a0 1092 8800 		sts 136,__zero_reg__
+ 749               	.LVL31:
+ 750               	.LBE82:
+ 751               	.LBE81:
+ 752               	.LBB83:
+ 753               	.LBB84:
+  24:pwm.h         **** 	ICR1 = period;
+ 754               		.loc 2 24 0
+ 755 02a4 9183      		std Z+1,r25
+ 756 02a6 8083      		st Z,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 757               		.loc 2 25 0
+ 758 02a8 1092 8B00 		sts 138+1,__zero_reg__
+ 759 02ac 1092 8A00 		sts 138,__zero_reg__
+ 760               	.LVL32:
+ 761               	/* epilogue start */
+ 762               	.LBE84:
+ 763               	.LBE83:
+  44:motor_control.h **** 
+  45:motor_control.h **** 	pwm(CH_A, 0, MAX_SPEED);
+  46:motor_control.h **** 	pwm(CH_B, 0, MAX_SPEED);
+  47:motor_control.h **** 
+  48:motor_control.h **** 	//controlMotor(NEUTRAL);
+  49:motor_control.h **** }
+ 764               		.loc 7 49 0
+ 765 02b0 0895      		ret
+ 766               		.cfi_endproc
+ 767               	.LFE20:
+ 769               	.global	controlMotor
+ 771               	controlMotor:
+ 772               	.LFB21:
+  50:motor_control.h **** 
+  51:motor_control.h **** void controlMotor(){
+ 773               		.loc 7 51 0
+ 774               		.cfi_startproc
+ 775 02b2 CF93      		push r28
+ 776               	.LCFI18:
+ 777               		.cfi_def_cfa_offset 3
+ 778               		.cfi_offset 28, -2
+ 779               	/* prologue: function */
+ 780               	/* frame size = 0 */
+ 781               	/* stack size = 1 */
+ 782               	.L__stack_usage = 1
+  52:motor_control.h **** 
+  53:motor_control.h **** 	count++;
+ 783               		.loc 7 53 0
+ 784 02b4 4091 0000 		lds r20,count
+ 785 02b8 5091 0000 		lds r21,count+1
+ 786 02bc 6091 0000 		lds r22,count+2
+ 787 02c0 7091 0000 		lds r23,count+3
+ 788 02c4 4F5F      		subi r20,-1
+ 789 02c6 5F4F      		sbci r21,-1
+ 790 02c8 6F4F      		sbci r22,-1
+ 791 02ca 7F4F      		sbci r23,-1
+ 792 02cc 4093 0000 		sts count,r20
+ 793 02d0 5093 0000 		sts count+1,r21
+ 794 02d4 6093 0000 		sts count+2,r22
+ 795 02d8 7093 0000 		sts count+3,r23
+ 796               	.LBB85:
+  54:motor_control.h **** 	uint8_t ir_val = IR_ARR_VAL;
+ 797               		.loc 7 54 0
+ 798 02dc C9B1      		in r28,0x9
+ 799 02de C295      		swap r28
+ 800 02e0 C170      		andi r28,1
+ 801               	.LVL33:
+ 802               	.LBE85:
+ 803               	.LBB86:
+ 804 02e2 4D99      		sbic 0x9,5
+ 805 02e4 00C0      		rjmp .L59
+ 806 02e6 80E0      		ldi r24,0
+ 807               	.L43:
+ 808               	.LVL34:
+ 809               	.LBE86:
+ 810               		.loc 7 54 0 is_stmt 0 discriminator 4
+ 811 02e8 C82B      		or r28,r24
+ 812               	.LVL35:
+ 813               	.LBB87:
+ 814 02ea 4E99      		sbic 0x9,6
+ 815 02ec 00C0      		rjmp .L60
+ 816               		.loc 7 54 0
+ 817 02ee 80E0      		ldi r24,0
+ 818               	.LVL36:
+ 819               	.L44:
+ 820               	.LBE87:
+ 821               		.loc 7 54 0 discriminator 8
+ 822 02f0 C82B      		or r28,r24
+ 823               	.LBB88:
+ 824 02f2 4F99      		sbic 0x9,7
+ 825 02f4 00C0      		rjmp .L61
+ 826               		.loc 7 54 0
+ 827 02f6 80E0      		ldi r24,0
+ 828               	.LVL37:
+ 829               	.L45:
+ 830               	.LBE88:
+ 831               		.loc 7 54 0 discriminator 12
+ 832 02f8 C82B      		or r28,r24
+ 833               	.LBB89:
+ 834 02fa 1D99      		sbic 0x3,5
+ 835 02fc 00C0      		rjmp .L62
+ 836               		.loc 7 54 0
+ 837 02fe 80E0      		ldi r24,0
+ 838               	.LVL38:
+ 839               	.L46:
+ 840               	.LBE89:
+ 841               		.loc 7 54 0 discriminator 16
+ 842 0300 C82B      		or r28,r24
+ 843               	.LBB90:
+ 844 0302 1B99      		sbic 0x3,3
+ 845 0304 00C0      		rjmp .L63
+ 846               		.loc 7 54 0
+ 847 0306 80E0      		ldi r24,0
+ 848               	.LVL39:
+ 849               	.L47:
+ 850               	.LBE90:
+ 851               		.loc 7 54 0 discriminator 20
+ 852 0308 C82B      		or r28,r24
+ 853               	.LBB91:
+ 854 030a 1C99      		sbic 0x3,4
+ 855 030c 00C0      		rjmp .L64
+ 856               		.loc 7 54 0
+ 857 030e 80E0      		ldi r24,0
+ 858               	.LVL40:
+ 859               	.L48:
+ 860               	.LBE91:
+ 861               		.loc 7 54 0 discriminator 24
+ 862 0310 C82B      		or r28,r24
+ 863               	.LBB92:
+ 864 0312 1899      		sbic 0x3,0
+ 865 0314 00C0      		rjmp .L65
+ 866               		.loc 7 54 0
+ 867 0316 80E0      		ldi r24,0
+ 868               	.LVL41:
+ 869               	.L49:
+ 870               	.LBE92:
+ 871               		.loc 7 54 0 discriminator 28
+ 872 0318 C82B      		or r28,r24
+ 873               	.LVL42:
+  55:motor_control.h **** 
+  56:motor_control.h **** 	if(count == 7000){
+ 874               		.loc 7 56 0 is_stmt 1 discriminator 28
+ 875 031a 4835      		cpi r20,88
+ 876 031c 5B41      		sbci r21,27
+ 877 031e 6105      		cpc r22,__zero_reg__
+ 878 0320 7105      		cpc r23,__zero_reg__
+ 879 0322 01F4      		brne .L50
+  57:motor_control.h **** 		putCh(distance);
+ 880               		.loc 7 57 0
+ 881 0324 8091 0000 		lds r24,distance
+ 882               	.LVL43:
+ 883 0328 0E94 0000 		call putCh
+ 884               	.LVL44:
+  58:motor_control.h **** 		putCh(distance >> 8);
+ 885               		.loc 7 58 0
+ 886 032c 8091 0000 		lds r24,distance+1
+ 887 0330 0E94 0000 		call putCh
+ 888               	.LVL45:
+  59:motor_control.h **** 		count = 0;
+ 889               		.loc 7 59 0
+ 890 0334 1092 0000 		sts count,__zero_reg__
+ 891 0338 1092 0000 		sts count+1,__zero_reg__
+ 892 033c 1092 0000 		sts count+2,__zero_reg__
+ 893 0340 1092 0000 		sts count+3,__zero_reg__
+ 894               	.L50:
+  60:motor_control.h **** 	}
+  61:motor_control.h **** 
+  62:motor_control.h **** 	int error = getError();
+ 895               		.loc 7 62 0
+ 896 0344 0E94 0000 		call getError
+ 897               	.LVL46:
+  63:motor_control.h **** 	P = error;
+ 898               		.loc 7 63 0
+ 899 0348 9093 0000 		sts P+1,r25
+ 900 034c 8093 0000 		sts P,r24
+  64:motor_control.h **** 	I +=  error;
+ 901               		.loc 7 64 0
+ 902 0350 2091 0000 		lds r18,I
+ 903 0354 3091 0000 		lds r19,I+1
+ 904 0358 280F      		add r18,r24
+ 905 035a 391F      		adc r19,r25
+ 906 035c 3093 0000 		sts I+1,r19
+ 907 0360 2093 0000 		sts I,r18
+  65:motor_control.h **** 	D = error - previous_error;
+ 908               		.loc 7 65 0
+ 909 0364 2091 0000 		lds r18,previous_error
+ 910 0368 3091 0000 		lds r19,previous_error+1
+ 911 036c AC01      		movw r20,r24
+ 912 036e 421B      		sub r20,r18
+ 913 0370 530B      		sbc r21,r19
+ 914 0372 9A01      		movw r18,r20
+ 915 0374 5093 0000 		sts D+1,r21
+ 916 0378 4093 0000 		sts D,r20
+  66:motor_control.h **** 	previous_error = error;
+ 917               		.loc 7 66 0
+ 918 037c 9093 0000 		sts previous_error+1,r25
+ 919 0380 8093 0000 		sts previous_error,r24
+  67:motor_control.h **** 
+  68:motor_control.h **** 	PID = Kp * P + Ki * I + Kd * D;
+ 920               		.loc 7 68 0
+ 921 0384 6BE1      		ldi r22,lo8(27)
+ 922 0386 689F      		mul r22,r24
+ 923 0388 A001      		movw r20,r0
+ 924 038a 699F      		mul r22,r25
+ 925 038c 500D      		add r21,r0
+ 926 038e 1124      		clr __zero_reg__
+ 927 0390 E4E1      		ldi r30,lo8(20)
+ 928 0392 E29F      		mul r30,r18
+ 929 0394 B001      		movw r22,r0
+ 930 0396 E39F      		mul r30,r19
+ 931 0398 700D      		add r23,r0
+ 932 039a 1124      		clr __zero_reg__
+ 933 039c 460F      		add r20,r22
+ 934 039e 571F      		adc r21,r23
+ 935 03a0 5093 0000 		sts PID+1,r21
+ 936 03a4 4093 0000 		sts PID,r20
+  69:motor_control.h **** 
+  70:motor_control.h **** 	right_motor_pwm = RIGHT_NORMAL_SPEED + PID;
+ 937               		.loc 7 70 0
+ 938 03a8 9A01      		movw r18,r20
+ 939 03aa 2C5E      		subi r18,-20
+ 940 03ac 3A4F      		sbci r19,-6
+ 941 03ae 3093 0000 		sts right_motor_pwm+1,r19
+ 942 03b2 2093 0000 		sts right_motor_pwm,r18
+  71:motor_control.h **** 	left_motor_pwm = LEFT_NORMAL_SPEED - PID;
+ 943               		.loc 7 71 0
+ 944 03b6 24E1      		ldi r18,lo8(20)
+ 945 03b8 35E0      		ldi r19,lo8(5)
+ 946 03ba B901      		movw r22,r18
+ 947 03bc 641B      		sub r22,r20
+ 948 03be 750B      		sbc r23,r21
+ 949 03c0 7093 0000 		sts left_motor_pwm+1,r23
+ 950 03c4 6093 0000 		sts left_motor_pwm,r22
+  72:motor_control.h **** 
+  73:motor_control.h **** 	FORWARD_MODE();
+ 951               		.loc 7 73 0
+ 952 03c8 48B1      		in r20,0x8
+ 953 03ca 4560      		ori r20,lo8(5)
+ 954 03cc 48B9      		out 0x8,r20
+ 955 03ce 48B1      		in r20,0x8
+ 956 03d0 457F      		andi r20,lo8(-11)
+ 957 03d2 48B9      		out 0x8,r20
+  74:motor_control.h **** 
+  75:motor_control.h **** 	if(ir_val == 0x00){
+ 958               		.loc 7 75 0
+ 959 03d4 C111      		cpse r28,__zero_reg__
+ 960 03d6 00C0      		rjmp .L51
+  76:motor_control.h **** 		if(error > 1000 && count2 <= 5){
+ 961               		.loc 7 76 0
+ 962 03d8 893E      		cpi r24,-23
+ 963 03da 73E0      		ldi r23,3
+ 964 03dc 9707      		cpc r25,r23
+ 965 03de 04F4      		brge .+2
+ 966 03e0 00C0      		rjmp .L52
+ 967               		.loc 7 76 0 is_stmt 0 discriminator 1
+ 968 03e2 8091 0000 		lds r24,count2
+ 969               	.LVL47:
+ 970 03e6 8630      		cpi r24,lo8(6)
+ 971 03e8 00F0      		brlo .+2
+ 972 03ea 00C0      		rjmp .L53
+  77:motor_control.h **** 			REVERSE_MODE();
+ 973               		.loc 7 77 0 is_stmt 1
+ 974 03ec 88B1      		in r24,0x8
+ 975 03ee 8A60      		ori r24,lo8(10)
+ 976 03f0 88B9      		out 0x8,r24
+ 977 03f2 88B1      		in r24,0x8
+ 978 03f4 8A7F      		andi r24,lo8(-6)
+ 979 03f6 88B9      		out 0x8,r24
+ 980               	.LVL48:
+ 981               	.LBB93:
+ 982               	.LBB94:
+  24:pwm.h         **** 	ICR1 = period;
+ 983               		.loc 2 24 0
+ 984 03f8 80ED      		ldi r24,lo8(-48)
+ 985 03fa 97E0      		ldi r25,lo8(7)
+ 986 03fc 9093 8700 		sts 134+1,r25
+ 987 0400 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 988               		.loc 2 25 0
+ 989 0404 3093 8900 		sts 136+1,r19
+ 990 0408 2093 8800 		sts 136,r18
+ 991               	.LVL49:
+ 992               	.LBE94:
+ 993               	.LBE93:
+ 994               	.LBB95:
+ 995               	.LBB96:
+  24:pwm.h         **** 	ICR1 = period;
+ 996               		.loc 2 24 0
+ 997 040c 9093 8700 		sts 134+1,r25
+ 998 0410 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 999               		.loc 2 25 0
+ 1000 0414 3093 8B00 		sts 138+1,r19
+ 1001 0418 2093 8A00 		sts 138,r18
+ 1002               	.LVL50:
+ 1003               	.LBE96:
+ 1004               	.LBE95:
+ 1005               	.LBB97:
+ 1006               	.LBB98:
+ 187:/usr/avr/include/util/delay.h **** 
+ 1007               		.loc 6 187 0
+ 1008 041c 4FEF      		ldi r20,lo8(319999)
+ 1009 041e 51EE      		ldi r21,hi8(319999)
+ 1010 0420 64E0      		ldi r22,hlo8(319999)
+ 1011 0422 4150      	1:	subi r20,1
+ 1012 0424 5040      		sbci r21,0
+ 1013 0426 6040      		sbci r22,0
+ 1014 0428 01F4      		brne 1b
+ 1015 042a 00C0      		rjmp .
+ 1016 042c 0000      		nop
+ 1017               	.LVL51:
+ 1018               	.LBE98:
+ 1019               	.LBE97:
+  78:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
+  79:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+  80:motor_control.h **** 			_delay_ms(100);
+  81:motor_control.h **** 			FORWARD_MODE();
+ 1020               		.loc 7 81 0
+ 1021 042e 48B1      		in r20,0x8
+ 1022 0430 4560      		ori r20,lo8(5)
+ 1023 0432 48B9      		out 0x8,r20
+ 1024 0434 48B1      		in r20,0x8
+ 1025 0436 457F      		andi r20,lo8(-11)
+ 1026 0438 48B9      		out 0x8,r20
+ 1027               	.LVL52:
+ 1028               	.LBB99:
+ 1029               	.LBB100:
+  24:pwm.h         **** 	ICR1 = period;
+ 1030               		.loc 2 24 0
+ 1031 043a 9093 8700 		sts 134+1,r25
+ 1032 043e 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1033               		.loc 2 25 0
+ 1034 0442 4AE8      		ldi r20,lo8(-118)
+ 1035 0444 52E0      		ldi r21,lo8(2)
+ 1036 0446 5093 8900 		sts 136+1,r21
+ 1037 044a 4093 8800 		sts 136,r20
+ 1038               	.LVL53:
+ 1039               	.LBE100:
+ 1040               	.LBE99:
+ 1041               	.LBB101:
+ 1042               	.LBB102:
+  24:pwm.h         **** 	ICR1 = period;
+ 1043               		.loc 2 24 0
+ 1044 044e 9093 8700 		sts 134+1,r25
+ 1045 0452 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1046               		.loc 2 25 0
+ 1047 0456 3093 8B00 		sts 138+1,r19
+ 1048 045a 2093 8A00 		sts 138,r18
+ 1049               	.LVL54:
  1050               	.LBE102:
  1051               	.LBE101:
  1052               	.LBB103:
  1053               	.LBB104:
-  20:pwm.h         **** 	ICR1 = period;
- 1054               		.loc 2 20 0
- 1055 0420 9093 8700 		sts 134+1,r25
- 1056 0424 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1057               		.loc 2 21 0
- 1058 0428 3093 8B00 		sts 138+1,r19
- 1059 042c 2093 8A00 		sts 138,r18
- 1060               	.LVL59:
+ 187:/usr/avr/include/util/delay.h **** 
+ 1054               		.loc 6 187 0
+ 1055 045e 8FE3      		ldi r24,lo8(-25537)
+ 1056 0460 9CE9      		ldi r25,hi8(-25537)
+ 1057 0462 0197      	1:	sbiw r24,1
+ 1058 0464 01F4      		brne 1b
+ 1059               	.LVL55:
+ 1060               	.L66:
  1061               	.LBE104:
  1062               	.LBE103:
  1063               	.LBB105:
  1064               	.LBB106:
- 187:/usr/avr/include/util/delay.h **** 
- 1065               		.loc 6 187 0
- 1066 0430 4FEF      		ldi r20,lo8(319999)
- 1067 0432 51EE      		ldi r21,hi8(319999)
- 1068 0434 64E0      		ldi r22,hlo8(319999)
- 1069 0436 4150      	1:	subi r20,1
- 1070 0438 5040      		sbci r21,0
- 1071 043a 6040      		sbci r22,0
- 1072 043c 01F4      		brne 1b
- 1073 043e 00C0      		rjmp .
- 1074 0440 0000      		nop
- 1075               	.LVL60:
- 1076               	.LBE106:
- 1077               	.LBE105:
-  74:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
-  75:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
-  76:motor_control.h **** 			_delay_ms(100);
-  77:motor_control.h **** 			FORWARD_MODE();
- 1078               		.loc 7 77 0
- 1079 0442 48B1      		in r20,0x8
- 1080 0444 4560      		ori r20,lo8(5)
- 1081 0446 48B9      		out 0x8,r20
- 1082 0448 48B1      		in r20,0x8
- 1083 044a 457F      		andi r20,lo8(-11)
- 1084 044c 48B9      		out 0x8,r20
- 1085               	.LVL61:
- 1086               	.LBB107:
- 1087               	.LBB108:
-  20:pwm.h         **** 	ICR1 = period;
- 1088               		.loc 2 20 0
- 1089 044e 9093 8700 		sts 134+1,r25
- 1090 0452 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1091               		.loc 2 21 0
- 1092 0456 4AE8      		ldi r20,lo8(-118)
- 1093 0458 52E0      		ldi r21,lo8(2)
- 1094 045a 5093 8900 		sts 136+1,r21
- 1095 045e 4093 8800 		sts 136,r20
- 1096               	.LVL62:
- 1097               	.LBE108:
- 1098               	.LBE107:
- 1099               	.LBB109:
- 1100               	.LBB110:
-  20:pwm.h         **** 	ICR1 = period;
- 1101               		.loc 2 20 0
- 1102 0462 9093 8700 		sts 134+1,r25
- 1103 0466 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1104               		.loc 2 21 0
- 1105 046a 3093 8B00 		sts 138+1,r19
- 1106 046e 2093 8A00 		sts 138,r18
- 1107               	.LVL63:
- 1108               	.LBE110:
- 1109               	.LBE109:
- 1110               	.LBB111:
- 1111               	.LBB112:
- 187:/usr/avr/include/util/delay.h **** 
- 1112               		.loc 6 187 0
- 1113 0472 8FE3      		ldi r24,lo8(-25537)
- 1114 0474 9CE9      		ldi r25,hi8(-25537)
- 1115 0476 0197      	1:	sbiw r24,1
- 1116 0478 01F4      		brne 1b
- 1117               	.LVL64:
- 1118               	.L67:
- 1119               	.LBE112:
- 1120               	.LBE111:
- 1121               	.LBB113:
- 1122               	.LBB114:
- 1123 047a 00C0      		rjmp .
- 1124 047c 0000      		nop
- 1125               	.LBE114:
- 1126               	.LBE113:
-  78:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED/2, MAX_SPEED);
-  79:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
-  80:motor_control.h **** 			_delay_ms(10);
-  81:motor_control.h **** 			count2++;
-  82:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
-  83:motor_control.h **** 			REVERSE_MODE();
-  84:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
-  85:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
-  86:motor_control.h **** 			_delay_ms(1000);
-  87:motor_control.h **** 			FORWARD_MODE();
+ 1065 0466 00C0      		rjmp .
+ 1066 0468 0000      		nop
+ 1067               	.LBE106:
+ 1068               	.LBE105:
+  82:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED/2, MAX_SPEED);
+  83:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+  84:motor_control.h **** 			_delay_ms(10);
+  85:motor_control.h **** 			count2++;
+  86:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
+  87:motor_control.h **** 			REVERSE_MODE();
   88:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
-  89:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED/2, MAX_SPEED);
-  90:motor_control.h **** 			_delay_ms(100);
-  91:motor_control.h **** 			count2++;
- 1127               		.loc 7 91 0
- 1128 047e 8091 0000 		lds r24,count2
- 1129 0482 8F5F      		subi r24,lo8(-(1))
- 1130 0484 8093 0000 		sts count2,r24
- 1131               	.L43:
- 1132               	/* epilogue start */
-  92:motor_control.h **** 		}else{
-  93:motor_control.h **** 			pwm(CH_A, 0, MAX_SPEED);
-  94:motor_control.h **** 			pwm(CH_B, 0, MAX_SPEED);
-  95:motor_control.h **** 		}
-  96:motor_control.h **** 
-  97:motor_control.h **** 		return;
-  98:motor_control.h **** 	}
-  99:motor_control.h **** 
- 100:motor_control.h **** 	if(right_motor_pwm > RIGHT_MAX)
- 101:motor_control.h **** 		right_motor_pwm = RIGHT_MAX;
- 102:motor_control.h **** 
- 103:motor_control.h **** 	if(left_motor_pwm > LEFT_MAX)
- 104:motor_control.h **** 		left_motor_pwm = LEFT_MAX;
- 105:motor_control.h **** 
- 106:motor_control.h **** 	if(right_motor_pwm < 0)
- 107:motor_control.h **** 		right_motor_pwm = 0;
- 108:motor_control.h **** 
- 109:motor_control.h **** 	if(left_motor_pwm < 0)
- 110:motor_control.h **** 		left_motor_pwm = 0;
- 111:motor_control.h **** 
- 112:motor_control.h **** 	count2 = 0;
- 113:motor_control.h **** 
- 114:motor_control.h **** 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
- 115:motor_control.h **** 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
- 116:motor_control.h **** 	/*switch(status){
- 117:motor_control.h **** 		case FORWARD:
- 118:motor_control.h **** 			if(channelA_status == FORWARD && channelB_status == FORWARD){
- 119:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
- 120:motor_control.h **** 				channelB = channelA;
- 121:motor_control.h **** 			}else if(channelA_status == REVERSE && channelB_status == REVERSE){
- 122:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
- 123:motor_control.h **** 					channelA -= BREAK_RATE;
- 124:motor_control.h **** 					channelB = channelA;
- 125:motor_control.h **** 				}else{
- 126:motor_control.h **** 					FORWARD_MODE();
- 127:motor_control.h **** 					channelA_status = FORWARD;
- 128:motor_control.h **** 					channelB_status = FORWARD;
- 129:motor_control.h **** 				}
- 130:motor_control.h **** 			}
- 131:motor_control.h **** 			break;
- 132:motor_control.h **** 		
- 133:motor_control.h **** 		case REVERSE:
- 134:motor_control.h **** 			if(channelA_status == REVERSE && channelB_status == REVERSE){
- 135:motor_control.h **** 				(channelA == MAX_SPEED) ? (channelA = MAX_SPEED) : (channelA += SPEED_INCREASE_RATE);
- 136:motor_control.h **** 				channelB = channelA;
- 137:motor_control.h **** 			}else if(channelA_status == FORWARD && channelB_status == FORWARD){
- 138:motor_control.h **** 				if(channelA > MIN_PWM_SPEED){
- 139:motor_control.h **** 					channelA -= BREAK_RATE;
- 140:motor_control.h **** 					channelB = channelA;
- 141:motor_control.h **** 				}else{
- 142:motor_control.h **** 					REVERSE_MODE();
- 143:motor_control.h **** 					channelA_status = REVERSE;
- 144:motor_control.h **** 					channelB_status = REVERSE;
- 145:motor_control.h **** 				}
- 146:motor_control.h **** 			}
- 147:motor_control.h **** 			break;
- 148:motor_control.h **** 		
- 149:motor_control.h **** 		case STOP:
- 150:motor_control.h **** 			MOTOR_PORT = 0x00;
- 151:motor_control.h **** 			channelA = 0x00;
- 152:motor_control.h **** 			channelB = 0x00;
- 153:motor_control.h **** 			break;
- 154:motor_control.h **** 
- 155:motor_control.h **** 		case NEUTRAL:
- 156:motor_control.h **** 			if(channelA > MIN_PWM_SPEED){
- 157:motor_control.h **** 				channelA -= SPEED_DECREASE_RATE;
- 158:motor_control.h **** 				channelB = channelA;
- 159:motor_control.h **** 			}
- 160:motor_control.h **** 
- 161:motor_control.h **** 			if(channelB_status == FORWARD && channelB_status == FORWARD){
- 162:motor_control.h **** 				FORWARD_MODE();
- 163:motor_control.h **** 			}
- 164:motor_control.h **** 			else{
- 165:motor_control.h **** 				REVERSE_MODE();
- 166:motor_control.h **** 			}
- 167:motor_control.h **** 
- 168:motor_control.h **** 			if(left_status || right_status){
- 169:motor_control.h **** 				channelA = 0x00;
- 170:motor_control.h **** 				channelB = 0x00;
- 171:motor_control.h **** 				left_status = FALSE;
- 172:motor_control.h **** 				right_status = FALSE;
- 173:motor_control.h **** 			}
- 174:motor_control.h **** 			break;
- 175:motor_control.h **** 
- 176:motor_control.h **** 		case RIGHT:
- 177:motor_control.h **** 			//RIGHT_MODE();
- 178:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
- 179:motor_control.h **** 				left_status = FALSE;
- 180:motor_control.h **** 				right_status = TRUE;
- 181:motor_control.h **** 				channelA = 15000;
- 182:motor_control.h **** 				channelB -= 30;
- 183:motor_control.h **** 			}
- 184:motor_control.h **** 			break;
- 185:motor_control.h **** 
- 186:motor_control.h **** 		case LEFT:
- 187:motor_control.h **** 			//LEFT_MODE();
- 188:motor_control.h **** 			if(channelA < MIN_PWM_SPEED){
- 189:motor_control.h **** 				left_status = TRUE;
- 190:motor_control.h **** 				right_status = FALSE;
- 191:motor_control.h **** 				channelA -= 30;
- 192:motor_control.h **** 				channelB = MAX_PWM_SPEED / 2;
- 193:motor_control.h **** 			}
- 194:motor_control.h **** 			break;
- 195:motor_control.h **** 	}
- 196:motor_control.h **** 
- 197:motor_control.h **** 	pwm(CH_A, channelA, MAX_PWM_SPEED);
- 198:motor_control.h **** 	pwm(CH_B, channelB, MAX_PWM_SPEED);
- 199:motor_control.h **** 	*/
- 200:motor_control.h **** }...
- 1133               		.loc 7 200 0
- 1134 0488 CF91      		pop r28
- 1135               	.LVL65:
- 1136 048a 0895      		ret
- 1137               	.LVL66:
- 1138               	.L60:
- 1139               	.LBB116:
-  50:motor_control.h **** 	uint8_t ir_val = IR_ARR_VAL;
- 1140               		.loc 7 50 0
- 1141 048c 82E0      		ldi r24,lo8(2)
- 1142 048e 00C0      		rjmp .L44
- 1143               	.LVL67:
- 1144               	.L61:
- 1145               	.LBE116:
- 1146               	.LBB117:
- 1147 0490 84E0      		ldi r24,lo8(4)
- 1148               	.LVL68:
- 1149 0492 00C0      		rjmp .L45
- 1150               	.LVL69:
- 1151               	.L62:
- 1152               	.LBE117:
- 1153               	.LBB118:
- 1154 0494 88E0      		ldi r24,lo8(8)
- 1155               	.LVL70:
- 1156 0496 00C0      		rjmp .L46
- 1157               	.LVL71:
- 1158               	.L63:
- 1159               	.LBE118:
- 1160               	.LBB119:
- 1161 0498 80E1      		ldi r24,lo8(16)
- 1162               	.LVL72:
- 1163 049a 00C0      		rjmp .L47
- 1164               	.LVL73:
- 1165               	.L64:
- 1166               	.LBE119:
- 1167               	.LBB120:
- 1168 049c 80E2      		ldi r24,lo8(32)
- 1169               	.LVL74:
- 1170 049e 00C0      		rjmp .L48
- 1171               	.LVL75:
- 1172               	.L65:
- 1173               	.LBE120:
- 1174               	.LBB121:
- 1175 04a0 80E4      		ldi r24,lo8(64)
- 1176               	.LVL76:
- 1177 04a2 00C0      		rjmp .L49
- 1178               	.LVL77:
- 1179               	.L66:
- 1180               	.LBE121:
- 1181               	.LBB122:
- 1182 04a4 80E8      		ldi r24,lo8(-128)
- 1183               	.LVL78:
- 1184 04a6 00C0      		rjmp .L50
- 1185               	.LVL79:
- 1186               	.L53:
- 1187               	.LBE122:
-  82:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
- 1188               		.loc 7 82 0
- 1189 04a8 8831      		cpi r24,24
- 1190 04aa 9C4F      		sbci r25,-4
- 1191 04ac 04F0      		brlt .+2
- 1192 04ae 00C0      		rjmp .L54
-  82:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
- 1193               		.loc 7 82 0 is_stmt 0 discriminator 1
- 1194 04b0 8091 0000 		lds r24,count2
- 1195               	.LVL80:
- 1196 04b4 8630      		cpi r24,lo8(6)
- 1197 04b6 00F0      		brlo .+2
- 1198 04b8 00C0      		rjmp .L54
-  83:motor_control.h **** 			REVERSE_MODE();
- 1199               		.loc 7 83 0 is_stmt 1
- 1200 04ba 88B1      		in r24,0x8
- 1201 04bc 8A60      		ori r24,lo8(10)
- 1202 04be 88B9      		out 0x8,r24
- 1203 04c0 88B1      		in r24,0x8
- 1204 04c2 8A7F      		andi r24,lo8(-6)
- 1205 04c4 88B9      		out 0x8,r24
- 1206               	.LVL81:
+  89:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED, MAX_SPEED);
+  90:motor_control.h **** 			_delay_ms(1000);
+  91:motor_control.h **** 			FORWARD_MODE();
+  92:motor_control.h **** 			pwm(CH_A, RIGHT_NORMAL_SPEED, MAX_SPEED);
+  93:motor_control.h **** 			pwm(CH_B, LEFT_NORMAL_SPEED/2, MAX_SPEED);
+  94:motor_control.h **** 			_delay_ms(100);
+  95:motor_control.h **** 			count2++;
+ 1069               		.loc 7 95 0
+ 1070 046a 8091 0000 		lds r24,count2
+ 1071 046e 8F5F      		subi r24,lo8(-(1))
+ 1072 0470 8093 0000 		sts count2,r24
+ 1073               	.L42:
+ 1074               	/* epilogue start */
+  96:motor_control.h **** 		}else{
+  97:motor_control.h **** 			pwm(CH_A, 0, MAX_SPEED);
+  98:motor_control.h **** 			pwm(CH_B, 0, MAX_SPEED);
+  99:motor_control.h **** 		}
+ 100:motor_control.h **** 
+ 101:motor_control.h **** 		return;
+ 102:motor_control.h **** 	}
+ 103:motor_control.h **** 
+ 104:motor_control.h **** 	if(right_motor_pwm > RIGHT_MAX)
+ 105:motor_control.h **** 		right_motor_pwm = RIGHT_MAX;
+ 106:motor_control.h **** 
+ 107:motor_control.h **** 	if(left_motor_pwm > LEFT_MAX)
+ 108:motor_control.h **** 		left_motor_pwm = LEFT_MAX;
+ 109:motor_control.h **** 
+ 110:motor_control.h **** 	if(right_motor_pwm < 0)
+ 111:motor_control.h **** 		right_motor_pwm = 0;
+ 112:motor_control.h **** 
+ 113:motor_control.h **** 	if(left_motor_pwm < 0)
+ 114:motor_control.h **** 		left_motor_pwm = 0;
+ 115:motor_control.h **** 
+ 116:motor_control.h **** 	count2 = 0;
+ 117:motor_control.h **** 
+ 118:motor_control.h **** 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
+ 119:motor_control.h **** 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
+ 120:motor_control.h **** }...
+ 1075               		.loc 7 120 0
+ 1076 0474 CF91      		pop r28
+ 1077               	.LVL56:
+ 1078 0476 0895      		ret
+ 1079               	.LVL57:
+ 1080               	.L59:
+ 1081               	.LBB108:
+  54:motor_control.h **** 	uint8_t ir_val = IR_ARR_VAL;
+ 1082               		.loc 7 54 0
+ 1083 0478 82E0      		ldi r24,lo8(2)
+ 1084 047a 00C0      		rjmp .L43
+ 1085               	.LVL58:
+ 1086               	.L60:
+ 1087               	.LBE108:
+ 1088               	.LBB109:
+ 1089 047c 84E0      		ldi r24,lo8(4)
+ 1090               	.LVL59:
+ 1091 047e 00C0      		rjmp .L44
+ 1092               	.LVL60:
+ 1093               	.L61:
+ 1094               	.LBE109:
+ 1095               	.LBB110:
+ 1096 0480 88E0      		ldi r24,lo8(8)
+ 1097               	.LVL61:
+ 1098 0482 00C0      		rjmp .L45
+ 1099               	.LVL62:
+ 1100               	.L62:
+ 1101               	.LBE110:
+ 1102               	.LBB111:
+ 1103 0484 80E1      		ldi r24,lo8(16)
+ 1104               	.LVL63:
+ 1105 0486 00C0      		rjmp .L46
+ 1106               	.LVL64:
+ 1107               	.L63:
+ 1108               	.LBE111:
+ 1109               	.LBB112:
+ 1110 0488 80E2      		ldi r24,lo8(32)
+ 1111               	.LVL65:
+ 1112 048a 00C0      		rjmp .L47
+ 1113               	.LVL66:
+ 1114               	.L64:
+ 1115               	.LBE112:
+ 1116               	.LBB113:
+ 1117 048c 80E4      		ldi r24,lo8(64)
+ 1118               	.LVL67:
+ 1119 048e 00C0      		rjmp .L48
+ 1120               	.LVL68:
+ 1121               	.L65:
+ 1122               	.LBE113:
+ 1123               	.LBB114:
+ 1124 0490 80E8      		ldi r24,lo8(-128)
+ 1125               	.LVL69:
+ 1126 0492 00C0      		rjmp .L49
+ 1127               	.LVL70:
+ 1128               	.L52:
+ 1129               	.LBE114:
+  86:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
+ 1130               		.loc 7 86 0
+ 1131 0494 8831      		cpi r24,24
+ 1132 0496 9C4F      		sbci r25,-4
+ 1133 0498 04F0      		brlt .+2
+ 1134 049a 00C0      		rjmp .L53
+  86:motor_control.h **** 		}else if(error < -1000 && count2 <= 5){
+ 1135               		.loc 7 86 0 is_stmt 0 discriminator 1
+ 1136 049c 8091 0000 		lds r24,count2
+ 1137               	.LVL71:
+ 1138 04a0 8630      		cpi r24,lo8(6)
+ 1139 04a2 00F0      		brlo .+2
+ 1140 04a4 00C0      		rjmp .L53
+  87:motor_control.h **** 			REVERSE_MODE();
+ 1141               		.loc 7 87 0 is_stmt 1
+ 1142 04a6 88B1      		in r24,0x8
+ 1143 04a8 8A60      		ori r24,lo8(10)
+ 1144 04aa 88B9      		out 0x8,r24
+ 1145 04ac 88B1      		in r24,0x8
+ 1146 04ae 8A7F      		andi r24,lo8(-6)
+ 1147 04b0 88B9      		out 0x8,r24
+ 1148               	.LVL72:
+ 1149               	.LBB115:
+ 1150               	.LBB116:
+  24:pwm.h         **** 	ICR1 = period;
+ 1151               		.loc 2 24 0
+ 1152 04b2 80ED      		ldi r24,lo8(-48)
+ 1153 04b4 97E0      		ldi r25,lo8(7)
+ 1154 04b6 9093 8700 		sts 134+1,r25
+ 1155 04ba 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1156               		.loc 2 25 0
+ 1157 04be 3093 8900 		sts 136+1,r19
+ 1158 04c2 2093 8800 		sts 136,r18
+ 1159               	.LVL73:
+ 1160               	.LBE116:
+ 1161               	.LBE115:
+ 1162               	.LBB117:
+ 1163               	.LBB118:
+  24:pwm.h         **** 	ICR1 = period;
+ 1164               		.loc 2 24 0
+ 1165 04c6 9093 8700 		sts 134+1,r25
+ 1166 04ca 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1167               		.loc 2 25 0
+ 1168 04ce 3093 8B00 		sts 138+1,r19
+ 1169 04d2 2093 8A00 		sts 138,r18
+ 1170               	.LVL74:
+ 1171               	.LBE118:
+ 1172               	.LBE117:
+ 1173               	.LBB119:
+ 1174               	.LBB120:
+ 187:/usr/avr/include/util/delay.h **** 
+ 1175               		.loc 6 187 0
+ 1176 04d6 5FEF      		ldi r21,lo8(3199999)
+ 1177 04d8 63ED      		ldi r22,hi8(3199999)
+ 1178 04da 70E3      		ldi r23,hlo8(3199999)
+ 1179 04dc 5150      	1:	subi r21,1
+ 1180 04de 6040      		sbci r22,0
+ 1181 04e0 7040      		sbci r23,0
+ 1182 04e2 01F4      		brne 1b
+ 1183 04e4 00C0      		rjmp .
+ 1184 04e6 0000      		nop
+ 1185               	.LVL75:
+ 1186               	.LBE120:
+ 1187               	.LBE119:
+  91:motor_control.h **** 			FORWARD_MODE();
+ 1188               		.loc 7 91 0
+ 1189 04e8 48B1      		in r20,0x8
+ 1190 04ea 4560      		ori r20,lo8(5)
+ 1191 04ec 48B9      		out 0x8,r20
+ 1192 04ee 48B1      		in r20,0x8
+ 1193 04f0 457F      		andi r20,lo8(-11)
+ 1194 04f2 48B9      		out 0x8,r20
+ 1195               	.LVL76:
+ 1196               	.LBB121:
+ 1197               	.LBB122:
+  24:pwm.h         **** 	ICR1 = period;
+ 1198               		.loc 2 24 0
+ 1199 04f4 9093 8700 		sts 134+1,r25
+ 1200 04f8 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1201               		.loc 2 25 0
+ 1202 04fc 3093 8900 		sts 136+1,r19
+ 1203 0500 2093 8800 		sts 136,r18
+ 1204               	.LVL77:
+ 1205               	.LBE122:
+ 1206               	.LBE121:
  1207               	.LBB123:
  1208               	.LBB124:
-  20:pwm.h         **** 	ICR1 = period;
- 1209               		.loc 2 20 0
- 1210 04c6 80ED      		ldi r24,lo8(-48)
- 1211 04c8 97E0      		ldi r25,lo8(7)
- 1212 04ca 9093 8700 		sts 134+1,r25
- 1213 04ce 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1214               		.loc 2 21 0
- 1215 04d2 3093 8900 		sts 136+1,r19
- 1216 04d6 2093 8800 		sts 136,r18
- 1217               	.LVL82:
+  24:pwm.h         **** 	ICR1 = period;
+ 1209               		.loc 2 24 0
+ 1210 0504 9093 8700 		sts 134+1,r25
+ 1211 0508 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1212               		.loc 2 25 0
+ 1213 050c 8AE8      		ldi r24,lo8(-118)
+ 1214 050e 92E0      		ldi r25,lo8(2)
+ 1215 0510 9093 8B00 		sts 138+1,r25
+ 1216 0514 8093 8A00 		sts 138,r24
+ 1217               	.LVL78:
  1218               	.LBE124:
  1219               	.LBE123:
  1220               	.LBB125:
- 1221               	.LBB126:
-  20:pwm.h         **** 	ICR1 = period;
- 1222               		.loc 2 20 0
- 1223 04da 9093 8700 		sts 134+1,r25
- 1224 04de 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1225               		.loc 2 21 0
- 1226 04e2 3093 8B00 		sts 138+1,r19
- 1227 04e6 2093 8A00 		sts 138,r18
- 1228               	.LVL83:
- 1229               	.LBE126:
- 1230               	.LBE125:
- 1231               	.LBB127:
- 1232               	.LBB128:
+ 1221               	.LBB107:
  187:/usr/avr/include/util/delay.h **** 
- 1233               		.loc 6 187 0
- 1234 04ea 5FEF      		ldi r21,lo8(3199999)
- 1235 04ec 63ED      		ldi r22,hi8(3199999)
- 1236 04ee 70E3      		ldi r23,hlo8(3199999)
- 1237 04f0 5150      	1:	subi r21,1
- 1238 04f2 6040      		sbci r22,0
- 1239 04f4 7040      		sbci r23,0
- 1240 04f6 01F4      		brne 1b
- 1241 04f8 00C0      		rjmp .
- 1242 04fa 0000      		nop
- 1243               	.LVL84:
- 1244               	.LBE128:
- 1245               	.LBE127:
-  87:motor_control.h **** 			FORWARD_MODE();
- 1246               		.loc 7 87 0
- 1247 04fc 48B1      		in r20,0x8
- 1248 04fe 4560      		ori r20,lo8(5)
- 1249 0500 48B9      		out 0x8,r20
- 1250 0502 48B1      		in r20,0x8
- 1251 0504 457F      		andi r20,lo8(-11)
- 1252 0506 48B9      		out 0x8,r20
- 1253               	.LVL85:
- 1254               	.LBB129:
- 1255               	.LBB130:
-  20:pwm.h         **** 	ICR1 = period;
- 1256               		.loc 2 20 0
- 1257 0508 9093 8700 		sts 134+1,r25
- 1258 050c 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1259               		.loc 2 21 0
- 1260 0510 3093 8900 		sts 136+1,r19
- 1261 0514 2093 8800 		sts 136,r18
- 1262               	.LVL86:
- 1263               	.LBE130:
- 1264               	.LBE129:
- 1265               	.LBB131:
- 1266               	.LBB132:
-  20:pwm.h         **** 	ICR1 = period;
- 1267               		.loc 2 20 0
- 1268 0518 9093 8700 		sts 134+1,r25
- 1269 051c 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1270               		.loc 2 21 0
- 1271 0520 8AE8      		ldi r24,lo8(-118)
- 1272 0522 92E0      		ldi r25,lo8(2)
- 1273 0524 9093 8B00 		sts 138+1,r25
- 1274 0528 8093 8A00 		sts 138,r24
- 1275               	.LVL87:
- 1276               	.LBE132:
- 1277               	.LBE131:
- 1278               	.LBB133:
- 1279               	.LBB115:
- 187:/usr/avr/include/util/delay.h **** 
- 1280               		.loc 6 187 0
- 1281 052c 8FEF      		ldi r24,lo8(319999)
- 1282 052e 91EE      		ldi r25,hi8(319999)
- 1283 0530 24E0      		ldi r18,hlo8(319999)
- 1284 0532 8150      	1:	subi r24,1
- 1285 0534 9040      		sbci r25,0
- 1286 0536 2040      		sbci r18,0
- 1287 0538 01F4      		brne 1b
- 1288 053a 00C0      		rjmp .L67
- 1289               	.LVL88:
- 1290               	.L54:
- 1291               	.LBE115:
- 1292               	.LBE133:
- 1293               	.LBB134:
- 1294               	.LBB135:
-  20:pwm.h         **** 	ICR1 = period;
- 1295               		.loc 2 20 0
- 1296 053c 80ED      		ldi r24,lo8(-48)
- 1297 053e 97E0      		ldi r25,lo8(7)
- 1298 0540 9093 8700 		sts 134+1,r25
- 1299 0544 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1300               		.loc 2 21 0
- 1301 0548 1092 8900 		sts 136+1,__zero_reg__
- 1302 054c 1092 8800 		sts 136,__zero_reg__
- 1303               	.LVL89:
- 1304               	.LBE135:
- 1305               	.LBE134:
- 1306               	.LBB136:
- 1307               	.LBB137:
-  20:pwm.h         **** 	ICR1 = period;
- 1308               		.loc 2 20 0
- 1309 0550 9093 8700 		sts 134+1,r25
- 1310 0554 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1311               		.loc 2 21 0
- 1312 0558 1092 8B00 		sts 138+1,__zero_reg__
- 1313 055c 1092 8A00 		sts 138,__zero_reg__
- 1314 0560 00C0      		rjmp .L43
- 1315               	.LVL90:
- 1316               	.L52:
- 1317               	.LBE137:
- 1318               	.LBE136:
- 100:motor_control.h **** 	if(right_motor_pwm > RIGHT_MAX)
- 1319               		.loc 7 100 0
- 1320 0562 8091 0000 		lds r24,right_motor_pwm
- 1321 0566 9091 0000 		lds r25,right_motor_pwm+1
- 1322               	.LVL91:
- 1323 056a 8D3D      		cpi r24,-35
- 1324 056c 9540      		sbci r25,5
- 1325 056e 04F0      		brlt .L56
- 101:motor_control.h **** 		right_motor_pwm = RIGHT_MAX;
- 1326               		.loc 7 101 0
- 1327 0570 8CED      		ldi r24,lo8(-36)
- 1328 0572 95E0      		ldi r25,lo8(5)
- 1329 0574 9093 0000 		sts right_motor_pwm+1,r25
- 1330 0578 8093 0000 		sts right_motor_pwm,r24
- 1331               	.L56:
- 103:motor_control.h **** 	if(left_motor_pwm > LEFT_MAX)
- 1332               		.loc 7 103 0
- 1333 057c 8091 0000 		lds r24,left_motor_pwm
- 1334 0580 9091 0000 		lds r25,left_motor_pwm+1
- 1335 0584 8D3D      		cpi r24,-35
- 1336 0586 9540      		sbci r25,5
- 1337 0588 04F0      		brlt .L57
- 104:motor_control.h **** 		left_motor_pwm = LEFT_MAX;
- 1338               		.loc 7 104 0
- 1339 058a 8CED      		ldi r24,lo8(-36)
- 1340 058c 95E0      		ldi r25,lo8(5)
- 1341 058e 9093 0000 		sts left_motor_pwm+1,r25
- 1342 0592 8093 0000 		sts left_motor_pwm,r24
- 1343               	.L57:
- 106:motor_control.h **** 	if(right_motor_pwm < 0)
- 1344               		.loc 7 106 0
- 1345 0596 8091 0000 		lds r24,right_motor_pwm
- 1346 059a 9091 0000 		lds r25,right_motor_pwm+1
- 1347 059e 97FF      		sbrs r25,7
- 1348 05a0 00C0      		rjmp .L58
- 107:motor_control.h **** 		right_motor_pwm = 0;
- 1349               		.loc 7 107 0
- 1350 05a2 1092 0000 		sts right_motor_pwm+1,__zero_reg__
- 1351 05a6 1092 0000 		sts right_motor_pwm,__zero_reg__
- 1352               	.L58:
- 109:motor_control.h **** 	if(left_motor_pwm < 0)
- 1353               		.loc 7 109 0
- 1354 05aa 8091 0000 		lds r24,left_motor_pwm
- 1355 05ae 9091 0000 		lds r25,left_motor_pwm+1
- 1356 05b2 97FF      		sbrs r25,7
- 1357 05b4 00C0      		rjmp .L59
- 110:motor_control.h **** 		left_motor_pwm = 0;
- 1358               		.loc 7 110 0
- 1359 05b6 1092 0000 		sts left_motor_pwm+1,__zero_reg__
- 1360 05ba 1092 0000 		sts left_motor_pwm,__zero_reg__
- 1361               	.L59:
- 112:motor_control.h **** 	count2 = 0;
- 1362               		.loc 7 112 0
- 1363 05be 1092 0000 		sts count2,__zero_reg__
- 114:motor_control.h **** 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
- 1364               		.loc 7 114 0
- 1365 05c2 2091 0000 		lds r18,right_motor_pwm
- 1366 05c6 3091 0000 		lds r19,right_motor_pwm+1
- 1367               	.LVL92:
- 1368               	.LBB138:
- 1369               	.LBB139:
-  20:pwm.h         **** 	ICR1 = period;
- 1370               		.loc 2 20 0
- 1371 05ca 80ED      		ldi r24,lo8(-48)
- 1372 05cc 97E0      		ldi r25,lo8(7)
- 1373 05ce 9093 8700 		sts 134+1,r25
- 1374 05d2 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1375               		.loc 2 21 0
- 1376 05d6 3093 8900 		sts 136+1,r19
- 1377 05da 2093 8800 		sts 136,r18
- 1378               	.LVL93:
- 1379               	.LBE139:
- 1380               	.LBE138:
- 115:motor_control.h **** 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
- 1381               		.loc 7 115 0
- 1382 05de 2091 0000 		lds r18,left_motor_pwm
- 1383 05e2 3091 0000 		lds r19,left_motor_pwm+1
- 1384               	.LVL94:
- 1385               	.LBB140:
- 1386               	.LBB141:
-  20:pwm.h         **** 	ICR1 = period;
- 1387               		.loc 2 20 0
- 1388 05e6 9093 8700 		sts 134+1,r25
- 1389 05ea 8093 8600 		sts 134,r24
-  21:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
- 1390               		.loc 2 21 0
- 1391 05ee 3093 8B00 		sts 138+1,r19
- 1392 05f2 2093 8A00 		sts 138,r18
- 1393 05f6 00C0      		rjmp .L43
- 1394               	.LBE141:
- 1395               	.LBE140:
- 1396               		.cfi_endproc
- 1397               	.LFE22:
- 1399               		.section	.text.startup,"ax",@progbits
- 1400               	.global	main
- 1402               	main:
- 1403               	.LFB23:
- 1404               		.file 8 "main.c"
-   1:main.c        **** #define F_CPU 16000000UL
-   2:main.c        **** 
-   3:main.c        **** //Comment the MCU which you're not using.
-   4:main.c        **** #define ATMEGA_328P
-   5:main.c        **** //#define ATMEGA_32A
-   6:main.c        **** 
-   7:main.c        **** #include <avr/io.h>
-   8:main.c        **** #include <util/delay.h>
-   9:main.c        **** 
-  10:main.c        **** #include "color_sensor.h"
-  11:main.c        **** #include "motor_control.h"
-  12:main.c        **** 
-  13:main.c        **** uint32_t count3 = 0;
+ 1222               		.loc 6 187 0
+ 1223 0518 8FEF      		ldi r24,lo8(319999)
+ 1224 051a 91EE      		ldi r25,hi8(319999)
+ 1225 051c 24E0      		ldi r18,hlo8(319999)
+ 1226 051e 8150      	1:	subi r24,1
+ 1227 0520 9040      		sbci r25,0
+ 1228 0522 2040      		sbci r18,0
+ 1229 0524 01F4      		brne 1b
+ 1230 0526 00C0      		rjmp .L66
+ 1231               	.LVL79:
+ 1232               	.L53:
+ 1233               	.LBE107:
+ 1234               	.LBE125:
+ 1235               	.LBB126:
+ 1236               	.LBB127:
+  24:pwm.h         **** 	ICR1 = period;
+ 1237               		.loc 2 24 0
+ 1238 0528 80ED      		ldi r24,lo8(-48)
+ 1239 052a 97E0      		ldi r25,lo8(7)
+ 1240 052c 9093 8700 		sts 134+1,r25
+ 1241 0530 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1242               		.loc 2 25 0
+ 1243 0534 1092 8900 		sts 136+1,__zero_reg__
+ 1244 0538 1092 8800 		sts 136,__zero_reg__
+ 1245               	.LVL80:
+ 1246               	.LBE127:
+ 1247               	.LBE126:
+ 1248               	.LBB128:
+ 1249               	.LBB129:
+  24:pwm.h         **** 	ICR1 = period;
+ 1250               		.loc 2 24 0
+ 1251 053c 9093 8700 		sts 134+1,r25
+ 1252 0540 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1253               		.loc 2 25 0
+ 1254 0544 1092 8B00 		sts 138+1,__zero_reg__
+ 1255 0548 1092 8A00 		sts 138,__zero_reg__
+ 1256 054c 00C0      		rjmp .L42
+ 1257               	.LVL81:
+ 1258               	.L51:
+ 1259               	.LBE129:
+ 1260               	.LBE128:
+ 104:motor_control.h **** 	if(right_motor_pwm > RIGHT_MAX)
+ 1261               		.loc 7 104 0
+ 1262 054e 8091 0000 		lds r24,right_motor_pwm
+ 1263 0552 9091 0000 		lds r25,right_motor_pwm+1
+ 1264               	.LVL82:
+ 1265 0556 8D3D      		cpi r24,-35
+ 1266 0558 9540      		sbci r25,5
+ 1267 055a 04F0      		brlt .L55
+ 105:motor_control.h **** 		right_motor_pwm = RIGHT_MAX;
+ 1268               		.loc 7 105 0
+ 1269 055c 8CED      		ldi r24,lo8(-36)
+ 1270 055e 95E0      		ldi r25,lo8(5)
+ 1271 0560 9093 0000 		sts right_motor_pwm+1,r25
+ 1272 0564 8093 0000 		sts right_motor_pwm,r24
+ 1273               	.L55:
+ 107:motor_control.h **** 	if(left_motor_pwm > LEFT_MAX)
+ 1274               		.loc 7 107 0
+ 1275 0568 8091 0000 		lds r24,left_motor_pwm
+ 1276 056c 9091 0000 		lds r25,left_motor_pwm+1
+ 1277 0570 8D3D      		cpi r24,-35
+ 1278 0572 9540      		sbci r25,5
+ 1279 0574 04F0      		brlt .L56
+ 108:motor_control.h **** 		left_motor_pwm = LEFT_MAX;
+ 1280               		.loc 7 108 0
+ 1281 0576 8CED      		ldi r24,lo8(-36)
+ 1282 0578 95E0      		ldi r25,lo8(5)
+ 1283 057a 9093 0000 		sts left_motor_pwm+1,r25
+ 1284 057e 8093 0000 		sts left_motor_pwm,r24
+ 1285               	.L56:
+ 110:motor_control.h **** 	if(right_motor_pwm < 0)
+ 1286               		.loc 7 110 0
+ 1287 0582 8091 0000 		lds r24,right_motor_pwm
+ 1288 0586 9091 0000 		lds r25,right_motor_pwm+1
+ 1289 058a 97FF      		sbrs r25,7
+ 1290 058c 00C0      		rjmp .L57
+ 111:motor_control.h **** 		right_motor_pwm = 0;
+ 1291               		.loc 7 111 0
+ 1292 058e 1092 0000 		sts right_motor_pwm+1,__zero_reg__
+ 1293 0592 1092 0000 		sts right_motor_pwm,__zero_reg__
+ 1294               	.L57:
+ 113:motor_control.h **** 	if(left_motor_pwm < 0)
+ 1295               		.loc 7 113 0
+ 1296 0596 8091 0000 		lds r24,left_motor_pwm
+ 1297 059a 9091 0000 		lds r25,left_motor_pwm+1
+ 1298 059e 97FF      		sbrs r25,7
+ 1299 05a0 00C0      		rjmp .L58
+ 114:motor_control.h **** 		left_motor_pwm = 0;
+ 1300               		.loc 7 114 0
+ 1301 05a2 1092 0000 		sts left_motor_pwm+1,__zero_reg__
+ 1302 05a6 1092 0000 		sts left_motor_pwm,__zero_reg__
+ 1303               	.L58:
+ 116:motor_control.h **** 	count2 = 0;
+ 1304               		.loc 7 116 0
+ 1305 05aa 1092 0000 		sts count2,__zero_reg__
+ 118:motor_control.h **** 	pwm(CH_A, right_motor_pwm, MAX_SPEED);
+ 1306               		.loc 7 118 0
+ 1307 05ae 2091 0000 		lds r18,right_motor_pwm
+ 1308 05b2 3091 0000 		lds r19,right_motor_pwm+1
+ 1309               	.LVL83:
+ 1310               	.LBB130:
+ 1311               	.LBB131:
+  24:pwm.h         **** 	ICR1 = period;
+ 1312               		.loc 2 24 0
+ 1313 05b6 80ED      		ldi r24,lo8(-48)
+ 1314 05b8 97E0      		ldi r25,lo8(7)
+ 1315 05ba 9093 8700 		sts 134+1,r25
+ 1316 05be 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1317               		.loc 2 25 0
+ 1318 05c2 3093 8900 		sts 136+1,r19
+ 1319 05c6 2093 8800 		sts 136,r18
+ 1320               	.LVL84:
+ 1321               	.LBE131:
+ 1322               	.LBE130:
+ 119:motor_control.h **** 	pwm(CH_B, left_motor_pwm, MAX_SPEED);
+ 1323               		.loc 7 119 0
+ 1324 05ca 2091 0000 		lds r18,left_motor_pwm
+ 1325 05ce 3091 0000 		lds r19,left_motor_pwm+1
+ 1326               	.LVL85:
+ 1327               	.LBB132:
+ 1328               	.LBB133:
+  24:pwm.h         **** 	ICR1 = period;
+ 1329               		.loc 2 24 0
+ 1330 05d2 9093 8700 		sts 134+1,r25
+ 1331 05d6 8093 8600 		sts 134,r24
+  25:pwm.h         **** 	(channel == CH_B) ? (OCR1B = onTime) : (OCR1A = onTime);
+ 1332               		.loc 2 25 0
+ 1333 05da 3093 8B00 		sts 138+1,r19
+ 1334 05de 2093 8A00 		sts 138,r18
+ 1335 05e2 00C0      		rjmp .L42
+ 1336               	.LBE133:
+ 1337               	.LBE132:
+ 1338               		.cfi_endproc
+ 1339               	.LFE21:
+ 1341               		.section	.text.startup,"ax",@progbits
+ 1342               	.global	main
+ 1344               	main:
+ 1345               	.LFB22:
+ 1346               		.file 8 "main.c"
+   1:main.c        **** #ifndef F_CPU
+   2:main.c        **** #define F_CPU 16000000UL
+   3:main.c        **** #endif
+   4:main.c        **** 
+   5:main.c        **** //Comment the MCU which you're not using.
+   6:main.c        **** #define ATMEGA_328P
+   7:main.c        **** //#define ATMEGA_32A
+   8:main.c        **** 
+   9:main.c        **** #include <avr/io.h>
+  10:main.c        **** #include <util/delay.h>
+  11:main.c        **** 
+  12:main.c        **** #include "color_sensor.h"
+  13:main.c        **** #include "motor_control.h"
   14:main.c        **** 
-  15:main.c        **** int main(void){
- 1405               		.loc 8 15 0
- 1406               		.cfi_startproc
- 1407               	/* prologue: function */
- 1408               	/* frame size = 0 */
- 1409               	/* stack size = 0 */
- 1410               	.L__stack_usage = 0
+  15:main.c        **** uint32_t count3 = 0;
   16:main.c        **** 
-  17:main.c        **** 	setupPWM();
- 1411               		.loc 8 17 0
- 1412 0000 0E94 0000 		call setupPWM
- 1413               	.LVL95:
-  18:main.c        **** 	setupMotor();
- 1414               		.loc 8 18 0
- 1415 0004 0E94 0000 		call setupMotor
- 1416               	.LVL96:
-  19:main.c        **** 	initIR();
- 1417               		.loc 8 19 0
- 1418 0008 0E94 0000 		call initIR
- 1419               	.LVL97:
-  20:main.c        **** 	init_SRF05();
- 1420               		.loc 8 20 0
- 1421 000c 0E94 0000 		call init_SRF05
- 1422               	.LVL98:
-  21:main.c        **** 	SRF05_Start();
- 1423               		.loc 8 21 0
- 1424 0010 0E94 0000 		call SRF05_Start
- 1425               	.LVL99:
-  22:main.c        **** 	init_ADC();
- 1426               		.loc 8 22 0
- 1427 0014 0E94 0000 		call init_ADC
- 1428               	.LVL100:
- 1429               	.L69:
-  23:main.c        **** 
-  24:main.c        **** 	while(1){
-  25:main.c        **** 		count3++;
- 1430               		.loc 8 25 0
- 1431 0018 8091 0000 		lds r24,count3
- 1432 001c 9091 0000 		lds r25,count3+1
- 1433 0020 A091 0000 		lds r26,count3+2
- 1434 0024 B091 0000 		lds r27,count3+3
- 1435 0028 0196      		adiw r24,1
- 1436 002a A11D      		adc r26,__zero_reg__
- 1437 002c B11D      		adc r27,__zero_reg__
- 1438 002e 8093 0000 		sts count3,r24
- 1439 0032 9093 0000 		sts count3+1,r25
- 1440 0036 A093 0000 		sts count3+2,r26
- 1441 003a B093 0000 		sts count3+3,r27
-  26:main.c        **** 		controlMotor();
- 1442               		.loc 8 26 0
- 1443 003e 0E94 0000 		call controlMotor
- 1444               	.LVL101:
-  27:main.c        **** 		if(count3 == 50000){
- 1445               		.loc 8 27 0
- 1446 0042 8091 0000 		lds r24,count3
- 1447 0046 9091 0000 		lds r25,count3+1
- 1448 004a A091 0000 		lds r26,count3+2
- 1449 004e B091 0000 		lds r27,count3+3
- 1450 0052 8035      		cpi r24,80
- 1451 0054 934C      		sbci r25,-61
- 1452 0056 A105      		cpc r26,__zero_reg__
- 1453 0058 B105      		cpc r27,__zero_reg__
- 1454 005a 01F4      		brne .L69
-  28:main.c        **** 			putCh(6666);
- 1455               		.loc 8 28 0
- 1456 005c 8AE0      		ldi r24,lo8(10)
- 1457 005e 0E94 0000 		call putCh
- 1458               	.LVL102:
-  29:main.c        **** 			putCh(6666 >> 8);
- 1459               		.loc 8 29 0
- 1460 0062 8AE1      		ldi r24,lo8(26)
- 1461 0064 0E94 0000 		call putCh
- 1462               	.LVL103:
-  30:main.c        **** 			putCh(5555);
- 1463               		.loc 8 30 0
- 1464 0068 83EB      		ldi r24,lo8(-77)
- 1465 006a 0E94 0000 		call putCh
- 1466               	.LVL104:
-  31:main.c        **** 			putCh(5555 >> 8);
- 1467               		.loc 8 31 0
- 1468 006e 85E1      		ldi r24,lo8(21)
- 1469 0070 0E94 0000 		call putCh
- 1470               	.LVL105:
-  32:main.c        **** 			count3 = 0;
- 1471               		.loc 8 32 0
- 1472 0074 1092 0000 		sts count3,__zero_reg__
- 1473 0078 1092 0000 		sts count3+1,__zero_reg__
- 1474 007c 1092 0000 		sts count3+2,__zero_reg__
- 1475 0080 1092 0000 		sts count3+3,__zero_reg__
- 1476 0084 00C0      		rjmp .L69
- 1477               		.cfi_endproc
- 1478               	.LFE23:
- 1480               	.global	count3
- 1481               		.section .bss
- 1484               	count3:
- 1485 0000 0000 0000 		.zero	4
- 1486               	.global	previous_error
- 1489               	previous_error:
- 1490 0004 0000      		.zero	2
- 1491               	.global	left_motor_pwm
- 1494               	left_motor_pwm:
- 1495 0006 0000      		.zero	2
- 1496               	.global	right_motor_pwm
- 1499               	right_motor_pwm:
- 1500 0008 0000      		.zero	2
- 1501               	.global	PID
- 1504               	PID:
- 1505 000a 0000      		.zero	2
- 1506               	.global	D
- 1509               	D:
- 1510 000c 0000      		.zero	2
- 1511               	.global	I
- 1514               	I:
- 1515 000e 0000      		.zero	2
- 1516               	.global	P
- 1519               	P:
- 1520 0010 0000      		.zero	2
- 1521               	.global	count2
- 1524               	count2:
- 1525 0012 00        		.zero	1
- 1526               	.global	count
- 1529               	count:
- 1530 0013 0000 0000 		.zero	4
- 1531               	.global	interrupt
- 1534               	interrupt:
- 1535 0017 00        		.zero	1
- 1536               	.global	mseconds
- 1539               	mseconds:
- 1540 0018 0000      		.zero	2
- 1541               		.comm	distance,2,1
- 1542               	.global	width
- 1545               	width:
- 1546 001a 00        		.zero	1
- 1547               		.text
- 1548               	.Letext0:
- 1549               		.file 9 "/usr/avr/include/stdint.h"
+  17:main.c        **** int main(void){
+ 1347               		.loc 8 17 0
+ 1348               		.cfi_startproc
+ 1349               	/* prologue: function */
+ 1350               	/* frame size = 0 */
+ 1351               	/* stack size = 0 */
+ 1352               	.L__stack_usage = 0
+  18:main.c        **** 
+  19:main.c        **** 	setupPWM();
+ 1353               		.loc 8 19 0
+ 1354 0000 0E94 0000 		call setupPWM
+ 1355               	.LVL86:
+  20:main.c        **** 	setupMotor();
+ 1356               		.loc 8 20 0
+ 1357 0004 0E94 0000 		call setupMotor
+ 1358               	.LVL87:
+  21:main.c        **** 	initIR();
+ 1359               		.loc 8 21 0
+ 1360 0008 0E94 0000 		call initIR
+ 1361               	.LVL88:
+  22:main.c        **** 	init_SRF05();
+ 1362               		.loc 8 22 0
+ 1363 000c 0E94 0000 		call init_SRF05
+ 1364               	.LVL89:
+  23:main.c        **** 	SRF05_Start();
+ 1365               		.loc 8 23 0
+ 1366 0010 0E94 0000 		call SRF05_Start
+ 1367               	.LVL90:
+  24:main.c        **** 	init_ADC();
+ 1368               		.loc 8 24 0
+ 1369 0014 0E94 0000 		call init_ADC
+ 1370               	.LVL91:
+ 1371               	.L68:
+  25:main.c        **** 
+  26:main.c        **** 	while(1){
+  27:main.c        **** 		count3++;
+ 1372               		.loc 8 27 0
+ 1373 0018 8091 0000 		lds r24,count3
+ 1374 001c 9091 0000 		lds r25,count3+1
+ 1375 0020 A091 0000 		lds r26,count3+2
+ 1376 0024 B091 0000 		lds r27,count3+3
+ 1377 0028 0196      		adiw r24,1
+ 1378 002a A11D      		adc r26,__zero_reg__
+ 1379 002c B11D      		adc r27,__zero_reg__
+ 1380 002e 8093 0000 		sts count3,r24
+ 1381 0032 9093 0000 		sts count3+1,r25
+ 1382 0036 A093 0000 		sts count3+2,r26
+ 1383 003a B093 0000 		sts count3+3,r27
+  28:main.c        **** 		controlMotor();
+ 1384               		.loc 8 28 0
+ 1385 003e 0E94 0000 		call controlMotor
+ 1386               	.LVL92:
+  29:main.c        **** 		if(count3 == 50000){
+ 1387               		.loc 8 29 0
+ 1388 0042 8091 0000 		lds r24,count3
+ 1389 0046 9091 0000 		lds r25,count3+1
+ 1390 004a A091 0000 		lds r26,count3+2
+ 1391 004e B091 0000 		lds r27,count3+3
+ 1392 0052 8035      		cpi r24,80
+ 1393 0054 934C      		sbci r25,-61
+ 1394 0056 A105      		cpc r26,__zero_reg__
+ 1395 0058 B105      		cpc r27,__zero_reg__
+ 1396 005a 01F4      		brne .L68
+  30:main.c        **** 			putCh(6666);
+ 1397               		.loc 8 30 0
+ 1398 005c 8AE0      		ldi r24,lo8(10)
+ 1399 005e 0E94 0000 		call putCh
+ 1400               	.LVL93:
+  31:main.c        **** 			putCh(6666 >> 8);
+ 1401               		.loc 8 31 0
+ 1402 0062 8AE1      		ldi r24,lo8(26)
+ 1403 0064 0E94 0000 		call putCh
+ 1404               	.LVL94:
+  32:main.c        **** 			putCh(5555);
+ 1405               		.loc 8 32 0
+ 1406 0068 83EB      		ldi r24,lo8(-77)
+ 1407 006a 0E94 0000 		call putCh
+ 1408               	.LVL95:
+  33:main.c        **** 			putCh(5555 >> 8);
+ 1409               		.loc 8 33 0
+ 1410 006e 85E1      		ldi r24,lo8(21)
+ 1411 0070 0E94 0000 		call putCh
+ 1412               	.LVL96:
+  34:main.c        **** 			count3 = 0;
+ 1413               		.loc 8 34 0
+ 1414 0074 1092 0000 		sts count3,__zero_reg__
+ 1415 0078 1092 0000 		sts count3+1,__zero_reg__
+ 1416 007c 1092 0000 		sts count3+2,__zero_reg__
+ 1417 0080 1092 0000 		sts count3+3,__zero_reg__
+ 1418 0084 00C0      		rjmp .L68
+ 1419               		.cfi_endproc
+ 1420               	.LFE22:
+ 1422               	.global	count3
+ 1423               		.section .bss
+ 1426               	count3:
+ 1427 0000 0000 0000 		.zero	4
+ 1428               	.global	previous_error
+ 1431               	previous_error:
+ 1432 0004 0000      		.zero	2
+ 1433               	.global	left_motor_pwm
+ 1436               	left_motor_pwm:
+ 1437 0006 0000      		.zero	2
+ 1438               	.global	right_motor_pwm
+ 1441               	right_motor_pwm:
+ 1442 0008 0000      		.zero	2
+ 1443               	.global	PID
+ 1446               	PID:
+ 1447 000a 0000      		.zero	2
+ 1448               	.global	D
+ 1451               	D:
+ 1452 000c 0000      		.zero	2
+ 1453               	.global	I
+ 1456               	I:
+ 1457 000e 0000      		.zero	2
+ 1458               	.global	P
+ 1461               	P:
+ 1462 0010 0000      		.zero	2
+ 1463               	.global	count2
+ 1466               	count2:
+ 1467 0012 00        		.zero	1
+ 1468               	.global	count
+ 1471               	count:
+ 1472 0013 0000 0000 		.zero	4
+ 1473               	.global	interrupt
+ 1476               	interrupt:
+ 1477 0017 00        		.zero	1
+ 1478               	.global	mseconds
+ 1481               	mseconds:
+ 1482 0018 0000      		.zero	2
+ 1483               		.comm	distance,2,1
+ 1484               	.global	width
+ 1487               	width:
+ 1488 001a 00        		.zero	1
+ 1489               		.text
+ 1490               	.Letext0:
+ 1491               		.file 9 "/usr/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/cco3DGWa.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/cco3DGWa.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/cco3DGWa.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/cco3DGWa.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/cco3DGWa.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/cco3DGWa.s:12     .text:0000000000000000 init_ADC
-     /tmp/cco3DGWa.s:45     .text:000000000000001c read_ADC
-     /tmp/cco3DGWa.s:74     .text:0000000000000036 setupPWM
-     /tmp/cco3DGWa.s:101    .text:000000000000004a pwm
-     /tmp/cco3DGWa.s:132    .text:000000000000006a initUSART
-     /tmp/cco3DGWa.s:164    .text:0000000000000086 getCh
-     /tmp/cco3DGWa.s:187    .text:0000000000000094 putCh
-     /tmp/cco3DGWa.s:211    .text:00000000000000a2 initIR
-     /tmp/cco3DGWa.s:235    .text:00000000000000b2 getPosition
-     /tmp/cco3DGWa.s:445    .text:000000000000018c getError
-     /tmp/cco3DGWa.s:470    .text:000000000000019e lineSize
-     /tmp/cco3DGWa.s:528    .text:00000000000001b2 init_SRF05
-     /tmp/cco3DGWa.s:564    .text:00000000000001ce SRF05_Start
-     /tmp/cco3DGWa.s:1539   .bss:0000000000000018 mseconds
-     /tmp/cco3DGWa.s:609    .text:00000000000001ec __vector_1
-     /tmp/cco3DGWa.s:1534   .bss:0000000000000017 interrupt
+     /tmp/cc1d0837.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cc1d0837.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cc1d0837.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cc1d0837.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc1d0837.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc1d0837.s:12     .text:0000000000000000 init_ADC
+     /tmp/cc1d0837.s:45     .text:000000000000001c read_ADC
+     /tmp/cc1d0837.s:74     .text:0000000000000036 setupPWM
+     /tmp/cc1d0837.s:101    .text:000000000000004a pwm
+     /tmp/cc1d0837.s:132    .text:000000000000006a initUSART
+     /tmp/cc1d0837.s:164    .text:0000000000000086 getCh
+     /tmp/cc1d0837.s:187    .text:0000000000000094 putCh
+     /tmp/cc1d0837.s:211    .text:00000000000000a2 initIR
+     /tmp/cc1d0837.s:235    .text:00000000000000b2 getPosition
+     /tmp/cc1d0837.s:445    .text:000000000000018c getError
+     /tmp/cc1d0837.s:470    .text:000000000000019e init_SRF05
+     /tmp/cc1d0837.s:506    .text:00000000000001ba SRF05_Start
+     /tmp/cc1d0837.s:1481   .bss:0000000000000018 mseconds
+     /tmp/cc1d0837.s:551    .text:00000000000001d8 __vector_1
+     /tmp/cc1d0837.s:1476   .bss:0000000000000017 interrupt
                             *COM*:0000000000000002 distance
-     /tmp/cco3DGWa.s:735    .text:0000000000000272 __vector_14
-     /tmp/cco3DGWa.s:782    .text:00000000000002a0 setupMotor
-     /tmp/cco3DGWa.s:829    .text:00000000000002c6 controlMotor
-     /tmp/cco3DGWa.s:1529   .bss:0000000000000013 count
-     /tmp/cco3DGWa.s:1519   .bss:0000000000000010 P
-     /tmp/cco3DGWa.s:1514   .bss:000000000000000e I
-     /tmp/cco3DGWa.s:1489   .bss:0000000000000004 previous_error
-     /tmp/cco3DGWa.s:1509   .bss:000000000000000c D
-     /tmp/cco3DGWa.s:1504   .bss:000000000000000a PID
-     /tmp/cco3DGWa.s:1499   .bss:0000000000000008 right_motor_pwm
-     /tmp/cco3DGWa.s:1494   .bss:0000000000000006 left_motor_pwm
-     /tmp/cco3DGWa.s:1524   .bss:0000000000000012 count2
-     /tmp/cco3DGWa.s:1402   .text.startup:0000000000000000 main
-     /tmp/cco3DGWa.s:1484   .bss:0000000000000000 count3
-     /tmp/cco3DGWa.s:1545   .bss:000000000000001a width
+     /tmp/cc1d0837.s:677    .text:000000000000025e __vector_14
+     /tmp/cc1d0837.s:724    .text:000000000000028c setupMotor
+     /tmp/cc1d0837.s:771    .text:00000000000002b2 controlMotor
+     /tmp/cc1d0837.s:1471   .bss:0000000000000013 count
+     /tmp/cc1d0837.s:1461   .bss:0000000000000010 P
+     /tmp/cc1d0837.s:1456   .bss:000000000000000e I
+     /tmp/cc1d0837.s:1431   .bss:0000000000000004 previous_error
+     /tmp/cc1d0837.s:1451   .bss:000000000000000c D
+     /tmp/cc1d0837.s:1446   .bss:000000000000000a PID
+     /tmp/cc1d0837.s:1441   .bss:0000000000000008 right_motor_pwm
+     /tmp/cc1d0837.s:1436   .bss:0000000000000006 left_motor_pwm
+     /tmp/cc1d0837.s:1466   .bss:0000000000000012 count2
+     /tmp/cc1d0837.s:1344   .text.startup:0000000000000000 main
+     /tmp/cc1d0837.s:1426   .bss:0000000000000000 count3
+     /tmp/cc1d0837.s:1487   .bss:000000000000001a width
 
 UNDEFINED SYMBOLS
 __udivmodhi4
